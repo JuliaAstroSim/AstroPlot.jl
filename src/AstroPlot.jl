@@ -5,6 +5,7 @@ using LaTeXStrings
 using Plotly
 using GR
 using Statistics
+using UnicodePlots
 
 using PhysicalParticles
 
