@@ -241,6 +241,12 @@ git-tree-sha1 = "c4c13474d23c60d20a67b217f1d7f22a40edf8f1"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.1.0"
 
+[[ParallelOperations]]
+deps = ["Distributed", "Test"]
+git-tree-sha1 = "8f67f7b91b5273861672a3a7d039e8d8e6549108"
+uuid = "09c1cff2-b94d-4c31-85a1-721512e21c63"
+version = "0.1.0"
+
 [[Parsers]]
 deps = ["Dates", "Test"]
 git-tree-sha1 = "d112c19ccca00924d5d3a38b11ae2b4b268dda39"
@@ -260,6 +266,14 @@ repo-rev = "master"
 repo-url = "https://github.com/JuliaAstroSim/PhysicalParticles.jl"
 uuid = "78724250-4eb2-11e9-0f34-13a7aab864c5"
 version = "1.0.1"
+
+[[PhysicalTrees]]
+deps = ["DataStructures", "Distributed", "ParallelOperations", "PhysicalParticles", "Test", "Unitful", "UnitfulAstro"]
+git-tree-sha1 = "98f6085c82957c231383dca370860e2e0e03ab02"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaAstroSim/PhysicalTrees.jl"
+uuid = "dc5d4990-50a5-4af2-bdaa-6f78dc9b9fb2"
+version = "0.1.0"
 
 [[Pidfile]]
 deps = ["FileWatching", "Test"]
