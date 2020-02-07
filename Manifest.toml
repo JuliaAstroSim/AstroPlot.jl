@@ -259,6 +259,14 @@ git-tree-sha1 = "f15e25a6fa064e0805ef7819d91d79e0ff0bedf4"
 uuid = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
 version = "0.2.0"
 
+[[PhysicalMeshes]]
+deps = ["Distributed", "PhysicalParticles", "Test", "Unitful", "UnitfulAstro"]
+git-tree-sha1 = "3e73acbd0960d59c8458c5d6da5ea8cd894c2f10"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaAstroSim/PhysicalMeshes.jl"
+uuid = "97d9904f-034f-4fb7-aeaa-03a173434233"
+version = "0.1.0"
+
 [[PhysicalParticles]]
 deps = ["DocStringExtensions", "LinearAlgebra", "NearestNeighbors", "PhysicalConstants", "Statistics", "Test", "Unitful", "UnitfulAstro"]
 git-tree-sha1 = "7c109de8d560c7d38c714913ccacc34198b42f19"

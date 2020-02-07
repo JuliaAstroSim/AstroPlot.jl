@@ -9,17 +9,24 @@ using UnicodePlots
 
 using PhysicalParticles
 using PhysicalTrees
+using PhysicalMeshes
 
 import Unitful: Units
 
 export
     plotly_scatter,
-    plotly_peano_scatter
+    plotly_mesh,
+    plotly_peano
+
 
 include("PhysicalParticles.jl")
-include("PhysicalTrees.jl")
-include("Peano.jl")
-include("PhysicalMeshes.jl")
+
+include("mesh/cube.jl")
+
+include("tree/octreenodes.jl")
+include("tree/octree.jl")
+include("tree/peano.jl")
+
 include("RotationCurve.jl")
 include("Density.jl")
 

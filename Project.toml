@@ -1,5 +1,11 @@
+name = "AstroPlot"
+uuid = "00b67d96-df8a-4e04-ab4d-0170e12eeaec"
+authors = ["islent <leoislent@gmail.com>"]
+version = "0.1.0"
+
 [deps]
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+PhysicalMeshes = "97d9904f-034f-4fb7-aeaa-03a173434233"
 PhysicalParticles = "78724250-4eb2-11e9-0f34-13a7aab864c5"
 PhysicalTrees = "dc5d4990-50a5-4af2-bdaa-6f78dc9b9fb2"
 Plotly = "58dd65bb-95f3-509e-9936-c39a10fdeae7"
