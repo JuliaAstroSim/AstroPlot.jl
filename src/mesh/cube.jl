@@ -9,12 +9,12 @@ function plot_coords_order(xb,yb,zb,xt,yt,zt)
            [zb, zt, zt, zb, zb, NaN, zt, zb, zb, zt, zt, NaN, zt, zt, zt, NaN, zb, zb, zb, NaN]
 end
 
-plot_coords_order(c::Cube2D) = plot_coords_order(c.below.x, c.below.y, c.top.x, c.top.y)
-plot_coords_order(c::Cube) = plot_coords_order(c.below.x, c.below.y, c.below.z, c.top.x, c.top.y, c.top.z)
+plot_coords_order(c::Cube2D{T}) where T<:Real = plot_coords_order(c.below.x, c.below.y, c.top.x, c.top.y)
+plot_coords_order(c::Cube{T}) where T<:Real = plot_coords_order(c.below.x, c.below.y, c.below.z, c.top.x, c.top.y, c.top.z)
 
-function plotly_mesh(c::Cube;
+function plotly_mesh(c::Cube{T}, u::Unitful.FreeUnits{(),NoDims,nothing} = Unitful.FreeUnits{(),NoDims,nothing}();
                      marker_size = 3,
-                     kw...)
+                     kw...) where T<:Real
     x, y, z = plot_coords_order(c)
     return Plotly.scatter3d(
         x=x, y=y, z=z;
@@ -23,9 +23,9 @@ function plotly_mesh(c::Cube;
     )
 end
 
-function plotly_mesh(c::Cube, u::Units;
+function plotly_mesh(c::Cube{T}, u::Units;
                      marker_size = 3,
-                     kw...)
+                     kw...) where T<:Quantity
     d = Cube(ustrip(u, c.top), ustrip(u, c.below))
     x, y, z = plot_coords_order(d)
     return Plotly.scatter3d(

@@ -16,7 +16,9 @@ import Unitful: Units
 export
     plotly_scatter,
     plotly_mesh,
-    plotly_peano
+    plotly_tree,
+    plotly_treenode,
+    plotly_peano    
 
 
 include("PhysicalParticles.jl")
