@@ -1,6 +1,8 @@
-function plotly_tree(tree::Octree; kw...)
+function plotly_tree(tree::PhysicalTrees.Octree; kw...)
     uLength = getuLength(tree.units)
-    pnodes = plotly_treenode(tree.treenodes[1:tree.NTreenodes]; kw...)
-    pdata = plotly_scatter(tree.data; kw...)
-    return [pnodes, pdata]
+    nodes = gather(tree, :treenodes)
+    data = gather(tree, :data)
+    pnodes = plotly_treenode.(nodes; kw...)
+    pdata = plotly_scatter.(data; kw...)
+    return [pnodes; pdata]
 end

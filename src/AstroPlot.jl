@@ -7,6 +7,7 @@ using PyPlot
 using Statistics
 using UnicodePlots
 
+using ParallelOperations
 using PhysicalParticles
 using PhysicalTrees
 using PhysicalMeshes

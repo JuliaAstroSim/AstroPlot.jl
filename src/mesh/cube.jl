@@ -9,8 +9,11 @@ function plot_coords_order(xb,yb,zb,xt,yt,zt)
            [zb, zt, zt, zb, zb, NaN, zt, zb, zb, zt, zt, NaN, zt, zt, zt, NaN, zb, zb, zb, NaN]
 end
 
-plot_coords_order(c::Cube2D{T}) where T<:Real = plot_coords_order(c.below.x, c.below.y, c.top.x, c.top.y)
-plot_coords_order(c::Cube{T}) where T<:Real = plot_coords_order(c.below.x, c.below.y, c.below.z, c.top.x, c.top.y, c.top.z)
+plot_coords_order(p1::PVector2D{T}, p2::PVector2D) where T<:Real = plot_coords_order(p1.x, p1.y, p2.x, p2.y)
+plot_coords_order(p1::PVector{T}, p2::PVector{T}) where T<:Real = plot_coords_order(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z)
+
+plot_coords_order(c::Cube2D{T}) where T<:Real = plot_coords_order(c.below, c.top)
+plot_coords_order(c::Cube{T}) where T<:Real = plot_coords_order(c.below, c.top)
 
 function plotly_mesh(c::Cube{T}, u::Unitful.FreeUnits{(),NoDims,nothing} = Unitful.FreeUnits{(),NoDims,nothing}();
                      marker_size = 3,
