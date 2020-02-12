@@ -32,7 +32,7 @@ function plotly_scatter(data::Array{PVector{T},1}, u::Units = u"kpc"; options = 
     return plotly_scatter(d, options = options; kw...)
 end
 
-function plotly_scatter(data::Array{AbstractParticle3D,1}, u::Units = u"kpc"; options = Dict(), kw...)
+function plotly_scatter(data::Array{T,1}, u::Units = u"kpc"; options = Dict(), kw...) where T<:AbstractParticle3D
     d = map(p -> ustrip(u, p.Pos), data)
 
     return plotly_scatter(d, options = options; kw...)
