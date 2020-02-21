@@ -19,4 +19,4 @@ assign_particles(data, :Mass, m)
 @info "Plotting"
 unicode_rotationcurve(data)
 
-plotrotationcurve(data)
+plot_rotationcurve(data)

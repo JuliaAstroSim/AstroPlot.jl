@@ -4,15 +4,18 @@ __precompile__(true)
 
 using Unitful, UnitfulAstro
 using LaTeXStrings
+using Printf
 using Plotly
 using Plots
 using Statistics
 using UnicodePlots
+using ProgressMeter
 
 using ParallelOperations
 using PhysicalParticles
 using PhysicalTrees
 using PhysicalMeshes
+using AstroIO
 
 import Unitful: Units
 
@@ -28,7 +31,8 @@ export
     unicode_rotationcurve,
 
     rotationcurve,
-    plotrotationcurve,
+    plot_rotationcurve,
+    plot_trajectory,
 
     rotvel,
     radialvel,
@@ -39,6 +43,8 @@ axisunit(::Nothing) = ""
 axisunit(u::Units) = string(" [", u, "]")
 axisunit(s::AbstractString, u::Units) = string(s, " [", u, "]")
 
+pyplot()
+
 include("PhysicalParticles.jl")
 
 include("mesh/cube.jl")
@@ -47,7 +53,8 @@ include("tree/octreenodes.jl")
 include("tree/octree.jl")
 include("tree/peano.jl")
 
-include("Analyse.jl")
+include("snapshots/analyse.jl")
+include("snapshots/trajectory.jl")
 
 include("RotationCurve.jl")
 include("Density.jl")

@@ -54,11 +54,20 @@ function unicode_scatter(data::Array{PVector{T}, 1};
     return UnicodePlots.scatterplot(x, y, xlabel = xlabel, ylabel = ylabel; kw...)
 end
 
-function unicode_scatter(data::Array{PVector{T}, 1}, u::Units;
+function unicode_scatter(data::Array{PVector{T}, 1}, u = u"kpc";
                          xaxis = :x, yaxis = :y,
                          xlabel = "$xaxis [$u]", ylabel = "$yaxis [$u]",
                          kw...) where T<:Quantity
     d = ustrip.(u, data)
+
+    return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
+end
+
+function unicode_scatter(data::Array{T, 1}, u = u"kpc";
+                         xaxis = :x, yaxis = :y,
+                         xlabel = "$xaxis [$u]", ylabel = "$yaxis [$u]",
+                         kw...) where T<:AbstractParticle
+    d = [ustrip(u, p.Pos) for p in data]
 
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end

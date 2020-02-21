@@ -1,9 +1,9 @@
-function plotly_treenode(node::PhysicalTrees.OctreeNode; kw...)
+function plotly_treenode(node::PhysicalTrees.OctreeNode{T}; kw...) where T
     p = one(node.Center) * 0.5 * node.SideLength
     return plotly_mesh(Cube(node.Center + p, node.Center - p), unit(node.SideLength); kw...)
 end
 
-function plot_coords_order(node::PhysicalTrees.OctreeNode)
+function plot_coords_order(node::PhysicalTrees.OctreeNode{T}) where T
     p = one(node.Center) * 0.5 * node.SideLength
     u = unit(node.SideLength)
     return plot_coords_order(ustrip(u, node.Center - p), ustrip(u, node.Center + p))

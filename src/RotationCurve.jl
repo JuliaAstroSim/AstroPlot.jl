@@ -28,7 +28,7 @@ function unicode_rotationcurve(particles::Array{T}, units = uAstro;
     UnicodePlots.lineplot(Rmean, Vmean)
 end
 
-function plotrotationcurve(particles::Array{T},
+function plot_rotationcurve(particles::Array{T},
                               units = uAstro;
                               filename = nothing,
                               timestamp = nothing,

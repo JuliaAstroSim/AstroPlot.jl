@@ -4,6 +4,7 @@ authors = ["islent <leoislent@gmail.com>"]
 version = "0.1.0"
 
 [deps]
+AstroIO = "c85a633c-0c3f-44a2-bffe-7f9d0681b3e7"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 ParallelOperations = "09c1cff2-b94d-4c31-85a1-721512e21c63"
 PhysicalMeshes = "97d9904f-034f-4fb7-aeaa-03a173434233"
@@ -11,6 +12,8 @@ PhysicalParticles = "78724250-4eb2-11e9-0f34-13a7aab864c5"
 PhysicalTrees = "dc5d4990-50a5-4af2-bdaa-6f78dc9b9fb2"
 Plotly = "58dd65bb-95f3-509e-9936-c39a10fdeae7"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
