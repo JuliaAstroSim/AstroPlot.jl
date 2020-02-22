@@ -1,7 +1,10 @@
 function plot_trajectory(p::Plots.Plot, pos::Array{AbstractPoint,1};
                          xaxis = :x,
                          yaxis = :y,
-                         aspect_ratio=:equal,
+                         xlabel = "",
+                         ylabel = "",
+                         aspect_ratio = 1.0,
+                         title = "Trajectory",
                          kw...)
     len = length(pos)
     x = zeros(len)
@@ -12,7 +15,14 @@ function plot_trajectory(p::Plots.Plot, pos::Array{AbstractPoint,1};
         y[i] = getproperty(pos[i], yaxis)
     end
 
-    Plots.plot!(p, x, y; aspect_ratio = aspect_ratio, kw...)
+    Plots.plot!(p, x, y;
+                xaxis = xaxis,
+                yaxis = yaxis,
+                xlabel = xlabel,
+                ylabel = ylabel,
+                aspect_ratio = aspect_ratio,
+                title = title,
+                kw...)
 end
 
 function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u::Units = u"kpc";
@@ -20,17 +30,31 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u::Units = u"
                          yaxis = :y,
                          xlabel = "$xaxis [$u]",
                          ylabel = "$yaxis [$u]",
+                         aspect_ratio = 1.0,
+                         title = "Trajectory",
                          kw...)
     p = Plots.plot()
     for key in keys(pos)
         pos[key] = ustrip.(u, pos[key])
-        plot_trajectory(p, pos[key], xaxis = xaxis, yaxis = yaxis, label = "particle $key"; kw...)
+        plot_trajectory(p, pos[key],
+                        xaxis = xaxis,
+                        yaxis = yaxis,
+                        xlabel = xlabel,
+                        ylabel = ylabel,
+                        aspect_ratio = aspect_ratio,
+                        label = "particle $key"; kw...)
     end
     return p
 end
 
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},
                          ids::Array{Int64,1}, ::jld2, u::Units = u"kpc";
+                         xaxis = :x,
+                         yaxis = :y,
+                         xlabel = "$xaxis [$u]",
+                         ylabel = "$yaxis [$u]",
+                         aspect_ratio = 1.0,
+                         title = "Trajectory",
                          kw...
                          )
     pos = Dict{Int64, Array{AbstractPoint,1}}()
@@ -50,5 +74,12 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
         next!(progress)
     end
 
-    plot_trajectory(pos, u; kw...)
+    return plot_trajectory(pos, u;
+                           xaxis = xaxis,
+                           yaxis = yaxis,
+                           xlabel = xlabel,
+                           ylabel = ylabel,
+                           aspect_ratio = aspect_ratio,
+                           title = title,
+                           kw...)
 end

@@ -369,7 +369,7 @@ version = "1.0.2"
 
 [[PhysicalTrees]]
 deps = ["DataStructures", "Distributed", "ParallelOperations", "PhysicalParticles", "Test", "Unitful", "UnitfulAstro"]
-git-tree-sha1 = "9872bcd4a9cc60008e99bd9e643e86b0a8a93da5"
+git-tree-sha1 = "da9dc3b78f1001f69b5fd03764a63f373f3f4375"
 repo-rev = "master"
 repo-url = "https://github.com/JuliaAstroSim/PhysicalTrees.jl"
 uuid = "dc5d4990-50a5-4af2-bdaa-6f78dc9b9fb2"

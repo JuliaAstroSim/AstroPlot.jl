@@ -33,6 +33,7 @@ export
     rotationcurve,
     plot_rotationcurve,
     plot_trajectory,
+    plot_positionslice,
 
     rotvel,
     radialvel,
@@ -55,6 +56,7 @@ include("tree/peano.jl")
 
 include("snapshots/analyse.jl")
 include("snapshots/trajectory.jl")
+include("snapshots/positions.jl")
 
 include("RotationCurve.jl")
 include("Density.jl")
