@@ -18,6 +18,7 @@ using PhysicalMeshes
 using AstroIO
 
 import Unitful: Units
+import AstroIO: jld2, gadget2, hdf5
 
 export
     plotly_scatter,
@@ -34,15 +35,13 @@ export
     plot_rotationcurve,
     plot_trajectory,
     plot_positionslice,
+    plot_positionslice_adapt,
 
     rotvel,
     radialvel,
-    distribution
+    distribution,
 
-
-axisunit(::Nothing) = ""
-axisunit(u::Units) = string(" [", u, "]")
-axisunit(s::AbstractString, u::Units) = string(s, " [", u, "]")
+    jld2, gadget2, hdf5
 
 pyplot()
 
