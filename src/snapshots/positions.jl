@@ -83,17 +83,17 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
 end
 
 function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
-                            xaxis = :x,
-                            yaxis = :y,
-                            xlabel = "",
-                            ylabel = "",
-                            xlen = 1.0u"kpc",
-                            ylen = 1.0u"kpc",
-                            aspect_ratio = 1.0,
-                            title = "Positions",
-                            label = nothing,
-                            markersize = 1.0,
-                            kw...) where T <: AbstractPoint where N
+                                  xaxis = :x,
+                                  yaxis = :y,
+                                  xlabel = "",
+                                  ylabel = "",
+                                  xlen = 1.0u"kpc",
+                                  ylen = 1.0u"kpc",
+                                  aspect_ratio = 1.0,
+                                  title = "Positions",
+                                  label = nothing,
+                                  markersize = 1.0,
+                                  kw...) where T <: AbstractPoint where N
     len = length(pos)
     x = zeros(len)
     y = zeros(len)
@@ -118,17 +118,17 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
 end
 
 function plot_positionslice_adapt(data::Array{T, N}, u = nothing;
-                            xaxis = :x,
-                            yaxis = :y,
-                            xlabel = "",
-                            ylabel = "",
-                            xlen = 1.0u"kpc",
-                            ylen = 1.0u"kpc",
-                            aspect_ratio = 1.0,
-                            title = "Positions",
-                            label = nothing,
-                            markersize = 1.0,
-                            kw...) where T <: AbstractParticle where N
+                                  xaxis = :x,
+                                  yaxis = :y,
+                                  xlabel = "",
+                                  ylabel = "",
+                                  xlen = 1.0u"kpc",
+                                  ylen = 1.0u"kpc",
+                                  aspect_ratio = 1.0,
+                                  title = "Positions",
+                                  label = nothing,
+                                  markersize = 1.0,
+                                  kw...) where T <: AbstractParticle where N
     len = length(data)
     x = zeros(len)
     y = zeros(len)
@@ -153,16 +153,16 @@ function plot_positionslice_adapt(data::Array{T, N}, u = nothing;
 end
 
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u::Units = u"kpc";
-                            times = Counts,
-                            xaxis = :x,
-                            yaxis = :y,
-                            xlabel = "$xaxis [$u]",
-                            ylabel = "$yaxis [$u]",
-                            xlen = 0.2u"kpc",
-                            ylen = 0.2u"kpc",
-                            label = nothing,
-                            markersize = 1.0,
-                            kw...)
+                                  times = Counts,
+                                  xaxis = :x,
+                                  yaxis = :y,
+                                  xlabel = "$xaxis [$u]",
+                                  ylabel = "$yaxis [$u]",
+                                  xlen = 0.2u"kpc",
+                                  ylen = 0.2u"kpc",
+                                  label = nothing,
+                                  markersize = 1.0,
+                                  kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
         filename = joinpath(folder, string(filenamebase, @sprintf("%05d", Counts[i]), ".jld2"))

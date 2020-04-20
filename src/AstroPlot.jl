@@ -10,6 +10,8 @@ using Plots
 using Statistics
 using UnicodePlots
 using ProgressMeter
+using DataFrames
+using CSV
 
 using ParallelOperations
 using PhysicalParticles
@@ -31,15 +33,21 @@ export
     unicode_density,
     unicode_rotationcurve,
 
+    # Analyse
     rotationcurve,
     plot_rotationcurve,
+
     plot_trajectory,
+
     plot_positionslice,
     plot_positionslice_adapt,
 
     rotvel,
     radialvel,
     distribution,
+
+    lagrange_radii,
+    plot_radii,
 
     jld2, gadget2, hdf5
 
@@ -56,6 +64,7 @@ include("tree/peano.jl")
 include("snapshots/analyse.jl")
 include("snapshots/trajectory.jl")
 include("snapshots/positions.jl")
+include("snapshots/lagrange.jl")
 
 include("RotationCurve.jl")
 include("Density.jl")
