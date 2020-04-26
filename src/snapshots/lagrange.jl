@@ -13,25 +13,31 @@ function lagrange_radii(particles::Array{T}, u::Units = u"kpc") where T<:Abstrac
     return ScaleRadius, [R[i] for i in index]
 end
 
-function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units; kw...)
+function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
+                          xlabel = "t [$uTime]",
+                          ylabel = "r [$uLength]",
+                          kw...)
     return Plots.plot(
         df.Time, df.ScaleRadius;
         title = "Scale radius",
         label = nothing,
-        xlabel = "time [$uTime]",
-        ylabel = "time [$uLength]",
+        xlabel = xlabel,
+        ylabel = ylabel,
         kw...
     )
 end
 
-function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units; kw...)
+function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
+                            xlabel = "t [$uTime]",
+                            ylabel = "r [$uLength]",
+                            kw...)
     return Plots.plot(
         df.Time,
         [df.L10, df.L20, df.L30, df.L40, df.L50, df.L60, df.L70, df.L80, df.L90, df.L100];
         title = "Lagrange radii",
         label = ["10%" "20%" "30%" "40%" "50%" "60%" "70%" "80%" "90%" "100%"],
-        xlabel = "time [$uTime]",
-        ylabel = "time [$uLength]",
+        xlabel = xlabel,
+        ylabel = ylabel,
         kw...
     )
 end
@@ -41,14 +47,17 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units, kw...
 
     plot Lagrange radii without 100% radius for better looking.
 """
-function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units; kw...)
+function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
+                              xlabel = "t [$uTime]",
+                              ylabel = "r [$uLength]",
+                              kw...)
     return Plots.plot(
         df.Time,
         [df.L10, df.L20, df.L30, df.L40, df.L50, df.L60, df.L70, df.L80, df.L90];
         title = "Lagrange radii",
         label = ["10%" "20%" "30%" "40%" "50%" "60%" "70%" "80%" "90%"],
-        xlabel = "time [$uTime]",
-        ylabel = "time [$uLength]",
+        xlabel = xlabel,
+        ylabel = ylabel,
         kw...
     )
 end

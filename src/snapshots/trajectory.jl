@@ -64,14 +64,14 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        filename = joinpath(folder, string(filenamebase, @sprintf("%05d", i), ".jld2"))
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), ".jld2"))
         data = read_jld(filename)
         for p in data
             if p.ID in ids
                 push!(pos[p.ID], p.Pos)
             end
         end
-        next!(progress)
+        next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 
     return plot_trajectory(pos, u;

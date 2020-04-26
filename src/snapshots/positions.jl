@@ -65,7 +65,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%05d", Counts[i]), ".jld2"))
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
         data = read_jld(filename)
         p = plot_positionslice(data, u; title = "Positions at $(times[i])",
                                         xaxis = xaxis,
@@ -76,9 +76,9 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                                         markersize = markersize,
                                         kw...)
 
-        outputfilename = joinpath(folder, string("pos_", @sprintf("%05d", Counts[i]), ".png"))
+        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
         png(p, outputfilename)
-        next!(progress)
+        next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 end
 
@@ -165,7 +165,7 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                   kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%05d", Counts[i]), ".jld2"))
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
         data = read_jld(filename)
         p = plot_positionslice_adapt(data, u; title = "Positions at $(times[i])",
                                                  xaxis = xaxis,
@@ -178,8 +178,8 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                                  markersize = markersize,
                                                  kw...)
 
-        outputfilename = joinpath(folder, string("pos_", @sprintf("%05d", Counts[i]), ".png"))
+        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
         png(p, outputfilename)
-        next!(progress)
+        next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 end

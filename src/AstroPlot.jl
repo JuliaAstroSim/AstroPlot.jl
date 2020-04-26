@@ -1,7 +1,5 @@
 module AstroPlot
 
-__precompile__(true)
-
 using Unitful, UnitfulAstro
 using LaTeXStrings
 using Printf
@@ -12,6 +10,8 @@ using UnicodePlots
 using ProgressMeter
 using DataFrames
 using CSV
+using ApproxFun
+using StatsPlots
 
 using ParallelOperations
 using PhysicalParticles
@@ -42,6 +42,9 @@ export
     plot_positionslice,
     plot_positionslice_adapt,
 
+    plot_energy,
+    plot_profiling,
+
     rotvel,
     radialvel,
     distribution,
@@ -65,6 +68,9 @@ include("snapshots/analyse.jl")
 include("snapshots/trajectory.jl")
 include("snapshots/positions.jl")
 include("snapshots/lagrange.jl")
+include("snapshots/energy.jl")
+include("snapshots/profiling.jl")
+include("snapshots/animation.jl")
 
 include("RotationCurve.jl")
 include("Density.jl")
