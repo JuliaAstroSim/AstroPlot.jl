@@ -33,7 +33,8 @@ function plot_rotationcurve(particles::Array{T},
                               filename = nothing,
                               timestamp = nothing,
                               rmhead::Int64 = 0,
-                              rmtail::Int64 = 0,) where T<:AbstractParticle3D
+                              rmtail::Int64 = 0,
+                              kw...) where T<:AbstractParticle3D
 
     Rmean, Vmean, Rstd, Vstd = rotationcurve(particles, units, rmhead = rmhead, rmtail = rmtail)
 
@@ -49,8 +50,8 @@ function plot_rotationcurve(particles::Array{T},
         ts = "at $timestamp"
     end
 
-    Plots.plot(Rmean, Vmean,
-               xerror = Rstd, yerror = Vstd, 
+    Plots.plot(Rmean, Vmean; #xerror = Rstd, yerror = Vstd, 
+               ribbon = (Vstd, Vstd),
                xlabel = xlb, ylabel = ylb, 
-               legend = false, title = "Rotation Curve" * ts)
+               legend = false, title = "Rotation Curve" * ts, kw...)
 end

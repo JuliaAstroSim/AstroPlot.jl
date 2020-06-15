@@ -62,7 +62,8 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
     )
 end
 
-function plot_radii(folder::String, filenamebase::String, Counts::Array{Int64,1}, suffix::AbstractString,
+function plot_radii(folder::AbstractString, filenamebase::AbstractString,
+                    Counts::Array{Int64,1}, suffix::AbstractString,
                     FileType::AbstractOutputType, units = uAstro;
                     times = Counts,
                     savelog = true,
@@ -113,11 +114,9 @@ function plot_radii(folder::String, filenamebase::String, Counts::Array{Int64,1}
 
     println("Plotting scale radius")
     ScalePlot = plot_scaleradius(df, uTime, uLength; legend = legend, kw...)
-    png(ScalePlot, "scale_radius.png")
 
     println("Plotting Lagrange radii")
     LagrangePlot = plot_lagrangeradii90(df, uTime, uLength; legend = legend, kw...)
-    png(LagrangePlot, "lagrage_radii.png")
 
     return ScalePlot, LagrangePlot, df
 end
