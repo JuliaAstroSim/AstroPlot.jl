@@ -66,7 +66,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
     for i in Counts
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), ".jld2"))
         data = read_jld(filename)
-        for p in data
+        for p in Iterators.flatten(values(data))
             if p.ID in ids
                 push!(pos[p.ID], p.Pos)
             end

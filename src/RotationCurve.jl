@@ -2,7 +2,7 @@ function rotationcurve(particles::Array{T}, units = uAstro;
                        rmhead::Int64 = 0,
                        rmtail::Int64 = 0
                        ) where T<:AbstractParticle3D
-    p0 = median(particles)
+    p0 = median(particles, :Pos)
     v0 = averagebymass(particles, :Vel)
 
     uLength = getuLength(units)

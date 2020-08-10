@@ -1,11 +1,11 @@
-function lagrange_radii(particles::Array{T}, u::Units = u"kpc") where T<:AbstractParticle3D
-    p0 = median(particles)
-    pos = [ustrip(u, p.Pos - p0) for p in particles]
+function lagrange_radii(particles, u::Units = u"kpc")
+    p0 = median(particles, :Pos)
+    pos = [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
 
     R = norm.(pos)
     sort!(R)
 
-    N = length(particles)
+    N = countdata(particles)
     ScaleRadius = R[floor(Int64, N / 2.718281828459)]
 
     len = div(N, 10)

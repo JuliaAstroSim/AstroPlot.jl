@@ -26,7 +26,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
                                ; kw...)
 end
 
-function plot_positionslice(data::Array{T, N}, u = nothing;
+function plot_positionslice(data, u = nothing;
                             xaxis = :x,
                             yaxis = :y,
                             xlabel = "",
@@ -35,15 +35,9 @@ function plot_positionslice(data::Array{T, N}, u = nothing;
                             title = "Positions",
                             label = nothing,
                             markersize = 1.0,
-                            kw...) where T <: AbstractParticle where N
-    len = length(data)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(data[i].Pos, xaxis))
-        y[i] = ustrip(u, getproperty(data[i].Pos, yaxis))
-    end
+                            kw...)
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
 
     return Plots.scatter(x, y, aspect_ratio = aspect_ratio,
                                title = title,
@@ -117,7 +111,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
                                ; kw...)
 end
 
-function plot_positionslice_adapt(data::Array{T, N}, u = nothing;
+function plot_positionslice_adapt(data, u = nothing;
                                   xaxis = :x,
                                   yaxis = :y,
                                   xlabel = "",
@@ -128,15 +122,9 @@ function plot_positionslice_adapt(data::Array{T, N}, u = nothing;
                                   title = "Positions",
                                   label = nothing,
                                   markersize = 1.0,
-                                  kw...) where T <: AbstractParticle where N
-    len = length(data)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(data[i].Pos, xaxis))
-        y[i] = ustrip(u, getproperty(data[i].Pos, yaxis))
-    end
+                                  kw...)
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
 
     xcenter = middle(x)
     ycenter = middle(y)
