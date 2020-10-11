@@ -1,27 +1,36 @@
-function plotly_treenode(node::PhysicalTrees.OctreeNode{T}; kw...) where T
+"""
+    Rect(node::PhysicalTrees.OctreeNode, u::Units = u"kpc")
+
+Convert an `PhysicalTrees.OctreeNode` to `Rect3D`
+"""
+function Rect(node::PhysicalTrees.OctreeNode, u::Units = u"kpc")
     p = one(node.Center) * 0.5 * node.SideLength
-    return plotly_mesh(Cube(node.Center + p, node.Center - p), unit(node.SideLength); kw...)
-end
-
-function plot_coords_order(node::PhysicalTrees.OctreeNode{T}) where T
-    p = one(node.Center) * 0.5 * node.SideLength
-    u = unit(node.SideLength)
-    return plot_coords_order(ustrip(u, node.Center - p), ustrip(u, node.Center + p))
-end
-
-function plotly_treenode(nodes::Array; kw...)
-    x = Array{Float64,1}()
-    y = Array{Float64,1}()
-    z = Array{Float64,1}()
-    for n in nodes
-        dx, dy, dz = plot_coords_order(n)
-        append!(x, dx)
-        append!(y, dy)
-        append!(z, dz)
-    end
-
-    return Plotly.scatter3d(
-        x=x, y=y, z=z;
-        kw...
+    return Makie.Rect3D(
+        point3(ustrip(u, node.Center - p)),
+        point3(ustrip(u, p * 2.0))
     )
+end
+
+"""
+    plot!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+
+Plot tree nodes in `wireframe` mode
+"""
+function plot!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+    for n in nodes
+        wireframe!(scene, Rect(n))
+    end
+end
+
+"""
+    plot(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+
+Plot tree nodes in `wireframe` mode
+"""
+function plot(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+    scene = wireframe(Rect(first(nodes)))
+    for n in nodes[2:end]
+        wireframe!(scene, Rect(n))
+    end
+    return scene
 end

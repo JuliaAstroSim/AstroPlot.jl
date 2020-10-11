@@ -22,12 +22,7 @@ function plotly_peano(bits = 1;
     data = [reshape(p, 1, len); reshape(x, 1, len); reshape(y, 1, len); reshape(z, 1, len)]
     data = sortslices(data, dims = 2)
 
-    return Plotly.scatter3d(
-        x = data[2,:],
-        y = data[3,:],
-        z = data[4,:],
-        text = string.(data[1,:]),
-        marker_size = marker_size;
-        kw...
-    )
+    scene = lines(data[2,:], data[3,:], data[4,:])
+
+    return scene
 end

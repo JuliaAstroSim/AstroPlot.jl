@@ -1,41 +1,14 @@
-function plotly_scatter(data::Array{PVector{T},1};
-                        mode = "markers",
-                        marker_size = 3,
-                        marker_line_width = 0,
-                        kw...) where T<:Number
-    len = length(data)
-    if len >= 100000
-        @warn "Interactive plotting of more than 100000 points may have lagging problem"
-    end
-
-    x = zeros(len)
-    y = zeros(len)
-    z = zeros(len)
-
-    for i in 1:len
-        x[i] = data[i].x
-        y[i] = data[i].y
-        z[i] = data[i].z
-    end
-
-    return Plotly.scatter3d(
-        x=x, y=y, z=z;
-        mode = mode,
-        marker_size = marker_size,
-        kw...
-    )
+function point3(p::PVector)
+    return Makie.Point3(p.x, p.y, p.z)
 end
 
-function plotly_scatter(data::Array{PVector{T},1}, u::Units = u"kpc"; options = Dict(), kw...) where T<:Quantity
-    d = ustrip.(u, data)
-
-    return plotly_scatter(d, options = options; kw...)
+function plot(data::Array{T,1}, u::Units = u"kpc"; kw...) where T<:AbstractParticle3D
+    d = [point3(ustrip(u, p)) for p in data]
+    return Makie.scatter(d)
 end
 
-function plotly_scatter(data::Array{T,1}, u::Units = u"kpc"; options = Dict(), kw...) where T<:AbstractParticle3D
-    d = map(p -> ustrip(u, p.Pos), data)
-
-    return plotly_scatter(d, options = options; kw...)
+function plot(data::Dict{T,A}, u::Units = u"kpc"; kw...) where A<:Array where T
+    return plot(collect(Iterators.flatten(values(data))), u; kw...)
 end
 
 function unicode_scatter(data::Array{PVector{T}, 1};

@@ -3,15 +3,13 @@ module AstroPlot
 using Unitful, UnitfulAstro
 using LaTeXStrings
 using Printf
-using Plotly
-using Plots
 using Statistics
 using UnicodePlots
 using ProgressMeter
 using DataFrames
 using CSV
-using ApproxFun
-using StatsPlots
+using Makie
+using Makie.AbstractPlotting.MakieLayout
 
 using ParallelOperations
 using PhysicalParticles
@@ -21,6 +19,7 @@ using AstroIO
 
 import Unitful: Units
 import AstroIO: jld2, gadget2, hdf5
+import Makie: plot, plot!, Rect, scatter, scatter!
 
 export
     plotly_scatter,
@@ -57,7 +56,6 @@ export
 
     jld2, gadget2, hdf5
 
-pyplot()
 
 include("PhysicalParticles.jl")
 
@@ -67,15 +65,15 @@ include("tree/octreenodes.jl")
 include("tree/octree.jl")
 include("tree/peano.jl")
 
-include("snapshots/analyse.jl")
-include("snapshots/trajectory.jl")
-include("snapshots/positions.jl")
-include("snapshots/lagrange.jl")
-include("snapshots/energy.jl")
-include("snapshots/profiling.jl")
-include("snapshots/animation.jl")
-
-include("RotationCurve.jl")
-include("Density.jl")
+#include("snapshots/analyse.jl")
+#include("snapshots/trajectory.jl")
+#include("snapshots/positions.jl")
+#include("snapshots/lagrange.jl")
+#include("snapshots/energy.jl")
+#include("snapshots/profiling.jl")
+#include("snapshots/animation.jl")
+#
+#include("RotationCurve.jl")
+#include("Density.jl")
 
 end
