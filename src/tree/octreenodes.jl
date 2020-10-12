@@ -12,25 +12,25 @@ function Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
 end
 
 """
-    plot!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+    plot_makie!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
 
 Plot tree nodes in `wireframe` mode
 """
-function plot!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+function plot_makie!(scene::Scene, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
     for n in nodes
-        wireframe!(scene, Rect(n))
+        wireframe!(scene, Rect(n, u))
     end
 end
 
 """
-    plot(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+    plot_makie(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
 
 Plot tree nodes in `wireframe` mode
 """
-function plot(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
-    scene = wireframe(Rect(first(nodes)))
+function plot_makie(nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
+    scene = wireframe(Rect(first(nodes), u))
     for n in nodes[2:end]
-        wireframe!(scene, Rect(n))
+        wireframe!(scene, Rect(n, u))
     end
     return scene
 end
