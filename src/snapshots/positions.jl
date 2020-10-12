@@ -48,7 +48,7 @@ function plot_positionslice(data, u = nothing;
                                ; kw...)
 end
 
-function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u::Units = u"kpc";
+function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
                             times = Counts,
                             xaxis = :x,
                             yaxis = :y,
@@ -140,7 +140,7 @@ function plot_positionslice_adapt(data, u = nothing;
                                ; kw...)
 end
 
-function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u::Units = u"kpc";
+function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
                                   times = Counts,
                                   xaxis = :x,
                                   yaxis = :y,

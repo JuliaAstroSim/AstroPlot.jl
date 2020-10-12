@@ -1,8 +1,18 @@
-function plotly_peano(bits = 1;
-                      marker_size = 3,
+"""
+    plot_peano(bits; kw...)
+"""
+function plot_peano(bits = 1;
                       kw...)
-    if bits > 8
+    if bits > 6
         @warn "bits (=$bits) is too large. May have display lagging"
+        println("Are you sure to plot? [yes]/no")
+        reply = readline()
+        if reply == "" || reply == "yes" || reply == "y"
+            
+        else
+            println("Plotting canceled!")
+            return nothing
+        end
     end
     n = 1<<bits
     len = (n)^3

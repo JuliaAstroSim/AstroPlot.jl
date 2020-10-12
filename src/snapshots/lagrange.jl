@@ -1,4 +1,4 @@
-function lagrange_radii(particles, u::Units = u"kpc")
+function lagrange_radii(particles, u = u"kpc")
     p0 = median(particles, :Pos)
     pos = [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
 
@@ -62,8 +62,8 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
     )
 end
 
-function plot_radii(folder::AbstractString, filenamebase::AbstractString,
-                    Counts::Array{Int64,1}, suffix::AbstractString,
+function plot_radii(folder::String, filenamebase::String,
+                    Counts::Array{Int64,1}, suffix::String,
                     FileType::AbstractOutputType, units = uAstro;
                     times = Counts,
                     savelog = true,

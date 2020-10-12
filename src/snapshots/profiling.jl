@@ -1,4 +1,4 @@
-function plot_profiling(datafile::AbstractString;
+function plot_profiling(datafile::String;
                         title = "Profiling",
                         xlabel = "step",
                         ylabel = "t [ns]",

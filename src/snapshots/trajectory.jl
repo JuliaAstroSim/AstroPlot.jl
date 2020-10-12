@@ -25,7 +25,7 @@ function plot_trajectory(p::Plots.Plot, pos::Array{AbstractPoint,1};
                 kw...)
 end
 
-function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u::Units = u"kpc";
+function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlabel = "$xaxis [$u]",
@@ -48,7 +48,7 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u::Units = u"
 end
 
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                         ids::Array{Int64,1}, ::jld2, u::Units = u"kpc";
+                         ids::Array{Int64,1}, ::jld2, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlabel = "$xaxis [$u]",

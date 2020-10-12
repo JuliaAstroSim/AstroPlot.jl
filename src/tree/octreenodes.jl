@@ -1,9 +1,9 @@
 """
-    Rect(node::PhysicalTrees.OctreeNode, u::Units = u"kpc")
+    Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
 
 Convert an `PhysicalTrees.OctreeNode` to `Rect3D`
 """
-function Rect(node::PhysicalTrees.OctreeNode, u::Units = u"kpc")
+function Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
     p = one(node.Center) * 0.5 * node.SideLength
     return Makie.Rect3D(
         point3(ustrip(u, node.Center - p)),

@@ -22,15 +22,13 @@ import AstroIO: jld2, gadget2, hdf5
 import Makie: plot, plot!, Rect, scatter, scatter!
 
 export
-    plotly_scatter,
-    plotly_mesh,
-    plotly_tree,
-    plotly_treenode,
-    plotly_peano,
-
     unicode_scatter,
     unicode_density,
     unicode_rotationcurve,
+
+    plot_makie, plot_makie!,
+
+    plot_peano,
 
     # Analyse
     rotationcurve,
