@@ -10,6 +10,7 @@ using DataFrames
 using CSV
 using Makie
 using Makie.AbstractPlotting.MakieLayout
+using Colors
 
 using ParallelOperations
 using PhysicalParticles
@@ -63,15 +64,15 @@ include("tree/octreenodes.jl")
 include("tree/octree.jl")
 include("tree/peano.jl")
 
-#include("snapshots/analyse.jl")
-#include("snapshots/trajectory.jl")
-#include("snapshots/positions.jl")
-#include("snapshots/lagrange.jl")
-#include("snapshots/energy.jl")
-#include("snapshots/profiling.jl")
-#include("snapshots/animation.jl")
-#
-#include("RotationCurve.jl")
-#include("Density.jl")
+include("snapshots/analyse.jl")
+include("snapshots/trajectory.jl")
+include("snapshots/positions.jl")
+include("snapshots/lagrange.jl")
+include("snapshots/energy.jl")
+include("snapshots/profiling.jl")
+include("snapshots/animation.jl")
+
+include("RotationCurve.jl")
+include("Density.jl")
 
 end

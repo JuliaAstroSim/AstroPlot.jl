@@ -5,8 +5,6 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
                             ylabel = "",
                             aspect_ratio = 1.0,
                             title = "Positions",
-                            label = nothing,
-                            markersize = 1.0,
                             kw...) where T <: AbstractPoint where N
     len = length(pos)
     x = zeros(len)
@@ -17,13 +15,19 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
         y[i] = ustrip(u, getproperty(pos[i], yaxis))
     end
 
-    return Plots.scatter(x, y, aspect_ratio = aspect_ratio,
-                               title = title,
-                               xlabel = xlabel,
-                               ylabel = ylabel,
-                               label = label,
-                               markersize = markersize,
-                               ; kw...)
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
+        title = title,
+        xlabel = xlabel,
+        ylabel = ylabel,
+        aspect = AxisAspect(aspect_ratio),
+    )
+
+    scatter!(scene, x, y)
+
+    return scene, layout
 end
 
 function plot_positionslice(data, u = nothing;
@@ -33,19 +37,23 @@ function plot_positionslice(data, u = nothing;
                             ylabel = "",
                             aspect_ratio = 1.0,
                             title = "Positions",
-                            label = nothing,
-                            markersize = 1.0,
                             kw...)
     x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
     y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
 
-    return Plots.scatter(x, y, aspect_ratio = aspect_ratio,
-                               title = title,
-                               xlabel = xlabel,
-                               ylabel = ylabel,
-                               label = label,
-                               markersize = markersize,
-                               ; kw...)
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
+        title = title,
+        xlabel = xlabel,
+        ylabel = ylabel,
+        aspect = AxisAspect(aspect_ratio),
+    )
+
+    scatter!(scene, x, y)
+
+    return scene, layout
 end
 
 function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
@@ -54,14 +62,12 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             yaxis = :y,
                             xlabel = "$xaxis [$u]",
                             ylabel = "$yaxis [$u]",
-                            label = nothing,
-                            markersize = 1.0,
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
         data = read_jld(filename)
-        p = plot_positionslice(data, u; title = "Positions at $(times[i])",
+        scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
                                         xaxis = xaxis,
                                         yaxis = yaxis,
                                         xlabel = xlabel,
@@ -71,7 +77,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                                         kw...)
 
         outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
-        png(p, outputfilename)
+        Makie.save(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 end
@@ -85,8 +91,6 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
                                   ylen = 1.0u"kpc",
                                   aspect_ratio = 1.0,
                                   title = "Positions",
-                                  label = nothing,
-                                  markersize = 1.0,
                                   kw...) where T <: AbstractPoint where N
     len = length(pos)
     x = zeros(len)
@@ -100,15 +104,22 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
     xcenter = middle(x)
     ycenter = middle(y)
 
-    return Plots.scatter(x, y, aspect_ratio = aspect_ratio,
-                               title = title,
-                               xlabel = xlabel,
-                               ylabel = ylabel,
-                               xlim = (xcenter - 0.5 * xlen, xcenter + 0.5 * xlen),
-                               ylim = (ycenter - 0.5 * ylen, ycenter + 0.5 * ylen),
-                               label = label,
-                               markersize = markersize,
-                               ; kw...)
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
+        title = title,
+        xlabel = xlabel,
+        ylabel = ylabel,
+        aspect = AxisAspect(aspect_ratio),
+    )
+
+    scatter!(scene, x, y)
+
+    xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
+    ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
+
+    return scene, layout
 end
 
 function plot_positionslice_adapt(data, u = nothing;
@@ -120,8 +131,6 @@ function plot_positionslice_adapt(data, u = nothing;
                                   ylen = 1.0u"kpc",
                                   aspect_ratio = 1.0,
                                   title = "Positions",
-                                  label = nothing,
-                                  markersize = 1.0,
                                   kw...)
     x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
     y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
@@ -129,15 +138,22 @@ function plot_positionslice_adapt(data, u = nothing;
     xcenter = middle(x)
     ycenter = middle(y)
 
-    return Plots.scatter(x, y, aspect_ratio = aspect_ratio,
-                               title = title,
-                               xlabel = xlabel,
-                               ylabel = ylabel,
-                               xlim = (xcenter - 0.5 * xlen, xcenter + 0.5 * xlen),
-                               ylim = (ycenter - 0.5 * ylen, ycenter + 0.5 * ylen),
-                               label = label,
-                               markersize = markersize,
-                               ; kw...)
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
+        title = title,
+        xlabel = xlabel,
+        ylabel = ylabel,
+        aspect = AxisAspect(aspect_ratio),
+    )
+
+    scatter!(scene, x, y)
+
+    xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
+    ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
+
+    return scene, layout
 end
 
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
@@ -148,26 +164,22 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                   ylabel = "$yaxis [$u]",
                                   xlen = 0.2u"kpc",
                                   ylen = 0.2u"kpc",
-                                  label = nothing,
-                                  markersize = 1.0,
                                   kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
         data = read_jld(filename)
-        p = plot_positionslice_adapt(data, u; title = "Positions at $(times[i])",
+        scene, layout = plot_positionslice_adapt(data, u; title = "Positions at $(times[i])",
                                                  xaxis = xaxis,
                                                  yaxis = yaxis,
                                                  xlabel = xlabel,
                                                  ylabel = ylabel,
                                                  xlen = xlen,
                                                  ylen = ylen,
-                                                 label = label,
-                                                 markersize = markersize,
                                                  kw...)
 
         outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
-        png(p, outputfilename)
+        png(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 end

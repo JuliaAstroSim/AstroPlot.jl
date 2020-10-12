@@ -50,8 +50,20 @@ function plot_rotationcurve(particles::Array{T},
         ts = "at $timestamp"
     end
 
-    Plots.plot(Rmean, Vmean; #xerror = Rstd, yerror = Vstd, 
-               ribbon = (Vstd, Vstd),
-               xlabel = xlb, ylabel = ylb, 
-               legend = false, title = "Rotation Curve" * ts, kw...)
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
+        xlabel = xlb,
+        ylabel = ylb,
+        title = "Rotation Curve" * ts
+    )
+
+    Makie.lines!(scene, Rmean, Vmean)
+
+    y_low = Rmean - Vstd
+    y_high = Rmean + Vstd
+    Makie.band!(scene, Rmean, y_low, y_high)
+
+    return scene, layout
 end

@@ -1,11 +1,4 @@
-function plot_trajectory(p::Plots.Plot, pos::Array{AbstractPoint,1};
-                         xaxis = :x,
-                         yaxis = :y,
-                         xlabel = "",
-                         ylabel = "",
-                         aspect_ratio = 1.0,
-                         title = "Trajectory",
-                         kw...)
+function plot_trajectory!(scene, pos::Array{AbstractPoint,1})
     len = length(pos)
     x = zeros(len)
     y = zeros(len)
@@ -14,15 +7,8 @@ function plot_trajectory(p::Plots.Plot, pos::Array{AbstractPoint,1};
         x[i] = getproperty(pos[i], xaxis)
         y[i] = getproperty(pos[i], yaxis)
     end
-
-    Plots.plot!(p, x, y;
-                xaxis = xaxis,
-                yaxis = yaxis,
-                xlabel = xlabel,
-                ylabel = ylabel,
-                aspect_ratio = aspect_ratio,
-                title = title,
-                kw...)
+    
+    Makie.lines!(scene, x, y)
 end
 
 function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
@@ -33,18 +19,19 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          aspect_ratio = 1.0,
                          title = "Trajectory",
                          kw...)
-    p = Plots.plot()
-    for key in keys(pos)
-        pos[key] = ustrip.(u, pos[key])
-        plot_trajectory(p, pos[key],
-                        xaxis = xaxis,
-                        yaxis = yaxis,
-                        xlabel = xlabel,
-                        ylabel = ylabel,
-                        aspect_ratio = aspect_ratio,
-                        label = "particle $key"; kw...)
-    end
-    return p
+    scene, layout = layoutscene()
+    
+    ax = layout[1,1] = LAxis(
+        scene,
+        xlabel = xlabel,
+        ylabel = ylabel,
+        title = title,
+        aspect = AxisAspect(aspect_ratio),
+    )
+
+    scenes = [plot_trajectory!(ax, ustrip.(u, pos[key])) for key in keys(pos)]
+
+    return scene, layout
 end
 
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},

@@ -27,6 +27,6 @@ function plot_energy(datafile::String,
         ylabel = ylabel,
         title = title,
     )
-    Makie.lines!(scene, df.time, df.energy)
+    Makie.lines!(ax, df.time, df.energy)
     return scene, layout
 end
