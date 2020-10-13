@@ -3,6 +3,8 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
                             yaxis = :y,
                             xlabel = "",
                             ylabel = "",
+                            xlims = nothing,
+                            ylims = nothing,
                             aspect_ratio = 1.0,
                             title = "Positions",
                             kw...) where T <: AbstractPoint where N
@@ -25,7 +27,15 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    scatter!(scene, x, y)
+    Makie.scatter!(ax, x, y)
+
+    if !isnothing(xlims)
+        Makie.xlims!(ax, xlims)
+    end
+
+    if !isnothing(ylims)
+        Makie.ylims!(ax, ylims)
+    end
 
     return scene, layout
 end
@@ -35,6 +45,8 @@ function plot_positionslice(data, u = nothing;
                             yaxis = :y,
                             xlabel = "",
                             ylabel = "",
+                            xlims = nothing,
+                            ylims = nothing,
                             aspect_ratio = 1.0,
                             title = "Positions",
                             kw...)
@@ -51,7 +63,15 @@ function plot_positionslice(data, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    scatter!(scene, x, y)
+    Makie.scatter!(ax, x, y)
+
+    if !isnothing(xlims)
+        Makie.xlims!(ax, xlims)
+    end
+
+    if !isnothing(ylims)
+        Makie.ylims!(ax, ylims)
+    end
 
     return scene, layout
 end
@@ -60,6 +80,8 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             times = Counts,
                             xaxis = :x,
                             yaxis = :y,
+                            xlims = nothing,
+                            ylims = nothing,
                             xlabel = "$xaxis [$u]",
                             ylabel = "$yaxis [$u]",
                             kw...)
@@ -70,10 +92,43 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
                                         xaxis = xaxis,
                                         yaxis = yaxis,
+                                        xlims = xlims,
+                                        ylims = ylims,
                                         xlabel = xlabel,
                                         ylabel = ylabel,
-                                        label = label,
-                                        markersize = markersize,
+                                        kw...)
+
+        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
+        Makie.save(outputfilename, scene)
+        next!(progress, showvalues = [("iter", i), ("file", filename)])
+    end
+end
+
+"""
+    plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc"; kw...)
+
+Plot position slice 
+"""
+function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc";
+                            times = Counts,
+                            xaxis = :x,
+                            yaxis = :y,
+                            xlims = nothing,
+                            ylims = nothing,
+                            xlabel = "$xaxis [$u]",
+                            ylabel = "$yaxis [$u]",
+                            kw...)
+    progress = Progress(length(Counts), "Loading data and plotting: ")
+    for i in eachindex(Counts)
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".gadget2"))
+        header, data = read_gadget2(filename)
+        scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
+                                        xaxis = xaxis,
+                                        yaxis = yaxis,
+                                        xlims = xlims,
+                                        ylims = ylims,
+                                        xlabel = xlabel,
+                                        ylabel = ylabel,
                                         kw...)
 
         outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
@@ -114,7 +169,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    scatter!(scene, x, y)
+    Makie.scatter!(ax, x, y)
 
     xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
     ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
@@ -148,7 +203,7 @@ function plot_positionslice_adapt(data, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    scatter!(scene, x, y)
+    Makie.scatter!(ax, x, y)
 
     xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
     ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
@@ -156,6 +211,11 @@ function plot_positionslice_adapt(data, u = nothing;
     return scene, layout
 end
 
+"""
+    plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc"; kw...)
+
+Plot position slice with an adaptive center but fixed box length
+"""
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
                                   times = Counts,
                                   xaxis = :x,
