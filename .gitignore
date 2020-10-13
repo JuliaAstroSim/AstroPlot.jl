@@ -1,3 +1,4 @@
 Manifest.toml
 test/*.png
 test/snapshots/*.png
+test/radii.csv

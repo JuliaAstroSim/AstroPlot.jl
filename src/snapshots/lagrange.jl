@@ -17,29 +17,50 @@ function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
                           xlabel = "t [$uTime]",
                           ylabel = "r [$uLength]",
                           kw...)
-    return Plots.plot(
-        df.Time, df.ScaleRadius;
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
         title = "Scale radius",
-        label = nothing,
         xlabel = xlabel,
         ylabel = ylabel,
-        kw...
     )
+
+    Makie.lines!(ax, df.Time, df.ScaleRadius)
+
+    return scene, layout
 end
 
 function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
                             xlabel = "t [$uTime]",
                             ylabel = "r [$uLength]",
                             kw...)
-    return Plots.plot(
-        df.Time,
-        [df.L10, df.L20, df.L30, df.L40, df.L50, df.L60, df.L70, df.L80, df.L90, df.L100];
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
         title = "Lagrange radii",
-        label = ["10%" "20%" "30%" "40%" "50%" "60%" "70%" "80%" "90%" "100%"],
         xlabel = xlabel,
         ylabel = ylabel,
-        kw...
     )
+
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = RGB(rand(3)...))
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = RGB(rand(3)...))
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = RGB(rand(3)...))
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = RGB(rand(3)...))
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = RGB(rand(3)...))
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = RGB(rand(3)...))
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = RGB(rand(3)...))
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = RGB(rand(3)...))
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = RGB(rand(3)...))
+    p10 = Makie.lines!(ax, df.Time, df.L100, color = RGB(rand(3)...))
+
+    leg = layout[1,2] = LLegend(scene,
+        [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10],
+        ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
+    )
+
+    return scene, layout
 end
 
 """
@@ -51,15 +72,31 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
                               xlabel = "t [$uTime]",
                               ylabel = "r [$uLength]",
                               kw...)
-    return Plots.plot(
-        df.Time,
-        [df.L10, df.L20, df.L30, df.L40, df.L50, df.L60, df.L70, df.L80, df.L90];
+    scene, layout = layoutscene()
+
+    ax = layout[1,1] = LAxis(
+        scene,
         title = "Lagrange radii",
-        label = ["10%" "20%" "30%" "40%" "50%" "60%" "70%" "80%" "90%"],
         xlabel = xlabel,
         ylabel = ylabel,
-        kw...
     )
+
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = RGB(rand(3)...))
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = RGB(rand(3)...))
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = RGB(rand(3)...))
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = RGB(rand(3)...))
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = RGB(rand(3)...))
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = RGB(rand(3)...))
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = RGB(rand(3)...))
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = RGB(rand(3)...))
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = RGB(rand(3)...))
+
+    leg = layout[1,2] = LLegend(scene,
+        [p1, p2, p3, p4, p5, p6, p7, p8, p9],
+        ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"]
+    )
+
+    return scene, layout
 end
 
 function plot_radii(folder::String, filenamebase::String,
@@ -113,10 +150,10 @@ function plot_radii(folder::String, filenamebase::String,
     end
 
     println("Plotting scale radius")
-    ScalePlot = plot_scaleradius(df, uTime, uLength; legend = legend, kw...)
+    ScaleScene, ScaleLayout = plot_scaleradius(df, uTime, uLength; kw...)
 
     println("Plotting Lagrange radii")
-    LagrangePlot = plot_lagrangeradii90(df, uTime, uLength; legend = legend, kw...)
+    LagrangeScene, LagrangeLayout = plot_lagrangeradii90(df, uTime, uLength; kw...)
 
-    return ScalePlot, LagrangePlot, df
+    return ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df
 end

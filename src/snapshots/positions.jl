@@ -76,40 +76,13 @@ function plot_positionslice(data, u = nothing;
     return scene, layout
 end
 
-function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
-                            times = Counts,
-                            xaxis = :x,
-                            yaxis = :y,
-                            xlims = nothing,
-                            ylims = nothing,
-                            xlabel = "$xaxis [$u]",
-                            ylabel = "$yaxis [$u]",
-                            kw...)
-    progress = Progress(length(Counts), "Loading data and plotting: ")
-    for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
-        data = read_jld(filename)
-        scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
-                                        xaxis = xaxis,
-                                        yaxis = yaxis,
-                                        xlims = xlims,
-                                        ylims = ylims,
-                                        xlabel = xlabel,
-                                        ylabel = ylabel,
-                                        kw...)
-
-        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
-        Makie.save(outputfilename, scene)
-        next!(progress, showvalues = [("iter", i), ("file", filename)])
-    end
-end
-
 """
     plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc"; kw...)
 
 Plot position slice 
 """
-function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc";
+function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1},
+                            suffix::String, FileType::AbstractOutputType, u = u"kpc";
                             times = Counts,
                             xaxis = :x,
                             yaxis = :y,
@@ -120,8 +93,14 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".gadget2"))
-        header, data = read_gadget2(filename)
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), suffix))
+    
+        if FileType == gadget2()
+            header, data = read_gadget2(filename)
+        elseif FileType == jld2()
+            data = read_jld(filename)
+        end
+    
         scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
                                         xaxis = xaxis,
                                         yaxis = yaxis,

@@ -1,4 +1,7 @@
-function plot_trajectory!(scene, pos::Array{AbstractPoint,1})
+function plot_trajectory!(scene, pos::Array{T,1};
+                          xaxis = :x,
+                          yaxis = :y,
+                          ) where T<:PVector
     len = length(pos)
     x = zeros(len)
     y = zeros(len)
@@ -8,7 +11,7 @@ function plot_trajectory!(scene, pos::Array{AbstractPoint,1})
         y[i] = getproperty(pos[i], yaxis)
     end
     
-    Makie.lines!(scene, x, y)
+    Makie.lines!(scene, x, y, color = RGB(rand(3)...))
 end
 
 function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
@@ -29,13 +32,15 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
         aspect = AxisAspect(aspect_ratio),
     )
 
-    scenes = [plot_trajectory!(ax, ustrip.(u, pos[key])) for key in keys(pos)]
+    scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis) for key in keys(pos)]
+
+    leg = layout[1,2] = LLegend(scene, scenes, string.(keys(pos)))
 
     return scene, layout
 end
 
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                         ids::Array{Int64,1}, ::jld2, u = u"kpc";
+                         ids::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlabel = "$xaxis [$u]",
@@ -51,8 +56,14 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), ".jld2"))
-        data = read_jld(filename)
+        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), suffix))
+        
+        if FileType == gadget2()
+            header, data = read_gadget2(filename)
+        elseif FileType == jld2()
+            data = read_jld(filename)
+        end
+
         for p in Iterators.flatten(values(data))
             if p.ID in ids
                 push!(pos[p.ID], p.Pos)
