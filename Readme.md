@@ -1,5 +1,45 @@
 # AstroPlot.jl
 
+[![codecov](https://codecov.io/gh/JuliaAstroSim/AstroPlot.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstroSim/AstroPlot.jl)
+
+## Installation
+
+```julia
+]add AstroPlot
+```
+
+## Usage
+
+### Plot a cube
+
+
+
+### Plot an octree
+
+
+
+### Simulation output plotting
+
+
+
+### Analyse snapshots
+
+#### Position slices
+
+
+
+#### Animation
+
+
+
+#### Particle trajectories
+
+
+
+#### Radii evolution
+
+
+
 ## Package ecosystem
 
 - Basic data structure: [PhysicalParticles.jl](https://github.com/JuliaAstroSim/PhysicalParticles.jl)

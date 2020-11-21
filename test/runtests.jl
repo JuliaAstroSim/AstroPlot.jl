@@ -7,10 +7,6 @@ pids = addprocs(3)
 using AstroPlot
 using Makie
 
-include("snapshots.jl")
-include("mesh.jl")
-include("tree.jl")
-
 @testset "Mesh" begin
     scene = plot_makie(Cube(PVector(0.0,0.0,0.0), PVector(1.0,1.0,1.0)), nothing)
     result = Makie.save("cube.png", scene)

@@ -30,3 +30,14 @@ function plot_energy(datafile::String,
     Makie.lines!(ax, df.time, df.energy)
     return scene, layout
 end
+
+function plot_energy!(ax, datafile::String,
+                     uTime = u"Gyr",
+                     uEnergy = u"Msun * kpc^2 / Gyr^2";
+                     title = "Energy",
+                     xlabel = "t [$uTime]",
+                     ylabel = "E [$uEnergy]",
+                     )
+    df = DataFrame(CSV.File(datafile))
+    Makie.lines!(ax, df.time, df.energy)
+end

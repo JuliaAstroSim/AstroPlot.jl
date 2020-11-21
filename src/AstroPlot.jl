@@ -9,7 +9,7 @@ using ProgressMeter
 using DataFrames
 using CSV
 using Makie
-using Makie.AbstractPlotting.MakieLayout
+using AbstractPlotting.MakieLayout
 using Colors
 
 using ParallelOperations
@@ -35,13 +35,13 @@ export
     rotationcurve,
     plot_rotationcurve,
 
-    plot_trajectory,
+    plot_trajectory, plot_trajectory!,
 
     plot_positionslice,
     plot_positionslice_adapt,
 
-    plot_energy,
-    plot_profiling,
+    plot_energy, plot_energy!,
+    plot_profiling, plot_profiling!,
 
     rotvel,
     radialvel,
