@@ -48,10 +48,10 @@ export
     distribution,
 
     lagrange_radii,
-    plot_radii,
-    plot_scaleradius,
-    plot_lagrangeradii,
-    plot_lagrangeradii90,
+    plot_radii, plot_radii!,
+    plot_scaleradius, plot_scaleradius!,
+    plot_lagrangeradii, plot_lagrangeradii!,
+    plot_lagrangeradii90, plot_lagrangeradii90!,
 
     jld2, gadget2, hdf5
 
