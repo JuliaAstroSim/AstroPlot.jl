@@ -25,6 +25,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
+AbstractPlotting = "0.14"
 CSV = "0.7"
 Colors = "0.12"
 DataFrames = "0.21"
