@@ -33,7 +33,7 @@ export
 
     # Analyse
     rotationcurve,
-    plot_rotationcurve,
+    plot_rotationcurve, plot_rotationcurve!,
 
     plot_trajectory, plot_trajectory!,
 

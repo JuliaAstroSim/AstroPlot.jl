@@ -96,7 +96,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), suffix))
     
         if FileType == gadget2()
-            header, data = read_gadget2(filename)
+            data = read_gadget2_pos(filename)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
