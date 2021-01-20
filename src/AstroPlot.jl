@@ -34,6 +34,7 @@ export
     # Analyse
     rotationcurve,
     plot_rotationcurve, plot_rotationcurve!,
+    plot_densitycurve, plot_densitycurve!,
 
     plot_trajectory, plot_trajectory!,
 
@@ -55,6 +56,8 @@ export
 
     jld2, gadget2, hdf5
 
+# Parameters
+SectionIndex = 7.0 / 12.0
 
 include("PhysicalParticles.jl")
 

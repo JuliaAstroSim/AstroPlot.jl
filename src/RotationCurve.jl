@@ -2,8 +2,7 @@ function rotationcurve(data, units = uAstro;
                        rmhead::Int64 = 0,
                        rmtail::Int64 = 0,
                        savelog = true,
-                       savefolder = pwd(),
-                       ) where T<:AbstractParticle3D
+                       savefolder = pwd())
     p0 = median(data, :Pos)
     v0 = averagebymass(data, :Vel)
 
@@ -16,7 +15,7 @@ function rotationcurve(data, units = uAstro;
     R = norm.(pos)
     Vrot = rotvel.(vel, pos)
 
-    Rmean, Vmean, Rstd, Vstd = distribution(R, Vrot, rmhead = rmhead, rmtail = rmtail)
+    Rmean, Vmean, Rstd, Vstd = distribution(R, Vrot;  rmhead, rmtail)
 
     if savelog
         df = DataFrame(Rmean = Rmean, Vmean = Vmean, Rstd = Rstd, Vstd = Vstd)
@@ -32,7 +31,7 @@ function unicode_rotationcurve(data, units = uAstro;
                                timestamp = nothing,
                                rmhead::Int64 = 0,
                                rmtail::Int64 = 0,
-                               ) where T<:AbstractParticle3D
+                               kw...)
     uLength = getuLength(units)
     uVel = getuVel(units)
 
@@ -50,7 +49,8 @@ function unicode_rotationcurve(data, units = uAstro;
     UnicodePlots.lineplot(Rmean, Vmean;
                           xlabel = xlb,
                           ylabel = ylb,
-                          title = "Rotation Curve" * ts)
+                          title = "Rotation Curve" * ts,
+                          kw...)
 end
 
 function plot_rotationcurve!(ax, data, units = uAstro;
@@ -61,11 +61,11 @@ function plot_rotationcurve!(ax, data, units = uAstro;
                              kw...)
     Rmean, Vmean, Rstd, Vstd = rotationcurve(data, units;  rmhead, rmtail, savelog, savefolder)
 
-    Makie.lines!(ax, Rmean, Vmean)
+    Makie.lines!(ax, Rmean, Vmean; kw...)
 
     y_low = Vmean - Vstd
     y_high = Vmean + Vstd
-    Makie.band!(ax, Rmean, y_low, y_high)
+    Makie.band!(ax, Rmean, y_low, y_high; kw...)
 end
 
 function plot_rotationcurve(data,
@@ -97,7 +97,7 @@ function plot_rotationcurve(data,
         title = "Rotation Curve" * ts
     )
 
-    plot_rotationcurve!(ax, data, units;  timestamp, rmhead, rmtail, savelog, savefolder, kw...)
+    plot_rotationcurve!(ax, data, units;  rmhead, rmtail, savelog, savefolder, kw...)
 
     return scene, layout
 end

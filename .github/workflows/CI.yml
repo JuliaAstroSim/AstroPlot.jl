@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [release, pull_request]
 
 # 64-bit Julia only
 jobs:
