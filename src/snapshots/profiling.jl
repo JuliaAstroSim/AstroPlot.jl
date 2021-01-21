@@ -24,7 +24,7 @@ function plot_profiling(datafile::String;
     )
 
     columns = names(df)
-    scenes = [Makie.lines!(ax, df[columns[1]], df[columns[k]],  color = RGB(rand(3)...)) for k in 2:length(columns)]
+    scenes = [Makie.lines!(ax, df[!,columns[1]], df[!,columns[k]],  color = RGB(rand(3)...)) for k in 2:length(columns)]
 
     leg = layout[1,1] = LLegend(
         scene, scenes,
@@ -50,12 +50,12 @@ function plot_profiling!(ax, layout, index, datafile::String;
     columns = names(df)
 
     if isnothing(colors)
-        scenes = [Makie.lines!(ax, df[columns[1]], df[columns[k]], color = RGB(rand(3)...)) for k in 2:length(columns)]
+        scenes = [Makie.lines!(ax, df[!,columns[1]], df[!,columns[k]], color = RGB(rand(3)...)) for k in 2:length(columns)]
     else
         if length(colors) < length(columns) - 1
             colors = [colors...; [RGB(rand(3)...) for i in 1:length(columns)-length(colors)-1]]
         end
-        scenes = [Makie.lines!(ax, df[columns[1]], df[columns[k]], color = colors[k-1]) for k in 2:length(columns)]
+        scenes = [Makie.lines!(ax, df[!,columns[1]], df[!,columns[k]], color = colors[k-1]) for k in 2:length(columns)]
     end
 
     return scenes, columns[2:end]

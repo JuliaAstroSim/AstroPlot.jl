@@ -32,13 +32,17 @@ end
     @test plotsuccess(result)
 end
 
-@testset "Analysis" begin
+@testset "Analyse" begin
     scene, layout = plot_profiling("profiling.csv")
     result = Makie.save("profiling.png", scene)
     @test plotsuccess(result)
 
     scene, layout = plot_energy("energy.csv")
     result = Makie.save("energy.png", scene)
+    @test plotsuccess(result)
+
+    scene, layout = plot_energy_delta("energy.csv")
+    result = Makie.save("energydelta.png")
     @test plotsuccess(result)
 
     scene, layout = plot_densitycurve(data)

@@ -42,6 +42,7 @@ export
     plot_positionslice_adapt,
 
     plot_energy, plot_energy!,
+    plot_energy_delta, plot_energy_delta!,
     plot_profiling, plot_profiling!,
 
     rotvel,
@@ -67,15 +68,14 @@ include("tree/octreenodes.jl")
 include("tree/octree.jl")
 include("tree/peano.jl")
 
-include("snapshots/analyse.jl")
+include("analyse/analyse.jl")
+include("analyse/energy.jl")
+include("analyse/rotationcurve.jl")
+include("analyse/density.jl")
+
 include("snapshots/trajectory.jl")
 include("snapshots/positions.jl")
 include("snapshots/lagrange.jl")
-include("snapshots/energy.jl")
 include("snapshots/profiling.jl")
-include("snapshots/animation.jl")
-
-include("RotationCurve.jl")
-include("Density.jl")
 
 end
