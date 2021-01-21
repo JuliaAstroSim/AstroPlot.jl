@@ -14,14 +14,14 @@ Supported keywords:
 function plot_energy!(ax, df::DataFrame;
                       kw...
                      )
-    Makie.lines!(ax, df.time, df.energy; color, kw...)
+    Makie.lines!(ax, df.time, df.energy; kw...)
 end
 
 function plot_energy!(ax, datafile::String;
                       kw...
                      )
     df = DataFrame(CSV.File(datafile))
-    Makie.lines!(ax, df.time, df.energy; color, kw...)
+    Makie.lines!(ax, df.time, df.energy; kw...)
 end
 
 function plot_energy(datafile::String,

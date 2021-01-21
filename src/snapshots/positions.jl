@@ -114,6 +114,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         Makie.save(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
+    return true
 end
 
 function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
@@ -221,4 +222,5 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
         png(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
+    return true
 end

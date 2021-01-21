@@ -1,11 +1,20 @@
-function lagrange_radii(particles, u = u"kpc")
+function pos_from_center(particles, u = u"kpc")
     p0 = median(particles, :Pos)
-    pos = [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
+    return [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
+end
+
+function pos_from_center(pos::Array{T,1}, u = u"kpc") where T <: AbstractPoint
+    p0 = median(pos)
+    return [ustrip(u, p - p0) for p in pos]
+end
+
+function lagrange_radii(data, u = u"kpc")
+    pos = pos_from_center(data, u)
 
     R = norm.(pos)
     sort!(R)
 
-    N = countdata(particles)
+    N = countdata(data)
     ScaleRadius = R[floor(Int64, N / 2.718281828459)]
 
     len = div(N, 10)
@@ -36,7 +45,7 @@ function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
     return scene, layout
 end
 
-function plot_lagrangeradii!(ax, layout, df::DataFrame;
+function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
                             colors = nothing,
                             kw...)
     if isnothing(colors)
@@ -79,7 +88,7 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
         ylabel = ylabel,
     )
 
-    plot_lagrangeradii!(ax, layout, df; colors, kw...)
+    plot_lagrangeradii!(scene, ax, layout, df; colors, kw...)
 
     return scene, layout
 end
@@ -129,7 +138,7 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
         ylabel = ylabel,
     )
 
-    plot_lagrangeradii!(ax, layout, df; colors, kw...)
+    plot_lagrangeradii!(scene, ax, layout, df; kw...)
 
     return scene, layout
 end

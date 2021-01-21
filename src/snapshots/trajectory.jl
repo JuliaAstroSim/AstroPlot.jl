@@ -102,7 +102,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), suffix))
         
         if FileType == gadget2()
-            data = read_gadget2_pos(filename)
+            header, data = read_gadget2(filename)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
@@ -179,7 +179,7 @@ function plot_trajectory!(scene, layout, ax, index, folder::String, filenamebase
         filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), suffix))
         
         if FileType == gadget2()
-            data = read_gadget2_pos(filename)
+            header, data = read_gadget2(filename)
         elseif FileType == jld2()
             data = read_jld(filename)
         end

@@ -2,3 +2,5 @@ Manifest.toml
 test/*.png
 test/snapshots/*.png
 test/radii.csv
+test/density.csv
+test/rotationcurve.csv
