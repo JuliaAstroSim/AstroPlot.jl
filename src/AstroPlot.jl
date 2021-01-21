@@ -9,7 +9,7 @@ using ProgressMeter
 using DataFrames
 using CSV
 using Makie
-using Makie.AbstractPlotting.MakieLayout
+using AbstractPlotting.MakieLayout
 using Colors
 
 using ParallelOperations
@@ -33,28 +33,31 @@ export
 
     # Analyse
     rotationcurve,
-    plot_rotationcurve,
+    plot_rotationcurve, plot_rotationcurve!,
+    plot_densitycurve, plot_densitycurve!,
 
-    plot_trajectory,
+    plot_trajectory, plot_trajectory!,
 
     plot_positionslice,
     plot_positionslice_adapt,
 
-    plot_energy,
-    plot_profiling,
+    plot_energy, plot_energy!,
+    plot_profiling, plot_profiling!,
 
     rotvel,
     radialvel,
     distribution,
 
     lagrange_radii,
-    plot_radii,
-    plot_scaleradius,
-    plot_lagrangeradii,
-    plot_lagrangeradii90,
+    plot_radii, plot_radii!,
+    plot_scaleradius, plot_scaleradius!,
+    plot_lagrangeradii, plot_lagrangeradii!,
+    plot_lagrangeradii90, plot_lagrangeradii90!,
 
     jld2, gadget2, hdf5
 
+# Parameters
+SectionIndex = 7.0 / 12.0
 
 include("PhysicalParticles.jl")
 

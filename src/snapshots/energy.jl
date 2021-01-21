@@ -11,12 +11,26 @@ Supported keywords:
 - xlabel
 - ylabel
 """
+function plot_energy!(ax, df::DataFrame;
+                      kw...
+                     )
+    Makie.lines!(ax, df.time, df.energy; kw...)
+end
+
+function plot_energy!(ax, datafile::String;
+                      kw...
+                     )
+    df = DataFrame(CSV.File(datafile))
+    Makie.lines!(ax, df.time, df.energy; kw...)
+end
+
 function plot_energy(datafile::String,
                      uTime = u"Gyr",
                      uEnergy = u"Msun * kpc^2 / Gyr^2";
                      title = "Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
+                     kw...
                      )
     df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene()
@@ -27,6 +41,7 @@ function plot_energy(datafile::String,
         ylabel = ylabel,
         title = title,
     )
-    Makie.lines!(ax, df.time, df.energy)
+
+    plot_energy!(ax, df; kw...)
     return scene, layout
 end

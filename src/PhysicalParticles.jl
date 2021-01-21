@@ -85,11 +85,11 @@ function unicode_scatter(data::Array{PVector{T}, 1}, u = u"kpc";
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end
 
-function unicode_scatter(data::Array{T, 1}, u = u"kpc";
+function unicode_scatter(data, u = u"kpc";
                          xaxis = :x, yaxis = :y,
                          xlabel = "$xaxis [$u]", ylabel = "$yaxis [$u]",
-                         kw...) where T<:AbstractParticle
-    d = [ustrip(u, p.Pos) for p in data]
+                         kw...)
+    d = [ustrip(u, p.Pos) for p in Iterators.flatten(values(data))]
 
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end
