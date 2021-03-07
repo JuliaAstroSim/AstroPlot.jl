@@ -44,7 +44,7 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          kw...)
     scene, layout = layoutscene()
     
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,
@@ -58,7 +58,7 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
         scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]) for i in 1:length(keys(pos))]
     end
 
-    leg = layout[1,1] = LLegend(
+    leg = layout[1,1] = Legend(
         scene, scenes,
         string.(keys(pos)),
         tellheight = false,
@@ -125,10 +125,10 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
                            aspect_ratio = aspect_ratio,
                            title = title,
                            colors = colors,
-                           kw...)
+                           kw...), pos
 end
 
-function plot_trajectory!(scene, layout, ax, index, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
+function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlims = nothing,
@@ -156,7 +156,7 @@ function plot_trajectory!(scene, layout, ax, index, pos::Dict{Int64, Array{Abstr
     return scenes, string.(keys(pos))
 end
 
-function plot_trajectory!(scene, layout, ax, index, folder::String, filenamebase::String, Counts::Array{Int64,1},
+function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::String, Counts::Array{Int64,1},
                          ids::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
@@ -192,7 +192,7 @@ function plot_trajectory!(scene, layout, ax, index, folder::String, filenamebase
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 
-    return plot_trajectory!(scene, layout, ax, index, pos, u;
+    return plot_trajectory!(scene, layout, ax, pos, u;
                            xaxis = xaxis,
                            yaxis = yaxis,
                            xlims = xlims,

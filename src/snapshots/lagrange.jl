@@ -33,7 +33,7 @@ function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
                           kw...)
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = "Scale radius",
         xlabel = xlabel,
@@ -69,7 +69,7 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
 
     scenes = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
     columns = ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
-    leg = layout[1,2] = LLegend(scene, scenes, columns)
+    leg = layout[1,2] = Legend(scene, scenes, columns)
 
     return scenes, columns
 end
@@ -81,7 +81,7 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
                             kw...)
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = "Lagrange radii",
         xlabel = xlabel,
@@ -131,7 +131,7 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
                               kw...)
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = "Lagrange radii",
         xlabel = xlabel,

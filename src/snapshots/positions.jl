@@ -1,3 +1,11 @@
+function plot_positionslice!(scene, data, u = nothing;
+                             xaxis = :x,
+                             yaxis = :y,
+                             kw...)
+    x, y = pack_xy(data, u; xaxis, yaxis)
+    Makie.scatter!(scene, x, y; kw...)
+end
+
 function plot_positionslice(pos::Array{T, N}, u = nothing;
                             xaxis = :x,
                             yaxis = :y,
@@ -19,7 +27,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
 
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = title,
         xlabel = xlabel,
@@ -27,7 +35,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y)
+    Makie.scatter!(ax, x, y; kw...)
 
     if !isnothing(xlims)
         Makie.xlims!(ax, xlims)
@@ -55,7 +63,7 @@ function plot_positionslice(data, u = nothing;
 
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = title,
         xlabel = xlabel,
@@ -63,7 +71,7 @@ function plot_positionslice(data, u = nothing;
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y)
+    Makie.scatter!(ax, x, y; kw...)
 
     if !isnothing(xlims)
         Makie.xlims!(ax, xlims)
@@ -141,7 +149,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
 
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = title,
         xlabel = xlabel,
@@ -175,7 +183,7 @@ function plot_positionslice_adapt(data, u = nothing;
 
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         title = title,
         xlabel = xlabel,

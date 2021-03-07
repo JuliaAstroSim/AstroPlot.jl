@@ -32,7 +32,7 @@ function plot_energy(datafile::String,
     df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene()
     
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,
@@ -73,7 +73,7 @@ function plot_energy_delta(datafile::String,
     df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene()
     
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,

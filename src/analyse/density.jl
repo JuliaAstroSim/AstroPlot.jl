@@ -70,7 +70,7 @@ function plot_densitycurve(data,
         ts = "at $timestamp"
     end
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         xlabel = xlb,
         ylabel = ylb,

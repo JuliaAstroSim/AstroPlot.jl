@@ -93,3 +93,51 @@ function unicode_scatter(data, u = u"kpc";
 
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end
+
+function pack_xy(data::Dict{K, Array{T, N}}, u = nothing;
+                 xaxis = :x,
+                 yaxis = :y,
+                 ) where K where N where T<:AbstractPoint
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
+    return x, y
+end
+
+function pack_xy(data::Dict{K, Array{T, N}}, u = nothing;
+                 xaxis = :x,
+                 yaxis = :y,
+                 ) where K where N where T<:AbstractParticle
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
+    return x, y
+end
+
+function pack_xy(data::Array{T,N}, u = nothing;
+                 xaxis = :x,
+                 yaxis = :y,
+                 kw...) where T <: AbstractPoint where N
+    len = length(pos)
+    x = zeros(len)
+    y = zeros(len)
+
+    for i in 1:len
+        x[i] = ustrip(u, getproperty(data[i], xaxis))
+        y[i] = ustrip(u, getproperty(data[i], yaxis))
+    end
+    return x, y
+end
+
+function pack_xy(data::Array{T,N}, u = nothing;
+                 xaxis = :x,
+                 yaxis = :y,
+                 kw...) where T <: AbstractParticle where N
+    len = length(pos)
+    x = zeros(len)
+    y = zeros(len)
+
+    for i in 1:len
+        x[i] = ustrip(u, getproperty(data.Pos[i], xaxis))
+        y[i] = ustrip(u, getproperty(data.Pos[i], yaxis))
+    end
+    return x, y
+end

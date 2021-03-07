@@ -31,6 +31,8 @@ export
 
     plot_peano,
 
+    pack_xy,
+
     # Analyse
     rotationcurve,
     plot_rotationcurve, plot_rotationcurve!,
@@ -38,7 +40,7 @@ export
 
     plot_trajectory, plot_trajectory!,
 
-    plot_positionslice,
+    plot_positionslice, plot_positionslice!,
     plot_positionslice_adapt,
 
     plot_energy, plot_energy!,

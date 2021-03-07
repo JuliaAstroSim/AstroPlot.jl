@@ -16,7 +16,7 @@ function plot_profiling(datafile::String;
     df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene()
 
-    ax = layout[1,1] = LAxis(
+    ax = layout[1,1] = Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,
@@ -26,7 +26,7 @@ function plot_profiling(datafile::String;
     columns = names(df)
     scenes = [Makie.lines!(ax, df[!,columns[1]], df[!,columns[k]],  color = RGB(rand(3)...)) for k in 2:length(columns)]
 
-    leg = layout[1,1] = LLegend(
+    leg = layout[1,1] = Legend(
         scene, scenes,
         columns[2:end],
         tellheight = false,
