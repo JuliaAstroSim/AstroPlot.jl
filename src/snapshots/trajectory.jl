@@ -90,6 +90,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
                          aspect_ratio = 1.0,
                          title = "Trajectory",
                          colors = nothing,
+                         formatstring = "%04d",
                          kw...
                          )
     pos = Dict{Int64, Array{AbstractPoint,1}}()
@@ -99,7 +100,8 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), suffix))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
             header, data = read_gadget2(filename)
@@ -167,6 +169,7 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
                          aspect_ratio = 1.0,
                          title = "Trajectory",
                          colors = nothing,
+                         formatstring = "%04d",
                          kw...
                          )
     pos = Dict{Int64, Array{AbstractPoint,1}}()
@@ -176,7 +179,8 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", i), suffix))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
             header, data = read_gadget2(filename)

@@ -56,19 +56,19 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
         end
     end
 
-    p1 = Makie.lines!(ax, df.Time, df.L10, color = RGB(rand(3)...))
-    p2 = Makie.lines!(ax, df.Time, df.L20, color = RGB(rand(3)...))
-    p3 = Makie.lines!(ax, df.Time, df.L30, color = RGB(rand(3)...))
-    p4 = Makie.lines!(ax, df.Time, df.L40, color = RGB(rand(3)...))
-    p5 = Makie.lines!(ax, df.Time, df.L50, color = RGB(rand(3)...))
-    p6 = Makie.lines!(ax, df.Time, df.L60, color = RGB(rand(3)...))
-    p7 = Makie.lines!(ax, df.Time, df.L70, color = RGB(rand(3)...))
-    p8 = Makie.lines!(ax, df.Time, df.L80, color = RGB(rand(3)...))
-    p9 = Makie.lines!(ax, df.Time, df.L90, color = RGB(rand(3)...))
-    p10 = Makie.lines!(ax, df.Time, df.L100, color = RGB(rand(3)...))
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1])
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2])
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3])
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4])
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5])
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6])
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7])
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8])
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9])
+    p10 = Makie.lines!(ax, df.Time, df.L100, color = colors[10])
 
-    scenes = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
-    columns = ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
+    scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
+    columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
     leg = layout[1,2] = Legend(scene, scenes, columns)
 
     return scenes, columns
@@ -93,7 +93,7 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
     return scene, layout
 end
 
-function plot_lagrangeradii90!(ax, df::DataFrame;
+function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
                                colors = nothing,
                                kw...)
     if isnothing(colors)
@@ -104,18 +104,19 @@ function plot_lagrangeradii90!(ax, df::DataFrame;
         end
     end
 
-    p1 = Makie.lines!(ax, df.Time, df.L10, color = RGB(rand(3)...))
-    p2 = Makie.lines!(ax, df.Time, df.L20, color = RGB(rand(3)...))
-    p3 = Makie.lines!(ax, df.Time, df.L30, color = RGB(rand(3)...))
-    p4 = Makie.lines!(ax, df.Time, df.L40, color = RGB(rand(3)...))
-    p5 = Makie.lines!(ax, df.Time, df.L50, color = RGB(rand(3)...))
-    p6 = Makie.lines!(ax, df.Time, df.L60, color = RGB(rand(3)...))
-    p7 = Makie.lines!(ax, df.Time, df.L70, color = RGB(rand(3)...))
-    p8 = Makie.lines!(ax, df.Time, df.L80, color = RGB(rand(3)...))
-    p9 = Makie.lines!(ax, df.Time, df.L90, color = RGB(rand(3)...))
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1])
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2])
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3])
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4])
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5])
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6])
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7])
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8])
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9])
 
-    scenes = [p1, p2, p3, p4, p5, p6, p7, p8, p9]
-    columns = ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"]
+    scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
+    columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
+    leg = layout[1,2] = Legend(scene, scenes, columns)
 
     return scenes, columns
 end
@@ -138,7 +139,7 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
         ylabel = ylabel,
     )
 
-    plot_lagrangeradii!(scene, ax, layout, df; kw...)
+    plot_lagrangeradii90!(scene, ax, layout, df; kw...)
 
     return scene, layout
 end
@@ -149,6 +150,7 @@ function plot_radii(folder::String, filenamebase::String,
                     times = Counts,
                     savelog = true,
                     savefolder = pwd(),
+                    formatstring = "%04d",
                     kw...)
 
     uTime = getuTime(units)
@@ -171,7 +173,8 @@ function plot_radii(folder::String, filenamebase::String,
 
     progress = Progress(length(Counts), "Loading data and precessing: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), suffix))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
             data = read_gadget2_pos(filename)
@@ -195,7 +198,7 @@ function plot_radii(folder::String, filenamebase::String,
     println("Plotting scale radius")
     ScaleScene, ScaleLayout = plot_scaleradius(df, uTime, uLength; kw...)
 
-    println("Plotting Lagrange radii")
+    println("Plotting Lagrange radii 90%")
     LagrangeScene, LagrangeLayout = plot_lagrangeradii90(df, uTime, uLength; kw...)
 
     return ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df
@@ -207,6 +210,7 @@ function plot_radii!(AS, AL, folder::String, filenamebase::String,
                     times = Counts,
                     savelog = true,
                     savefolder = pwd(),
+                    formatstring = "%04d",
                     kw...)
     uTime = getuTime(units)
     uLength = getuLength(units)
@@ -228,7 +232,8 @@ function plot_radii!(AS, AL, folder::String, filenamebase::String,
 
     progress = Progress(length(Counts), "Loading data and precessing: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), suffix))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
             header, data = read_gadget2(filename)

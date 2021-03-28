@@ -98,10 +98,12 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             ylims = nothing,
                             xlabel = "$xaxis [$u]",
                             ylabel = "$yaxis [$u]",
+                            formatstring = "%04d",
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), suffix))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
     
         if FileType == gadget2()
             data = read_gadget2_pos(filename)
@@ -118,7 +120,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                                         ylabel = ylabel,
                                         kw...)
 
-        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
+        outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
         Makie.save(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
@@ -212,10 +214,12 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                   ylabel = "$yaxis [$u]",
                                   xlen = 0.2u"kpc",
                                   ylen = 0.2u"kpc",
+                                  formatstring = "%04d",
                                   kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
-        filename = joinpath(folder, string(filenamebase, @sprintf("%04d", Counts[i]), ".jld2"))
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, ".jld2"))
         data = read_jld(filename)
         scene, layout = plot_positionslice_adapt(data, u; title = "Positions at $(times[i])",
                                                  xaxis = xaxis,
@@ -226,7 +230,7 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                                  ylen = ylen,
                                                  kw...)
 
-        outputfilename = joinpath(folder, string("pos_", @sprintf("%04d", Counts[i]), ".png"))
+        outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
         png(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
