@@ -23,17 +23,9 @@ end
 function unicode_density(data, units = uAstro;
                          timestamp = nothing,
                          kw...)
-    uLength = getuLength(units)
-    uMass = getuMass(units)
-
-    xlb = "R" * axisunit(uLength)
-    ylb = "Mass" * axisunit(uMass)
-
-    if isnothing(timestamp)
-        ts = ""
-    else
-        ts = "at $timestamp"
-    end
+    xlb = "R" * axisunit(getuLength(units))
+    ylb = "Mass" * axisunit(getuMass(units))
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
 
     Rmean, Mmean = densitycurve(data, units)
     
@@ -58,17 +50,13 @@ function plot_densitycurve(data,
                            timestamp = nothing,
                            savelog = true,
                            savefolder = pwd(),
+                           resolution = (1600, 900),
                            kw...)
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     xlb = "R" * axisunit(getuLength(units))
     ylb = "Rho" * axisunit(getuDensity(units))
-
-    if isnothing(timestamp)
-        ts = ""
-    else
-        ts = "at $timestamp"
-    end
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
 
     ax = layout[1,1] = Axis(
         scene,

@@ -41,8 +41,9 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          aspect_ratio = 1.0,
                          title = "Trajectory",
                          colors = nothing,
+                         resolution = (1600, 900),
                          kw...)
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
         scene,

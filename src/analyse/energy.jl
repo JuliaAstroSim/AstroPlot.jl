@@ -28,9 +28,10 @@ function plot_energy(datafile::String,
                      title = "Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
+                     resolution = (1600, 900),
                      kw...)
     df = DataFrame(CSV.File(datafile))
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
         scene,
@@ -69,9 +70,10 @@ function plot_energy_delta(datafile::String,
                            title = "Delta Energy",
                            xlabel = "t [$uTime]",
                            ylabel = "dE [$uEnergy]",
+                           resolution = (1600, 900),
                            kw...)
     df = DataFrame(CSV.File(datafile))
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
         scene,

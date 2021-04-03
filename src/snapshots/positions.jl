@@ -15,6 +15,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
                             ylims = nothing,
                             aspect_ratio = 1.0,
                             title = "Positions",
+                            resolution = (1600, 900),
                             kw...) where T <: AbstractPoint where N
     len = length(pos)
     x = zeros(len)
@@ -25,7 +26,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
         y[i] = ustrip(u, getproperty(pos[i], yaxis))
     end
 
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -57,11 +58,12 @@ function plot_positionslice(data, u = nothing;
                             ylims = nothing,
                             aspect_ratio = 1.0,
                             title = "Positions",
+                            resolution = (1600, 900),
                             kw...)
     x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
     y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
 
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -111,7 +113,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
             data = read_jld(filename)
         end
     
-        scene, layout = plot_positionslice(data, u; title = "Positions at $(times[i])",
+        scene, layout = plot_positionslice(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis = xaxis,
                                         yaxis = yaxis,
                                         xlims = xlims,
@@ -136,6 +138,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
                                   ylen = 1.0u"kpc",
                                   aspect_ratio = 1.0,
                                   title = "Positions",
+                                  resolution = (1600, 900),
                                   kw...) where T <: AbstractPoint where N
     len = length(pos)
     x = zeros(len)
@@ -149,7 +152,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
     xcenter = middle(x)
     ycenter = middle(y)
 
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -176,6 +179,7 @@ function plot_positionslice_adapt(data, u = nothing;
                                   ylen = 1.0u"kpc",
                                   aspect_ratio = 1.0,
                                   title = "Positions",
+                                  resolution = (1600, 900),
                                   kw...)
     x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
     y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
@@ -183,7 +187,7 @@ function plot_positionslice_adapt(data, u = nothing;
     xcenter = middle(x)
     ycenter = middle(y)
 
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -221,7 +225,7 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
         snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
         filename = joinpath(folder, string(filenamebase, snapshot_index, ".jld2"))
         data = read_jld(filename)
-        scene, layout = plot_positionslice_adapt(data, u; title = "Positions at $(times[i])",
+        scene, layout = plot_positionslice_adapt(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis = xaxis,
                                                  yaxis = yaxis,
                                                  xlabel = xlabel,

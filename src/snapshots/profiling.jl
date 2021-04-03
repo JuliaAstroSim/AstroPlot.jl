@@ -12,9 +12,10 @@ function plot_profiling(datafile::String;
                         title = "Profiling",
                         xlabel = "step",
                         ylabel = "t [ns]",
+                        resolution = (1600, 900),
                         kw...)
     df = DataFrame(CSV.File(datafile))
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,

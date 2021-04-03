@@ -1,7 +1,7 @@
 function rotationcurve(data, units = uAstro;
                        rmhead::Int64 = 0,
                        rmtail::Int64 = 0,
-                       savelog = true,
+                       savelog::Bool = true,
                        savefolder = pwd())
     p0 = median(data, :Pos)
     v0 = averagebymass(data, :Vel)
@@ -32,17 +32,10 @@ function unicode_rotationcurve(data, units = uAstro;
                                rmhead::Int64 = 0,
                                rmtail::Int64 = 0,
                                kw...)
-    uLength = getuLength(units)
-    uVel = getuVel(units)
+    xlb = "R" * axisunit(getuLength(units))
+    ylb = "RotV" * axisunit(getuVel(units))
 
-    xlb = "R" * axisunit(uLength)
-    ylb = "RotV" * axisunit(uVel)
-
-    if isnothing(timestamp)
-        ts = ""
-    else
-        ts = "at $timestamp"
-    end
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
 
     Rmean, Vmean, Rstd, Vstd = rotationcurve(data, units;  rmhead, rmtail)
     
@@ -68,27 +61,19 @@ function plot_rotationcurve!(ax, data, units = uAstro;
     Makie.band!(ax, Rmean, y_low, y_high; kw...)
 end
 
-function plot_rotationcurve(data,
-                              units = uAstro;
+function plot_rotationcurve(data, units = uAstro;
                               timestamp = nothing,
                               rmhead::Int64 = 0,
                               rmtail::Int64 = 0,
                               savelog = true,
                               savefolder = pwd(),
+                              resolution = (1600, 900),
                               kw...) where T<:AbstractParticle3D
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
-    uLength = getuLength(units)
-    uVel = getuVel(units)
-
-    xlb = "R" * axisunit(uLength)
-    ylb = "RotV" * axisunit(uVel)
-
-    if isnothing(timestamp)
-        ts = ""
-    else
-        ts = "at $timestamp"
-    end
+    xlb = "R" * axisunit(getuLength(units))
+    ylb = "RotV" * axisunit(getuVel(units))
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
 
     ax = layout[1,1] = Axis(
         scene,

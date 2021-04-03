@@ -30,8 +30,9 @@ end
 function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
                           xlabel = "t [$uTime]",
                           ylabel = "r [$uLength]",
+                          resolution = (1600, 900),
                           kw...)
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -78,8 +79,9 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
                             xlabel = "t [$uTime]",
                             ylabel = "r [$uLength]",
                             colors = nothing,
+                            resolution = (1600, 900),
                             kw...)
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
@@ -129,8 +131,9 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units, kw...
 function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
                               xlabel = "t [$uTime]",
                               ylabel = "r [$uLength]",
+                              resolution = (1600, 900),
                               kw...)
-    scene, layout = layoutscene()
+    scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
         scene,
