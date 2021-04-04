@@ -27,14 +27,12 @@ function unicode_radialpotential(data, units = uAstro;
         kw...
     )
     R, pot = radialpotential(data, units; savelog, savefolder)
-    xlb = "log(R$(axisunit(getuLength(units))))"
-    ylb = "log(Acc$(axisunit(getuEnergy(units))))"
+    
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     UnicodePlots.scatterplot(
         log10.(R), log10.(abs.(pot)) .* sign.(pot);
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "log(R$(axisunit(getuLength(units))))",
+        ylabel = "log(Acc$(axisunit(getuEnergy(units))))",
         title = "Radial Potential" * ts,
         kw...
     )
@@ -60,14 +58,11 @@ function plot_radialpotential(data, units = uAstro;
     )
     scene, layout = layoutscene(; resolution)
 
-    xlb = "log(R$(axisunit(getuLength(units))))"
-    ylb = "log(Potential$(axisunit(getuEnergy(units))))"
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     ax = layout[1,1] = Axis(
         scene,
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "log(R$(axisunit(getuLength(units))))",
+        ylabel = "log(Potential$(axisunit(getuEnergy(units))))",
         title = "Radial Potential" * ts
     )
 

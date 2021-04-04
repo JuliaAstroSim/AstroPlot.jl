@@ -34,14 +34,12 @@ function unicode_radialforce(data, units = uAstro;
         kw...
     )
     R, acc = radialforce(data, units; savelog, savefolder)
-    xlb = "log(R$(axisunit(getuLength(units))))"
-    ylb = "log(Acc$(axisunit(getuAcc(units))))"
+    
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     UnicodePlots.scatterplot(
         log10.(R), log10.(acc);
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "log(R$(axisunit(getuLength(units))))",
+        ylabel = "log(Acc$(axisunit(getuAcc(units))))",
         title = "Radial Force" * ts,
         kw...
     )
@@ -66,15 +64,12 @@ function plot_radialforce(data, units = uAstro;
         kw...
     )
     scene, layout = layoutscene(; resolution)
-
-    xlb = "log(R$(axisunit(getuLength(units))))"
-    ylb = "log(Acc$(axisunit(getuAcc(units))))"
+    
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     ax = layout[1,1] = Axis(
         scene,
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "log(R$(axisunit(getuLength(units))))",
+        ylabel = "log(Acc$(axisunit(getuAcc(units))))",
         title = "Radial Force" * ts
     )
 

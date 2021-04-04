@@ -23,15 +23,12 @@ end
 function unicode_density(data, units = uAstro;
                          timestamp = nothing,
                          kw...)
-    xlb = "R" * axisunit(getuLength(units))
-    ylb = "Mass" * axisunit(getuMass(units))
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     Rmean, Mmean = densitycurve(data, units)
     
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
     UnicodePlots.lineplot(Rmean, Mmean;
-                          xlabel = xlb,
-                          ylabel = ylb,
+                          xlabel = "R" * axisunit(getuLength(units)),
+                          ylabel = "Mass" * axisunit(getuMass(units)),
                           title = "Rotation Curve" * ts,
                           kw...)
 end
@@ -54,14 +51,11 @@ function plot_densitycurve(data,
                            kw...)
     scene, layout = layoutscene(; resolution)
 
-    xlb = "R" * axisunit(getuLength(units))
-    ylb = "Rho" * axisunit(getuDensity(units))
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     ax = layout[1,1] = Axis(
         scene,
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "R" * axisunit(getuLength(units)),
+        ylabel = "Rho" * axisunit(getuDensity(units)),
         title = "Rotation Curve" * ts
     )
 

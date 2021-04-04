@@ -32,16 +32,12 @@ function unicode_rotationcurve(data, units = uAstro;
                                rmhead::Int64 = 0,
                                rmtail::Int64 = 0,
                                kw...)
-    xlb = "R" * axisunit(getuLength(units))
-    ylb = "RotV" * axisunit(getuVel(units))
-
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     Rmean, Vmean, Rstd, Vstd = rotationcurve(data, units;  rmhead, rmtail)
-    
+                               
+    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
     UnicodePlots.lineplot(Rmean, Vmean;
-                          xlabel = xlb,
-                          ylabel = ylb,
+                          xlabel = "R" * axisunit(getuLength(units)),
+                          ylabel = "RotV" * axisunit(getuVel(units)),
                           title = "Rotation Curve" * ts,
                           kw...)
 end
@@ -70,15 +66,12 @@ function plot_rotationcurve(data, units = uAstro;
                               resolution = (1600, 900),
                               kw...) where T<:AbstractParticle3D
     scene, layout = layoutscene(; resolution)
-
-    xlb = "R" * axisunit(getuLength(units))
-    ylb = "RotV" * axisunit(getuVel(units))
+    
     ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-
     ax = layout[1,1] = Axis(
         scene,
-        xlabel = xlb,
-        ylabel = ylb,
+        xlabel = "R" * axisunit(getuLength(units)),
+        ylabel = "RotV" * axisunit(getuVel(units)),
         title = "Rotation Curve" * ts
     )
 
