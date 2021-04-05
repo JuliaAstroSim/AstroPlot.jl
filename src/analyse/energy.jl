@@ -189,7 +189,6 @@ function plot_energy_delta(df::DataFrame;
                            ylabel = "dE [$uEnergy]",
                            resolution = (1600, 900),
                            kw...)
-    df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
@@ -206,4 +205,80 @@ end
 function plot_energy_delta(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy_delta(df; kw...)
+end
+
+function kinetic_energy(p::AbstractParticle)
+    return 0.5 * p.Mass * p.Vel * p.Vel
+end
+
+function sum_kinetic(data)
+    k = map(d -> kinetic_energy(d), Iterators.flatten(values(data)))
+    return sum(k)
+end
+
+function sum_potential(data)
+    return sum([p.Potential for p in Iterators.flatten(values(data))])
+end
+
+function plot_energy(
+    folder::String, filenamebase::String,
+    Counts::Vector{Int64}, suffix::String,
+    FileType::AbstractOutputType, units = uAstro;
+    times = Counts,
+    savelog = true,
+    savefolder = pwd(),
+    formatstring = "%04d",
+    potential = true,
+    kinetic = true,
+    kw...
+)
+    uTime = getuTime(units)
+    uEnergy = getuEnergy(units)
+    df = DataFrame(
+        time = Float64[],
+        kinetic = Float64[],
+        potential = Float64[],
+        total = Float64[],
+    )
+    
+    progress = Progress(length(Counts), "Loading data and precessing: ")
+    for i in eachindex(Counts)
+        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
+
+        if FileType == gadget2()
+            header, data = read_gadget2(filename, pot = true)
+        elseif FileType == jld2()
+            data = read_jld(filename)
+        end
+
+        KE = sum_kinetic(data)
+        PE = sum_potential(data)
+        push!(df, [
+            ustrip(uTime, times[i]),
+            ustrip.(uEnergy, [KE, PE, KE + PE])...
+        ])
+
+        next!(progress, showvalues = [
+            ("iter", i),
+            ("time", times[i]),
+            ("file", filename),
+            ("kinetic energy", KE),
+            ("potential energy", PE),
+            ("total energy", KE + PE),
+        ])
+    end
+
+    if savelog
+        outputfile = joinpath(savefolder, "energy.csv")
+        CSV.write(outputfile, df)
+        println("Energy data saved to ", outputfile)
+    end
+
+    if iszero(sum(df.potential))
+        @warn "Total potential is zero! Check your output settings."
+    end
+
+    println("Plotting energy")
+    return plot_energy(df; uTime, uEnergy, potential, kinetic, kw...)
 end
