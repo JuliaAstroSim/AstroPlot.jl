@@ -40,15 +40,14 @@ function plot_energy_kinetic!(ax, datafile::String; kw...)
     plot_energy_kinetic!(ax, df; kw...)
 end
 
-function plot_energy_kinetic(datafile::String,
+function plot_energy_kinetic(df::DataFrame;
                      uTime = u"Gyr",
-                     uEnergy = u"Msun * kpc^2 / Gyr^2";
+                     uEnergy = u"Msun * kpc^2 / Gyr^2",
                      title = "Kinetic Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
                      resolution = (1600, 900),
                      kw...)
-    df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
@@ -62,15 +61,19 @@ function plot_energy_kinetic(datafile::String,
     return scene, layout
 end
 
-function plot_energy_potential(datafile::String,
+function plot_energy_kinetic(datafile::String; kw...)
+    df = DataFrame(CSV.File(datafile))
+    plot_energy_kinetic(df; kw...)
+end
+
+function plot_energy_potential(df::DataFrame;
                      uTime = u"Gyr",
-                     uEnergy = u"Msun * kpc^2 / Gyr^2";
+                     uEnergy = u"Msun * kpc^2 / Gyr^2",
                      title = "Potential Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
                      resolution = (1600, 900),
                      kw...)
-    df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
@@ -84,9 +87,14 @@ function plot_energy_potential(datafile::String,
     return scene, layout
 end
 
-function plot_energy(datafile::String,
+function plot_energy_potential(datafile::String; kw...)
+    df = DataFrame(CSV.File(datafile))
+    plot_energy_potential(df; kw...)
+end
+
+function plot_energy(df::DataFrame;
                      uTime = u"Gyr",
-                     uEnergy = u"Msun * kpc^2 / Gyr^2";
+                     uEnergy = u"Msun * kpc^2 / Gyr^2",
                      title = "Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
@@ -97,7 +105,6 @@ function plot_energy(datafile::String,
                      colorkinetic = :blue,
                      colortotal = :black,
                      kw...)
-    df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene(; resolution)
     
     ax = layout[1,1] = Axis(
@@ -144,6 +151,11 @@ function plot_energy(datafile::String,
     return scene, layout
 end
 
+function plot_energy(datafile::String; kw...)
+    df = DataFrame(CSV.File(datafile))
+    plot_energy(df; kw...)
+end
+
 function energy_delta(df::DataFrame)
     time = @view df.time[2:end]
     E0 = @view df.energy[1:end-1]
@@ -169,9 +181,9 @@ function plot_energy_delta!(ax, datafile::String;
     plot_energy_delta!(ax, df; kw...)
 end
 
-function plot_energy_delta(datafile::String,
+function plot_energy_delta(df::DataFrame;
                            uTime = u"Gyr",
-                           uEnergy = u"Msun * kpc^2 / Gyr^2";
+                           uEnergy = u"Msun * kpc^2 / Gyr^2",
                            title = "Delta Energy",
                            xlabel = "t [$uTime]",
                            ylabel = "dE [$uEnergy]",
@@ -189,4 +201,9 @@ function plot_energy_delta(datafile::String,
 
     plot_energy_delta!(ax, df; kw...)
     return scene, layout
+end
+
+function plot_energy_delta(datafile::String; kw...)
+    df = DataFrame(CSV.File(datafile))
+    plot_energy_delta(df; kw...)
 end

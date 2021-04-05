@@ -61,7 +61,3 @@ function plot_profiling!(ax, layout, index, datafile::String;
 
     return scenes, columns[2:end]
 end
-
-function pie()
-    
-end
