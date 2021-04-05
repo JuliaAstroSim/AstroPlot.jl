@@ -49,6 +49,8 @@ export
 
     plot_energy, plot_energy!,
     plot_energy_delta, plot_energy_delta!,
+    plot_energy_potential, plot_energy_potential!,
+    plot_energy_kinetic, plot_energy_kinetic!,
     plot_profiling, plot_profiling!,
 
     rotvel,
