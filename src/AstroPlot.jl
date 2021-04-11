@@ -25,6 +25,7 @@ import Makie: plot, plot!, Rect, scatter, scatter!
 export
     unicode_scatter,
     unicode_density,
+    unicode_force,
     unicode_radialforce,
     unicode_radialpotential,
     unicode_rotationcurve,
@@ -40,6 +41,7 @@ export
     plot_rotationcurve, plot_rotationcurve!,
     plot_densitycurve, plot_densitycurve!,
     plot_radialforce, plot_radialforce!,
+    plot_force, plot_force!,
     plot_radialpotential, plot_radialpotential!,
 
     plot_trajectory, plot_trajectory!,
@@ -55,6 +57,7 @@ export
 
     rotvel,
     radialvel,
+    force,
     radialforce,
     radialpotential,
     distribution,
@@ -82,6 +85,7 @@ include("analyse/analyse.jl")
 include("analyse/energy.jl")
 include("analyse/rotationcurve.jl")
 include("analyse/density.jl")
+include("analyse/force.jl")
 include("analyse/radialforce.jl")
 include("analyse/radialpotential.jl")
 
