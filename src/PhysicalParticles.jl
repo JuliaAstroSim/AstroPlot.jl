@@ -60,6 +60,19 @@ function plot_makie!(scene::Scene, data::Dict{T,A}, u = u"kpc"; kw...) where A<:
     plot_makie!(scene, collect(Iterators.flatten(values(data))), u; kw...)
 end
 
+"""
+    function unicode_scatter(data::Array{PVector{T}, 1}; kw...) where T<:Number
+    function unicode_scatter(data::Array{PVector{T}, 1}, u = u"kpc"; kw...) where T<:Quantity
+    function unicode_scatter(data, u = u"kpc"; kw...)
+
+Scatter plot of points or particles in REPL
+
+# Keywords
+$_common_keyword_axis_label
+
+# Examples
+julia> unicode_scatter(randn_pvector(100))
+"""
 function unicode_scatter(data::Array{PVector{T}, 1};
                          xaxis = :x, yaxis = :y,
                          xlabel = "$xaxis", ylabel = "$yaxis",
@@ -94,6 +107,15 @@ function unicode_scatter(data, u = u"kpc";
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end
 
+"""
+    function pack_xy(data, u = nothing; kw...)
+
+Return Tuple (x,y) substracted from points or positions of particles in data.
+Useful to prepare a plot.
+
+# Keywords
+$_common_keyword_axis
+"""
 function pack_xy(data::Dict{K, Array{T, N}}, u = nothing;
                  xaxis = :x,
                  yaxis = :y,
@@ -114,9 +136,8 @@ end
 
 function pack_xy(data::Array{T,N}, u = nothing;
                  xaxis = :x,
-                 yaxis = :y,
-                 kw...) where T <: AbstractPoint where N
-    len = length(pos)
+                 yaxis = :y) where T <: AbstractPoint where N
+    len = length(data)
     x = zeros(len)
     y = zeros(len)
 
@@ -129,9 +150,8 @@ end
 
 function pack_xy(data::Array{T,N}, u = nothing;
                  xaxis = :x,
-                 yaxis = :y,
-                 kw...) where T <: AbstractParticle where N
-    len = length(pos)
+                 yaxis = :y) where T <: AbstractParticle where N
+    len = length(data)
     x = zeros(len)
     y = zeros(len)
 

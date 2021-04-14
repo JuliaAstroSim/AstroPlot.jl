@@ -1,3 +1,12 @@
+"""
+    function plot_positionslice!(scene, data, u = nothing; kw...)
+
+Add 2D scatter plot of positions to `scene`.
+`data` can be array or dict of arrays, of points or particles.
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_positionslice!(scene, data, u = nothing;
                              xaxis = :x,
                              yaxis = :y,
@@ -6,6 +15,20 @@ function plot_positionslice!(scene, data, u = nothing;
     Makie.scatter!(scene, x, y; kw...)
 end
 
+"""
+    function plot_positionslice(pos::Array{T, N}, u = nothing; kw...)
+    function plot_positionslice(data, u = nothing; kw...)
+
+2D scatter plot of positions
+
+# Keywords
+$_common_keyword_figure
+
+# Examples
+```jl
+julia> scene, layout = plot_positionslice(randn_pvector(100); title = "Positions")
+```
+"""
 function plot_positionslice(pos::Array{T, N}, u = nothing;
                             xaxis = :x,
                             yaxis = :y,
@@ -29,10 +52,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = title,
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
@@ -66,10 +86,7 @@ function plot_positionslice(data, u = nothing;
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = title,
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
@@ -89,7 +106,20 @@ end
 """
     plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc"; kw...)
 
-Plot position slice 
+2D scatter plot of positions in snapshots
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_snapshot
+
+# Examples
+```jl
+julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), dpi = 300, resolution = (800,800),
+        xlims = (-0.05, +0.05), ylims = (-0.05, +0.05), times = collect(0.0:0.01:0.1) * u"Gyr")
+```
 """
 function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1},
                             suffix::String, FileType::AbstractOutputType, u = u"kpc";
@@ -98,8 +128,8 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
                             yaxis = :y,
                             xlims = nothing,
                             ylims = nothing,
-                            xlabel = "$xaxis [$u]",
-                            ylabel = "$yaxis [$u]",
+                            xlabel = "$(xaxis)$(axisunit(u))",
+                            ylabel = "$(yaxis)$(axisunit(u))",
                             formatstring = "%04d",
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
@@ -114,12 +144,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         end
     
         scene, layout = plot_positionslice(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
-                                        xaxis = xaxis,
-                                        yaxis = yaxis,
-                                        xlims = xlims,
-                                        ylims = ylims,
-                                        xlabel = xlabel,
-                                        ylabel = ylabel,
+                                        xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
@@ -129,13 +154,28 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
     return true
 end
 
+"""
+    function plot_positionslice_adapt(pos::Array{T, N}, u = nothing; kw...)
+    function plot_positionslice_adapt(data, u = nothing; kw...)
+
+Plot position slice with an adaptive center but fixed box length
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_adapt_len
+
+# Examples
+```jl
+julia> scene, layout = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
+```
+"""
 function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
                                   xaxis = :x,
                                   yaxis = :y,
                                   xlabel = "",
                                   ylabel = "",
-                                  xlen = 1.0u"kpc",
-                                  ylen = 1.0u"kpc",
+                                  xlen::Float64 = 1.0,
+                                  ylen::Float64 = 1.0,
                                   aspect_ratio = 1.0,
                                   title = "Positions",
                                   resolution = (1600, 900),
@@ -155,14 +195,11 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = title,
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y)
+    Makie.scatter!(ax, x, y; kw...)
 
     xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
     ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
@@ -175,8 +212,8 @@ function plot_positionslice_adapt(data, u = nothing;
                                   yaxis = :y,
                                   xlabel = "",
                                   ylabel = "",
-                                  xlen = 1.0u"kpc",
-                                  ylen = 1.0u"kpc",
+                                  xlen::Float64 = 1.0,
+                                  ylen::Float64 = 1.0,
                                   aspect_ratio = 1.0,
                                   title = "Positions",
                                   resolution = (1600, 900),
@@ -190,14 +227,11 @@ function plot_positionslice_adapt(data, u = nothing;
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = title,
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y)
+    Makie.scatter!(ax, x, y; kw...)
 
     xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
     ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
@@ -209,33 +243,49 @@ end
     plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc"; kw...)
 
 Plot position slice with an adaptive center but fixed box length
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_snapshot
+$_common_keyword_adapt_len
+
+# Examples
+```jl
+julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
+        dpi = 300, resolution = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")
+```
 """
-function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc";
+function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1},
+                                  suffix::String, FileType::AbstractOutputType, u = u"kpc";
                                   times = Counts,
                                   xaxis = :x,
                                   yaxis = :y,
-                                  xlabel = "$xaxis [$u]",
-                                  ylabel = "$yaxis [$u]",
-                                  xlen = 0.2u"kpc",
-                                  ylen = 0.2u"kpc",
+                                  xlabel = "$(xaxis)$(axisunit(u))",
+                                  ylabel = "$(yaxis)$(axisunit(u))",
+                                  xlen::Float64 = 0.2,
+                                  ylen::Float64 = 0.2,
                                   formatstring = "%04d",
                                   kw...)
     progress = Progress(length(Counts), "Loading data and plotting: ")
     for i in eachindex(Counts)
         snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
-        filename = joinpath(folder, string(filenamebase, snapshot_index, ".jld2"))
-        data = read_jld(filename)
+        filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
+        
+        if FileType == gadget2()
+            data = read_gadget2_pos(filename)
+        elseif FileType == jld2()
+            data = read_jld(filename)
+        end
+
         scene, layout = plot_positionslice_adapt(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
-                                                 xaxis = xaxis,
-                                                 yaxis = yaxis,
-                                                 xlabel = xlabel,
-                                                 ylabel = ylabel,
-                                                 xlen = xlen,
-                                                 ylen = ylen,
+                                                 xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
-        png(outputfilename, scene)
+        Makie.save(outputfilename, scene)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
     return true

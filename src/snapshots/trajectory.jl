@@ -1,9 +1,20 @@
+"""
+    function plot_trajectory!(ax, pos::Array{T,1}; kw...)
+        
+Plot `pos` as particle trajectory
+
+# Keywords
+$_common_keyword_axis
+$_common_keyword_lims
+- `color`: color of the trajectory line
+"""
 function plot_trajectory!(ax, pos::Array{T,1};
                           xaxis = :x,
                           yaxis = :y,
                           xlims = nothing,
                           ylims = nothing,
-                          color = nothing
+                          color = nothing,
+                          kw...
                           ) where T<:PVector
     len = length(pos)
     x = zeros(len)
@@ -15,9 +26,9 @@ function plot_trajectory!(ax, pos::Array{T,1};
     end
     
     if isnothing(color)
-        s = Makie.lines!(ax, x, y, color = RGB(rand(3)...))
+        s = Makie.lines!(ax, x, y, color = RGB(rand(3)...); kw...)
     else
-        s = Makie.lines!(ax, x, y, color = color)
+        s = Makie.lines!(ax, x, y, color = color; kw...)
     end
 
     if !isnothing(xlims)
@@ -31,6 +42,13 @@ function plot_trajectory!(ax, pos::Array{T,1};
     return s
 end
 
+"""
+    function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc"; kw...)
+
+# Keywords
+$_common_keyword_figure
+- colors: use different colors for different particles
+"""
 function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
@@ -54,9 +72,9 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
     )
 
     if isnothing(colors)
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...)) for key in keys(pos)]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...); kw...) for key in keys(pos)]
     else
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]) for i in 1:length(keys(pos))]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]; kw...) for i in 1:length(keys(pos))]
     end
 
     leg = layout[1,1] = Legend(
@@ -80,6 +98,26 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
     return scene, layout
 end
 
+"""
+$(SIGNATURES)
+
+Plot trajectories of particles from a series of snapshots
+
+# Arguments
+$_common_argument_snapshot
+- `ids`: plot trajectories of selected particles whose ID is in `ids`
+
+# Keywords
+$_common_keyword_figure
+- `colors`: use different colors for different particles
+$_common_keyword_snapshot
+
+# Examples
+```jl
+julia scene, layout, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
+            [1,2,3], ".gadget2", gadget2(), dpi = 300, resolution = (800,800))
+```
+"""
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},
                          ids::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, u = u"kpc";
                          xaxis = :x,
@@ -101,7 +139,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        snapshot_index = @eval @sprintf($formatstring, $(i))
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
@@ -118,19 +156,18 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 
-    return plot_trajectory(pos, u;
-                           xaxis = xaxis,
-                           yaxis = yaxis,
-                           xlims = xlims,
-                           ylims = ylims,
-                           xlabel = xlabel,
-                           ylabel = ylabel,
-                           aspect_ratio = aspect_ratio,
-                           title = title,
-                           colors = colors,
-                           kw...), pos
+    scene, layout = plot_trajectory(pos, u; xaxis, yaxis, xlims, ylims, xlabel, ylabel, aspect_ratio, title, colors, kw...)
+    return scene, layout, pos
 end
 
+"""
+    function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
+
+Plot trajectories in `ax`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
@@ -143,9 +180,9 @@ function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoin
                          colors = nothing,
                          kw...)
     if isnothing(colors)
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...)) for key in keys(pos)]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...); kw...) for key in keys(pos)]
     else
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]) for i in 1:length(keys(pos))]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]; kw...) for i in 1:length(keys(pos))]
     end
     
     if !isnothing(xlims)
@@ -159,6 +196,18 @@ function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoin
     return scenes, string.(keys(pos))
 end
 
+"""
+$(SIGNATURES)
+
+Plot trajectories in `ax`
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_snapshot
+"""
 function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::String, Counts::Array{Int64,1},
                          ids::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, u = u"kpc";
                          xaxis = :x,
@@ -198,14 +247,5 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
     end
 
     return plot_trajectory!(scene, layout, ax, pos, u;
-                           xaxis = xaxis,
-                           yaxis = yaxis,
-                           xlims = xlims,
-                           ylims = ylims,
-                           xlabel = xlabel,
-                           ylabel = ylabel,
-                           aspect_ratio = aspect_ratio,
-                           title = title,
-                           colors = colors,
-                           kw...)
+            xaxis, yaxis, xlims, ylims, xlabel, ylabel, aspect_ratio, title, colors,kw...)
 end

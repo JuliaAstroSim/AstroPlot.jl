@@ -18,7 +18,7 @@ Plot tree nodes in `wireframe` mode
 """
 function plot_makie!(scene::Scene, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
     for n in nodes
-        wireframe!(scene, Rect(n, u))
+        wireframe!(scene, Rect(n, u); kw...)
     end
 end
 
@@ -30,7 +30,7 @@ Plot tree nodes in `wireframe` mode
 function plot_makie(nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
     scene = wireframe(Rect(first(nodes), u))
     for n in nodes[2:end]
-        wireframe!(scene, Rect(n, u))
+        wireframe!(scene, Rect(n, u); kw...)
     end
     return scene
 end

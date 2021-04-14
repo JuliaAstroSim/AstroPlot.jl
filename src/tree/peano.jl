@@ -1,8 +1,10 @@
 """
-    plot_peano(bits; kw...)
+    plot_peano(bits::Int = 1)
+
+Interactively plot Hilber-Peano curve with `Makie`.
+It is recommanded that `bits <= 6` to avoid lagging problems.
 """
-function plot_peano(bits = 1;
-                      kw...)
+function plot_peano(bits::Int = 1)
     if bits > 6
         @warn "bits (=$bits) is too large. May have display lagging"
         println("Are you sure to plot? [yes]/no")

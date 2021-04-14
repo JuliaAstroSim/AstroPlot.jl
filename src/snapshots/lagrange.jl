@@ -1,3 +1,9 @@
+"""
+    function pos_from_center(particles, u = u"kpc")
+    function pos_from_center(pos::Array{T,1}, u = u"kpc") where T <: AbstractPoint
+
+Return a unitless array of positions relative to the center.
+"""
 function pos_from_center(particles, u = u"kpc")
     p0 = median(particles, :Pos)
     return [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
@@ -8,6 +14,11 @@ function pos_from_center(pos::Array{T,1}, u = u"kpc") where T <: AbstractPoint
     return [ustrip(u, p - p0) for p in pos]
 end
 
+"""
+    function lagrange_radii(data, u = u"kpc")
+
+Return a `Tuple` of scale radius and lagrange radii. Designed for spherically symmetric systems.
+"""
 function lagrange_radii(data, u = u"kpc")
     pos = pos_from_center(data, u)
 
@@ -24,28 +35,43 @@ end
 
 function plot_scaleradius!(ax, df::DataFrame;
                            kw...)
-    Makie.lines!(ax, df.Time, df.ScaleRadius)
+    Makie.lines!(ax, df.Time, df.ScaleRadius; kw...)
 end
 
+"""
+    function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units; kw...)
+
+Plot evolution of scale radius by time. `df` contains columns named `Time` and `ScaleRadius`
+
+# Keywords
+$_common_keyword_label
+- `title`: title line of the figure
+- `resolution`: figure size
+"""
 function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
-                          xlabel = "t [$uTime]",
-                          ylabel = "r [$uLength]",
+                          xlabel = "t$(axisunit(uTime))",
+                          ylabel = "r$(axisunit(uLength))",
+                          title = "Scale radius",
                           resolution = (1600, 900),
                           kw...)
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = "Scale radius",
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
     )
 
-    plot_scaleradius!(ax, df)
+    plot_scaleradius!(ax, df; kw...)
 
     return scene, layout
 end
 
+"""
+    function plot_lagrangeradii!(scene, ax, layout, df::DataFrame; kw...)
+
+Plot evolution of lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
+
+
+"""
 function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
                             colors = nothing,
                             kw...)
@@ -57,16 +83,16 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
         end
     end
 
-    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1])
-    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2])
-    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3])
-    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4])
-    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5])
-    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6])
-    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7])
-    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8])
-    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9])
-    p10 = Makie.lines!(ax, df.Time, df.L100, color = colors[10])
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1]; kw...)
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2]; kw...)
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3]; kw...)
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4]; kw...)
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5]; kw...)
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6]; kw...)
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7]; kw...)
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8]; kw...)
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9]; kw...)
+    p10 = Makie.lines!(ax, df.Time, df.L100, color = colors[10]; kw...)
 
     scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
@@ -106,15 +132,15 @@ function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
         end
     end
 
-    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1])
-    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2])
-    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3])
-    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4])
-    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5])
-    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6])
-    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7])
-    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8])
-    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9])
+    p1 = Makie.lines!(ax, df.Time, df.L10, color = colors[1]; kw...)
+    p2 = Makie.lines!(ax, df.Time, df.L20, color = colors[2]; kw...)
+    p3 = Makie.lines!(ax, df.Time, df.L30, color = colors[3]; kw...)
+    p4 = Makie.lines!(ax, df.Time, df.L40, color = colors[4]; kw...)
+    p5 = Makie.lines!(ax, df.Time, df.L50, color = colors[5]; kw...)
+    p6 = Makie.lines!(ax, df.Time, df.L60, color = colors[6]; kw...)
+    p7 = Makie.lines!(ax, df.Time, df.L70, color = colors[7]; kw...)
+    p8 = Makie.lines!(ax, df.Time, df.L80, color = colors[8]; kw...)
+    p9 = Makie.lines!(ax, df.Time, df.L90, color = colors[9]; kw...)
 
     scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
