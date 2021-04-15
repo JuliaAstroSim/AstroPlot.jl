@@ -1,3 +1,11 @@
+"""
+    function densitycurve(data, units = uAstro; kw...)
+
+Plot radial mass density curve of spherically symmetric system
+
+# Keywords
+$_common_keyword_log
+"""
 function densitycurve(data, units = uAstro;
                       savelog = true,
                       savefolder = pwd())
@@ -20,46 +28,63 @@ function densitycurve(data, units = uAstro;
     return Rmean, Mmean
 end
 
+"""
+    function unicode_density(data, units = uAstro; kw...)
+
+Plot radial mass density curve of spherically symmetric system in `REPL`
+
+# Keywords
+$_common_keyword_label_title
+$_common_keyword_timestamp
+"""
 function unicode_density(data, units = uAstro;
                          timestamp = nothing,
+                         xlabel = "R" * axisunit(getuLength(units)),
+                         ylabel = "Mass" * axisunit(getuMass(units)),
+                         title = "Rotation Curve" * isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
                          kw...)
     Rmean, Mmean = densitycurve(data, units)
-    
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-    UnicodePlots.lineplot(Rmean, Mmean;
-                          xlabel = "R" * axisunit(getuLength(units)),
-                          ylabel = "Mass" * axisunit(getuMass(units)),
-                          title = "Rotation Curve" * ts,
-                          kw...)
+    UnicodePlots.lineplot(Rmean, Mmean; xlabel, ylabel, title, kw...)
 end
 
+"""
+    function plot_densitycurve!(ax, data, units = uAstro; kw...)
+
+Plot radial mass density curve of spherically symmetric system
+
+# Keywords
+$_common_keyword_log
+$_common_keyword_timestamp
+"""
 function plot_densitycurve!(ax, data, units = uAstro;
                             savelog = true,
                             savefolder = pwd(),
                             kw...)
     Rmean, Mmean = densitycurve(data, units;  savelog, savefolder)
-
     Makie.lines!(ax, Rmean, Mmean; kw...)
 end
 
-function plot_densitycurve(data,
-                           units = uAstro;
+"""
+    function plot_densitycurve(data, units = uAstro; kw...)
+
+Plot radial mass density curve of spherically symmetric system
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_timestamp
+"""
+function plot_densitycurve(data, units = uAstro;
                            timestamp = nothing,
+                           xlabel = "R" * axisunit(getuLength(units)),
+                           ylabel = "Rho" * axisunit(getuDensity(units)),
+                           title = "Rotation Curve" * isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
                            savelog = true,
                            savefolder = pwd(),
                            resolution = (1600, 900),
                            kw...)
     scene, layout = layoutscene(; resolution)
-
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-    ax = layout[1,1] = Axis(
-        scene,
-        xlabel = "R" * axisunit(getuLength(units)),
-        ylabel = "Rho" * axisunit(getuDensity(units)),
-        title = "Rotation Curve" * ts
-    )
-
+    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
     plot_densitycurve!(ax, data, units;  savelog, savefolder, kw...)
-
     return scene, layout
 end

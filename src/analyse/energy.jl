@@ -1,16 +1,4 @@
-"""
-    plot_energy(datafile::String; kw...)
 
-Read energy data, plot in `lines`, return `scene` and `layout`
-Data columns: time, energy
-
-Supported keywords:
-- uTime
-- uEnergy
-- title
-- xlabel
-- ylabel
-"""
 function plot_energy!(ax, df::DataFrame;
                       kw...)
     Makie.lines!(ax, df.time, df.energy; kw...)
@@ -40,6 +28,14 @@ function plot_energy_kinetic!(ax, datafile::String; kw...)
     plot_energy_kinetic!(ax, df; kw...)
 end
 
+"""
+    function plot_energy_kinetic(df::DataFrame; kw...)
+
+Plot kinetic energy in `df` which contains columns named `time` and `kinetic`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_kinetic(df::DataFrame;
                      uTime = u"Gyr",
                      uEnergy = u"Msun * kpc^2 / Gyr^2",
@@ -61,11 +57,27 @@ function plot_energy_kinetic(df::DataFrame;
     return scene, layout
 end
 
+"""
+    function plot_energy_kinetic(datafile::String; kw...)
+
+Plot kinetic energy in `datafile` which contains columns named `time` and `kinetic`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_kinetic(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy_kinetic(df; kw...)
 end
 
+"""
+    function plot_energy_potential(df::DataFrame; kw...)
+
+Plot potential energy in `df` which contains columns named `time` and `potential`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_potential(df::DataFrame;
                      uTime = u"Gyr",
                      uEnergy = u"Msun * kpc^2 / Gyr^2",
@@ -87,17 +99,36 @@ function plot_energy_potential(df::DataFrame;
     return scene, layout
 end
 
+"""
+    function plot_energy_potential(datafile::String; kw...)
+
+Plot potential energy in `datafile` which contains columns named `time` and `potential`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_potential(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy_potential(df; kw...)
 end
 
+"""
+    function plot_energy(df::DataFrame; kw...)
+
+Plot energy data in `df` which contains columns named `time` and `energy`.
+`kinetic` and `potential` columns are optional.
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_energy
+"""
 function plot_energy(df::DataFrame;
                      uTime = u"Gyr",
                      uEnergy = u"Msun * kpc^2 / Gyr^2",
                      title = "Energy",
-                     xlabel = "t [$uTime]",
-                     ylabel = "E [$uEnergy]",
+                     xlabel = "t$(axisunit(uTIme))",
+                     ylabel = "E$(axisunit(uEnergy))",
                      resolution = (1600, 900),
                      potential = true,
                      kinetic = true,
@@ -106,13 +137,7 @@ function plot_energy(df::DataFrame;
                      colortotal = :black,
                      kw...)
     scene, layout = layoutscene(; resolution)
-    
-    ax = layout[1,1] = Axis(
-        scene,
-        xlabel = xlabel,
-        ylabel = ylabel,
-        title = title,
-    )
+    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
 
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
         df.energy = df.potential + df.kinetic
@@ -151,6 +176,21 @@ function plot_energy(df::DataFrame;
     return scene, layout
 end
 
+"""
+    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
+
+Plot energy (last one minus previous one) in `datafile` which is a
+`CSV` file containing columns named `time` and `energy`. `kinetic` and `potential` columns are optional.
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_snapshot
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_energy
+"""
 function plot_energy(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy(df; kw...)
@@ -160,10 +200,19 @@ function energy_delta(df::DataFrame)
     time = @view df.time[2:end]
     E0 = @view df.energy[1:end-1]
     E1 = @view df.energy[2:end]
+    #TODO: divide by E0?
     dE = E1 .- E0
     return time, dE
 end
 
+"""
+    function plot_energy_delta!(ax, df::DataFrame; kw...)
+
+Compute and plot delta energy in `df` which contains columns named `time` and `energy`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_delta!(ax, df::DataFrame;
                             kw...)
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
@@ -175,51 +224,95 @@ function plot_energy_delta!(ax, df::DataFrame;
     Makie.lines!(ax, time, dE; kw...)
 end
 
+"""
+    function plot_energy_delta!(ax, datafile::String; kw...)
+
+Plot delta energy (last one minus previous one) in `datafile` which is a
+`CSV` file containing columns named `time` and `energy`
+"""
 function plot_energy_delta!(ax, datafile::String;
                             kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy_delta!(ax, df; kw...)
 end
 
+"""
+    function plot_energy_delta(df::DataFrame; kw...)
+
+Compute and plot delta energy in `df` which contains columns named `time` and `energy`
+
+# Keywords
+$_common_keyword_figure
+"""
 function plot_energy_delta(df::DataFrame;
                            uTime = u"Gyr",
                            uEnergy = u"Msun * kpc^2 / Gyr^2",
                            title = "Delta Energy",
-                           xlabel = "t [$uTime]",
-                           ylabel = "dE [$uEnergy]",
+                           xlabel = "t$(axisunit(uTime))",
+                           ylabel = "dE$(axisunit(uEnergy))",
                            resolution = (1600, 900),
                            kw...)
     scene, layout = layoutscene(; resolution)
-    
-    ax = layout[1,1] = Axis(
-        scene,
-        xlabel = xlabel,
-        ylabel = ylabel,
-        title = title,
-    )
-
+    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
     plot_energy_delta!(ax, df; kw...)
     return scene, layout
 end
 
+"""
+function plot_energy_delta(datafile::String; kw...)
+
+Plot delta energy (last one minus previous one) in `datafile` which is a
+`CSV` file containing columns named `time` and `energy`
+"""
 function plot_energy_delta(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
     plot_energy_delta(df; kw...)
 end
 
+"""
+    function kinetic_energy(p::AbstractParticle)
+
+Compute kinetic energy of a particle using the equation:
+    0.5 * Mass * Vel^2
+"""
 function kinetic_energy(p::AbstractParticle)
     return 0.5 * p.Mass * p.Vel * p.Vel
 end
 
+"""
+    function sum_kinetic(data)
+
+Sum kinetic energy (0.5 * Mass * Vel^2) of particles in `data`.
+"""
 function sum_kinetic(data)
     k = map(d -> kinetic_energy(d), Iterators.flatten(values(data)))
     return sum(k)
 end
 
+"""
+    function sum_kinetic(data)
+
+Sum potential energy of particles in `data`. Potentials need to be computed in advance.
+"""
 function sum_potential(data)
     return sum([p.Potential for p in Iterators.flatten(values(data))])
 end
 
+"""
+    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
+
+Compute kinetic energy and sum potential energy of particles in each snapshot
+Return a Tuple of `scene` and `layout`
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_snapshot
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_energy
+"""
 function plot_energy(
     folder::String, filenamebase::String,
     Counts::Vector{Int64}, suffix::String,

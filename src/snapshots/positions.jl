@@ -5,7 +5,7 @@ Add 2D scatter plot of positions to `scene`.
 `data` can be array or dict of arrays, of points or particles.
 
 # Keywords
-$_common_keyword_figure
+$_common_keyword_axis
 """
 function plot_positionslice!(scene, data, u = nothing;
                              xaxis = :x,
@@ -23,6 +23,7 @@ end
 
 # Keywords
 $_common_keyword_figure
+$_common_keyword_aspect
 
 # Examples
 ```jl
@@ -114,6 +115,7 @@ $_common_argument_snapshot
 # Keywords
 $_common_keyword_figure
 $_common_keyword_snapshot
+$_common_keyword_aspect
 
 # Examples
 ```jl
@@ -163,6 +165,7 @@ Plot position slice with an adaptive center but fixed box length
 # Keywords
 $_common_keyword_figure
 $_common_keyword_adapt_len
+$_common_keyword_aspect
 
 # Examples
 ```jl
@@ -251,6 +254,7 @@ $_common_argument_snapshot
 $_common_keyword_figure
 $_common_keyword_snapshot
 $_common_keyword_adapt_len
+$_common_keyword_aspect
 
 # Examples
 ```jl

@@ -17,7 +17,7 @@ end
 """
     function lagrange_radii(data, u = u"kpc")
 
-Return a `Tuple` of scale radius and lagrange radii. Designed for spherically symmetric systems.
+Return a `Tuple` of scale radius and Lagrange radii. Designed for spherically symmetric systems.
 """
 function lagrange_radii(data, u = u"kpc")
     pos = pos_from_center(data, u)
@@ -42,6 +42,8 @@ end
     function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units; kw...)
 
 Plot evolution of scale radius by time. `df` contains columns named `Time` and `ScaleRadius`
+
+Return a `Tuple` of scene and layout
 
 # Keywords
 $_common_keyword_label
@@ -68,9 +70,13 @@ end
 """
     function plot_lagrangeradii!(scene, ax, layout, df::DataFrame; kw...)
 
-Plot evolution of lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
+Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
 
+Return a `Tuple` of scenes and layouts of different line plots
 
+# Keywords
+$_common_keyword_title
+$_common_keyword_axis_label
 """
 function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
                             colors = nothing,
@@ -101,19 +107,28 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
     return scenes, columns
 end
 
+"""
+    function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units; kw...)
+
+Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
+
+Return a `Tuple` of scene and layout
+
+# Keywords
+$_common_keyword_title
+$_common_keyword_axis_label
+"""
 function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
-                            xlabel = "t [$uTime]",
-                            ylabel = "r [$uLength]",
+                            xlabel = "t$(axisunit(uTime))",
+                            ylabel = "r$(axisunit(uLength))",
+                            title = "Lagrange radii",
                             colors = nothing,
                             resolution = (1600, 900),
                             kw...)
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = "Lagrange radii",
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
     )
 
     plot_lagrangeradii!(scene, ax, layout, df; colors, kw...)
@@ -121,6 +136,18 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
     return scene, layout
 end
 
+"""
+    function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame; kw...)
+
+Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L90`
+`L100` is omitted, because in most cases, those escaping particles may over distort the figure.
+
+Return a `Tuple` of scenes and layouts of different line plots
+
+# Keywords
+$_common_keyword_title
+$_common_keyword_axis_label
+"""
 function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
                                colors = nothing,
                                kw...)
@@ -150,22 +177,27 @@ function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
 end
 
 """
-function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units, kw...)
+    function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units; kw...)
 
-    plot Lagrange radii without 100% radius for better looking.
+Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L90`
+`L100` is omitted, because in most cases, those escaping particles may over distort the figure.
+
+Return a `Tuple` of scene and layout
+
+# Keywords
+$_common_keyword_title
+$_common_keyword_axis_label
 """
 function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
                               xlabel = "t [$uTime]",
                               ylabel = "r [$uLength]",
+                              title = "Lagrange radii",
                               resolution = (1600, 900),
                               kw...)
     scene, layout = layoutscene(; resolution)
 
     ax = layout[1,1] = Axis(
-        scene,
-        title = "Lagrange radii",
-        xlabel = xlabel,
-        ylabel = ylabel,
+        scene; title, xlabel, ylabel,
     )
 
     plot_lagrangeradii90!(scene, ax, layout, df; kw...)
@@ -173,6 +205,24 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
     return scene, layout
 end
 
+"""
+    function plot_radii(folder::String, filenamebase::String, Counts::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
+
+Plot scale radius and Lagrange radii (up to 90% by default)
+
+Return `Tuple(ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df)`. `df` contains radii data
+
+# Arguments
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_snapshot
+
+# Examples
+julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
+    joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
+    times = collect(0.0:0.01:0.1) * u"Gyr", title = "Radii plot")
+"""
 function plot_radii(folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
                     FileType::AbstractOutputType, units = uAstro;
@@ -233,7 +283,28 @@ function plot_radii(folder::String, filenamebase::String,
     return ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df
 end
 
-function plot_radii!(AS, AL, folder::String, filenamebase::String,
+"""
+    function plot_radii(AS, SL, AL, LL, folder::String, filenamebase::String, Counts::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
+
+Plot scale radius and Lagrange radii (up to 90% by default)
+Return radii data in `Dict`
+
+# Arguments
+- `AS`: `Axis` of scale radius scene
+- `SL`: Lagrange radii scene
+- `AL`: `Axis` of Lagrange radii scene
+- `LL`: `layout` of Lagrange radii scene
+$_common_argument_snapshot
+
+# Keywords
+$_common_keyword_snapshot
+
+# Examples
+julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
+    joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
+    times = collect(0.0:0.01:0.1) * u"Gyr", title = "Radii plot")
+"""
+function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
                     FileType::AbstractOutputType, units = uAstro;
                     times = Counts,
@@ -287,7 +358,7 @@ function plot_radii!(AS, AL, folder::String, filenamebase::String,
     plot_scaleradius!(AS, df; kw...)
 
     println("Plotting Lagrange radii")
-    LScenes, LNames = plot_lagrangeradii90!(AL, df; kw...)
+    LScenes, LNames = plot_lagrangeradii90!(SL, AL, LL, df; kw...)
 
     return df
 end

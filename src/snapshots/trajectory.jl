@@ -48,6 +48,7 @@ end
 # Keywords
 $_common_keyword_figure
 - colors: use different colors for different particles
+$_common_keyword_aspect
 """
 function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
@@ -72,9 +73,9 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
     )
 
     if isnothing(colors)
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...); kw...) for key in keys(pos)]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...), kw...) for key in keys(pos)]
     else
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]; kw...) for i in 1:length(keys(pos))]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i], kw...) for i in 1:length(keys(pos))]
     end
 
     leg = layout[1,1] = Legend(
@@ -111,6 +112,7 @@ $_common_argument_snapshot
 $_common_keyword_figure
 - `colors`: use different colors for different particles
 $_common_keyword_snapshot
+$_common_keyword_aspect
 
 # Examples
 ```jl
@@ -166,23 +168,20 @@ end
 Plot trajectories in `ax`
 
 # Keywords
-$_common_keyword_figure
+$_common_keyword_axis
+$_common_keyword_lims
 """
 function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlims = nothing,
                          ylims = nothing,
-                         xlabel = "$xaxis [$u]",
-                         ylabel = "$yaxis [$u]",
-                         aspect_ratio = 1.0,
-                         title = "Trajectory",
                          colors = nothing,
                          kw...)
     if isnothing(colors)
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...); kw...) for key in keys(pos)]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[key]); xaxis, yaxis, color = RGB(rand(3)...), kw...) for key in keys(pos)]
     else
-        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i]; kw...) for i in 1:length(keys(pos))]
+        scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i], kw...) for i in 1:length(keys(pos))]
     end
     
     if !isnothing(xlims)
@@ -205,7 +204,8 @@ Plot trajectories in `ax`
 $_common_argument_snapshot
 
 # Keywords
-$_common_keyword_figure
+$_common_keyword_axis
+$_common_keyword_lims
 $_common_keyword_snapshot
 """
 function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::String, Counts::Array{Int64,1},
@@ -214,10 +214,6 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
                          yaxis = :y,
                          xlims = nothing,
                          ylims = nothing,
-                         xlabel = "$xaxis [$u]",
-                         ylabel = "$yaxis [$u]",
-                         aspect_ratio = 1.0,
-                         title = "Trajectory",
                          colors = nothing,
                          formatstring = "%04d",
                          kw...
@@ -247,5 +243,5 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
     end
 
     return plot_trajectory!(scene, layout, ax, pos, u;
-            xaxis, yaxis, xlims, ylims, xlabel, ylabel, aspect_ratio, title, colors,kw...)
+            xaxis, yaxis, xlims, ylims, colors,kw...)
 end
