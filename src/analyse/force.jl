@@ -25,18 +25,14 @@ function unicode_force(data, units = uAstro;
         timestamp = nothing,
         savelog::Bool = false,
         savefolder = pwd(),
-        kw...
-    )
-    R, acc = force(data, units; savelog, savefolder)
-    
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-    UnicodePlots.scatterplot(
-        log10.(R), log10.(acc);
         xlabel = "log(R$(axisunit(getuLength(units))))",
         ylabel = "log(Acc$(axisunit(getuAcc(units))))",
+        ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
         title = "Force" * ts,
         kw...
     )
+    R, acc = force(data, units; savelog, savefolder)
+    UnicodePlots.scatterplot(log10.(R), log10.(acc); xlabel, ylabel, title, kw...)
 end
 
 function plot_force!(ax, data, units = uAstro;
@@ -45,7 +41,6 @@ function plot_force!(ax, data, units = uAstro;
         kw...
     )
     R, acc = force(data, units; savelog, savefolder)
-    
     Makie.scatter!(ax, log10.(R), log10.(acc); kw...)
 end
 
@@ -55,19 +50,14 @@ function plot_force(data, units = uAstro;
         savefolder = pwd(),
         markersize = 0.1,
         resolution = (1600, 900),
+        ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
+        xlabel = "log(R$(axisunit(getuLength(units))))",
+        ylabel = "log(Acc$(axisunit(getuAcc(units))))",
+        title = "Force" * ts,
         kw...
     )
     scene, layout = layoutscene(; resolution)
-    
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-    ax = layout[1,1] = Axis(
-        scene,
-        xlabel = "log(R$(axisunit(getuLength(units))))",
-        ylabel = "log(Acc$(axisunit(getuAcc(units))))",
-        title = "Force" * ts
-    )
-
+    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
     plot_force!(ax, data, units; savelog, savefolder, markersize, kw...)
-
     return scene, layout
 end

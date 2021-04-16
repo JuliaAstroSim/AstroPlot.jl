@@ -11,7 +11,7 @@ $_common_keyword_section
 function rotationcurve(data, units = uAstro;
                        rmhead::Int64 = 0,
                        rmtail::Int64 = 0,
-                       section::Int64 = floor(Int64, length(x)^SectionIndex),
+                       section::Int64 = floor(Int64, countdata(data)^SectionIndex),
                        savelog::Bool = true,
                        savefolder = pwd())
     p0 = median(data, :Pos)
@@ -50,20 +50,18 @@ $_common_keyword_section
 """
 function unicode_rotationcurve(data, units = uAstro;
                                timestamp = nothing,
-                               section::Int64 = floor(Int64, length(x)^SectionIndex),
+                               section::Int64 = floor(Int64, countdata(data)^SectionIndex),
                                rmhead::Int64 = 0,
                                rmtail::Int64 = 0,
                                savelog::Bool = true,
                                savefolder = pwd(),
+                               xlabel = "R" * axisunit(getuLength(units)),
+                               ylabel = "RotV" * axisunit(getuVel(units)),
+                               ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
+                               title = "Rotation Curve" * ts,
                                kw...)
     Rmean, Vmean, Rstd, Vstd = rotationcurve(data, units;  rmhead, rmtail, section, savelog, savefolder)
-                               
-    ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))
-    UnicodePlots.lineplot(Rmean, Vmean;
-                          xlabel = "R" * axisunit(getuLength(units)),
-                          ylabel = "RotV" * axisunit(getuVel(units)),
-                          title = "Rotation Curve" * ts,
-                          kw...)
+    UnicodePlots.lineplot(Rmean, Vmean; xlabel, ylabel, title, kw...)
 end
 
 """
@@ -79,7 +77,7 @@ $_common_keyword_section
 function plot_rotationcurve!(ax, data, units = uAstro;
                              rmhead::Int64 = 0,
                              rmtail::Int64 = 0,
-                             section::Int64 = floor(Int64, length(x)^SectionIndex),
+                             section::Int64 = floor(Int64, countdata(data)^SectionIndex),
                              savelog = true,
                              savefolder = pwd(),
                              kw...)
@@ -109,7 +107,7 @@ function plot_rotationcurve(data, units = uAstro;
                               rmtail::Int64 = 0,
                               xlabel = "R" * axisunit(getuLength(units)),
                               ylabel = "RotV" * axisunit(getuVel(units)),
-                              title = "Rotation Curve" * isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
+                              title = "Rotation Curve" * (isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))),
                               savelog = true,
                               savefolder = pwd(),
                               resolution = (1600, 900),
