@@ -12,6 +12,9 @@ using Makie
 using AbstractPlotting.MakieLayout
 using Colors
 using DocStringExtensions
+using FileIO
+using VideoIO
+using Images
 
 using ParallelOperations
 using PhysicalParticles
@@ -72,6 +75,10 @@ export
     sortarrays!,
     pos_from_center,
 
+    # video
+    png2video,
+    mosaicview,
+
     jld2, gadget2, hdf5
 
 # Parameters
@@ -100,5 +107,8 @@ include("snapshots/trajectory.jl")
 include("snapshots/positions.jl")
 include("snapshots/lagrange.jl")
 include("snapshots/profiling.jl")
+
+include("video.jl")
+include("images.jl")
 
 end
