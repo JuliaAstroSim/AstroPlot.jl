@@ -28,7 +28,7 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 VideoIO = "d6d074c3-1acf-5d4c-9a43-ef38773959a2"
 
 [compat]
-AbstractPlotting = "0.14, 0.15, 0.16"
+AbstractPlotting = "0.14, 0.15, 0.16, 0.18"
 AstroIO = "0.1"
 CSV = "0.8"
 Colors = "0.12"
