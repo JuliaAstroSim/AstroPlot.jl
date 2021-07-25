@@ -46,7 +46,7 @@ function plot_energy_kinetic(df::DataFrame;
                      kw...)
     scene, layout = layoutscene(; resolution)
     
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,
@@ -88,7 +88,7 @@ function plot_energy_potential(df::DataFrame;
                      kw...)
     scene, layout = layoutscene(; resolution)
     
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,
@@ -127,7 +127,7 @@ function plot_energy(df::DataFrame;
                      uTime = u"Gyr",
                      uEnergy = u"Msun * kpc^2 / Gyr^2",
                      title = "Energy",
-                     xlabel = "t$(axisunit(uTIme))",
+                     xlabel = "t$(axisunit(uTime))",
                      ylabel = "E$(axisunit(uEnergy))",
                      resolution = (1600, 900),
                      potential = true,
@@ -137,7 +137,7 @@ function plot_energy(df::DataFrame;
                      colortotal = :black,
                      kw...)
     scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
 
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
         df.energy = df.potential + df.kinetic
@@ -253,7 +253,7 @@ function plot_energy_delta(df::DataFrame;
                            resolution = (1600, 900),
                            kw...)
     scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_energy_delta!(ax, df; kw...)
     return scene, layout
 end

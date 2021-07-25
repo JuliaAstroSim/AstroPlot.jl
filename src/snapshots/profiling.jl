@@ -24,7 +24,7 @@ function plot_profiling(datafile::String;
     df = DataFrame(CSV.File(datafile))
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; xlabel, ylabel, title,
     )
 

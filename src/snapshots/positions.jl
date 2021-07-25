@@ -52,7 +52,7 @@ function plot_positionslice(pos::Array{T, N}, u = nothing;
 
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
@@ -86,7 +86,7 @@ function plot_positionslice(data, u = nothing;
 
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
@@ -197,7 +197,7 @@ function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
 
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
@@ -229,7 +229,7 @@ function plot_positionslice_adapt(data, u = nothing;
 
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )

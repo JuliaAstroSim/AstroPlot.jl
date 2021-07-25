@@ -57,7 +57,7 @@ function plot_force(data, units = uAstro;
         kw...
     )
     scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_force!(ax, data, units; savelog, savefolder, markersize, kw...)
     return scene, layout
 end

@@ -1,12 +1,10 @@
 using Test
 
-using Distributed
-pids = addprocs(3)
-@everywhere using PhysicalTrees, PhysicalParticles, UnitfulAstro, PhysicalMeshes
+using PhysicalTrees, PhysicalParticles, UnitfulAstro, PhysicalMeshes
 
 using AstroPlot
 using AstroIO
-using Makie
+using GLMakie
 
 function plotsuccess(result)
     return !isnothing(result)

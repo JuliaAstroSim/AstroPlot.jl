@@ -29,7 +29,7 @@ end
 Plot all files matching `filenamebase` and `suffix` in `folder` to mosaic view.
 """
 function mosaicview(folder::String, filenamebase::String, suffix::String; kw...)
-    imgnames = filter(x->occursin(suffix,x), readdir(dir)) # Populate list of all .pngs
+    imgnames = filter(x->(occursin(suffix,x) && occursin(filenamebase,x)), readdir(folder)) # Populate list of all .pngs
     intstrings =  map(x->split(split(x, filenamebase)[2], suffix)[1], imgnames)        # Extract index from filenames
     p = sortperm(parse.(Int, intstrings))                  # sort files numerically
     imgnames = imgnames[p]

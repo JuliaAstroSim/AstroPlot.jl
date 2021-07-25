@@ -64,7 +64,7 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          kw...)
     scene, layout = layoutscene(; resolution)
     
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene,
         xlabel = xlabel,
         ylabel = ylabel,

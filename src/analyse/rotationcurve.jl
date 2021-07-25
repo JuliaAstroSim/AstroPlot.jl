@@ -113,7 +113,7 @@ function plot_rotationcurve(data, units = uAstro;
                               resolution = (1600, 900),
                               kw...) where T<:AbstractParticle3D
     scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = Axis(scene; xlabel, ylabel, title)
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_rotationcurve!(ax, data, units;  rmhead, rmtail, savelog, savefolder, kw...)
     return scene, layout
 end

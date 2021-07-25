@@ -58,7 +58,7 @@ function plot_scaleradius(df::DataFrame, uTime::Units, uLength::Units;
                           kw...)
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
     )
 
@@ -127,7 +127,7 @@ function plot_lagrangeradii(df::DataFrame, uTime::Units, uLength::Units;
                             kw...)
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
     )
 
@@ -196,7 +196,7 @@ function plot_lagrangeradii90(df::DataFrame, uTime::Units, uLength::Units;
                               kw...)
     scene, layout = layoutscene(; resolution)
 
-    ax = layout[1,1] = Axis(
+    ax = layout[1,1] = GLMakie.Axis(
         scene; title, xlabel, ylabel,
     )
 

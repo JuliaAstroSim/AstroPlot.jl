@@ -8,8 +8,7 @@ using UnicodePlots
 using ProgressMeter
 using DataFrames
 using CSV
-using Makie
-using AbstractPlotting.MakieLayout
+using GLMakie
 using Colors
 using DocStringExtensions
 using FileIO
