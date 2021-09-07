@@ -23,7 +23,7 @@ using AstroIO
 
 import Unitful: Units
 import AstroIO: jld2, gadget2, hdf5
-import Makie: plot, plot!, Rect, scatter, scatter!
+import GLMakie: plot, plot!, Rect, scatter, scatter!
 
 export
     unicode_scatter,
