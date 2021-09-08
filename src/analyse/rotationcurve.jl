@@ -11,7 +11,7 @@ $_common_keyword_section
 function rotationcurve(data, units = uAstro;
                        rmhead::Int64 = 0,
                        rmtail::Int64 = 0,
-                       section::Int64 = floor(Int64, countdata(data)^SectionIndex),
+                       section::Int64 = floor(Int64, length(data)^SectionIndex),
                        savelog::Bool = true,
                        savefolder = pwd())
     p0 = median(data, :Pos)
@@ -20,8 +20,8 @@ function rotationcurve(data, units = uAstro;
     uLength = getuLength(units)
     uVel = getuVel(units)
 
-    pos = [ustrip(uLength, p.Pos - p0) for p in Iterators.flatten(values(data))]
-    vel = [ustrip(uVel, p.Vel - v0) for p in Iterators.flatten(values(data))]
+    pos = [ustrip(uLength, p.Pos - p0) for p in data]
+    vel = [ustrip(uVel, p.Vel - v0) for p in data]
 
     R = norm.(pos)
     Vrot = rotvel.(vel, pos)
@@ -50,7 +50,7 @@ $_common_keyword_section
 """
 function unicode_rotationcurve(data, units = uAstro;
                                timestamp = nothing,
-                               section::Int64 = floor(Int64, countdata(data)^SectionIndex),
+                               section::Int64 = floor(Int64, length(data)^SectionIndex),
                                rmhead::Int64 = 0,
                                rmtail::Int64 = 0,
                                savelog::Bool = true,
@@ -77,7 +77,7 @@ $_common_keyword_section
 function plot_rotationcurve!(ax, data, units = uAstro;
                              rmhead::Int64 = 0,
                              rmtail::Int64 = 0,
-                             section::Int64 = floor(Int64, countdata(data)^SectionIndex),
+                             section::Int64 = floor(Int64, length(data)^SectionIndex),
                              savelog = true,
                              savefolder = pwd(),
                              kw...)

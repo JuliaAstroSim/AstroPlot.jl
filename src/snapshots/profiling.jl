@@ -45,9 +45,6 @@ function plot_profiling(datafile::String;
 end
 
 function plot_profiling!(ax, layout, index, datafile::String;
-                        title = "Profiling",
-                        xlabel = "step",
-                        ylabel = "t [ns]",
                         colors = nothing,
                         kw...)
     df = DataFrame(CSV.File(datafile))

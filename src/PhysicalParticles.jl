@@ -5,7 +5,7 @@ end
 """
     plot_makie(data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
     plot_makie(data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
-    plot_makie(data::Dict{T,A}, u = u"kpc"; kw...) where A<:Array where T
+    plot_makie(data::StructArray, u = u"kpc"; kw...)
 
 Plot `scatter` data points (in interactive mode)
 
@@ -27,14 +27,14 @@ function plot_makie(data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractPartic
     return Makie.scatter(d; kw...)
 end
 
-function plot_makie(data::Dict{T,A}, u = u"kpc"; kw...) where A<:Array where T
-    return plot_makie(collect(Iterators.flatten(values(data))), u; kw...)
+function plot_makie(data::StructArray, u = u"kpc"; kw...)
+    return plot_makie(data.Pos, u; kw...)
 end
 
 """
     plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
     plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
-    plot_makie!(scene::Scene, data::Dict{T,A}, u = u"kpc"; kw...) where A<:Array where T
+    plot_makie!(scene::Scene, data::StructArray, u = u"kpc"; kw...)
 
 Plot `scatter` data points (in interactive mode)
 
@@ -56,8 +56,8 @@ function plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<
     Makie.scatter!(scene, d; kw...)
 end
 
-function plot_makie!(scene::Scene, data::Dict{T,A}, u = u"kpc"; kw...) where A<:Array where T
-    plot_makie!(scene, collect(Iterators.flatten(values(data))), u; kw...)
+function plot_makie!(scene::Scene, data::StructArray, u = u"kpc"; kw...)
+    plot_makie!(scene, data.Pos, u; kw...)
 end
 
 """
@@ -102,7 +102,7 @@ function unicode_scatter(data, u = u"kpc";
                          xaxis = :x, yaxis = :y,
                          xlabel = "$xaxis [$u]", ylabel = "$yaxis [$u]",
                          kw...)
-    d = [ustrip(u, p.Pos) for p in Iterators.flatten(values(data))]
+    d = [ustrip(u, p.Pos) for p in data]
 
     return unicode_scatter(d, xaxis = xaxis, yaxis = yaxis, xlabel = xlabel, ylabel = ylabel; kw...)
 end
@@ -116,24 +116,6 @@ Useful to prepare a plot.
 # Keywords
 $_common_keyword_axis
 """
-function pack_xy(data::Dict{K, Array{T, N}}, u = nothing;
-                 xaxis = :x,
-                 yaxis = :y,
-                 ) where K where N where T<:AbstractPoint
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
-    return x, y
-end
-
-function pack_xy(data::Dict{K, Array{T, N}}, u = nothing;
-                 xaxis = :x,
-                 yaxis = :y,
-                 ) where K where N where T<:AbstractParticle
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
-    return x, y
-end
-
 function pack_xy(data::Array{T,N}, u = nothing;
                  xaxis = :x,
                  yaxis = :y) where T <: AbstractPoint where N
@@ -160,4 +142,10 @@ function pack_xy(data::Array{T,N}, u = nothing;
         y[i] = ustrip(u, getproperty(data.Pos[i], yaxis))
     end
     return x, y
+end
+
+function pack_xy(data::StructArray, u = nothing;
+    xaxis = :x,
+    yaxis = :y)
+    pack_xy(data.Pos, u; xaxis, yaxis)
 end

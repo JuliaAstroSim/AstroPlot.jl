@@ -7,8 +7,8 @@ function radialpotential(data, units = uAstro;
     uLength = getuLength(units)
     uEnergy = getuEnergy(units)
 
-    R = [ustrip(uLength, norm(p.Pos - p0)) for p in Iterators.flatten(values(data))]
-    pot = [ustrip(uEnergy, p.Potential) for p in Iterators.flatten(values(data))]
+    R = [ustrip(uLength, norm(p.Pos - p0)) for p in data]
+    pot = [ustrip(uEnergy, p.Potential) for p in data]
 
     if savelog
         df = DataFrame(R = R, pot = pot)

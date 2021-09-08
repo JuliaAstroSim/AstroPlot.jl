@@ -81,8 +81,8 @@ function plot_positionslice(data, u = nothing;
                             title = "Positions",
                             resolution = (1600, 900),
                             kw...)
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in data]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in data]
 
     scene, layout = layoutscene(; resolution)
 
@@ -221,8 +221,8 @@ function plot_positionslice_adapt(data, u = nothing;
                                   title = "Positions",
                                   resolution = (1600, 900),
                                   kw...)
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in Iterators.flatten(values(data))]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in Iterators.flatten(values(data))]
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in data]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in data]
 
     xcenter = middle(x)
     ycenter = middle(y)

@@ -6,7 +6,7 @@ Return a unitless array of positions relative to the center.
 """
 function pos_from_center(particles, u = u"kpc")
     p0 = median(particles, :Pos)
-    return [ustrip(u, p.Pos - p0) for p in Iterators.flatten(values(particles))]
+    return [ustrip(u, p.Pos - p0) for p in particles]
 end
 
 function pos_from_center(pos::Array{T,1}, u = u"kpc") where T <: AbstractPoint
@@ -25,7 +25,7 @@ function lagrange_radii(data, u = u"kpc")
     R = norm.(pos)
     sort!(R)
 
-    N = countdata(data)
+    N = length(data)
     ScaleRadius = R[floor(Int64, N / 2.718281828459)]
 
     len = div(N, 10)

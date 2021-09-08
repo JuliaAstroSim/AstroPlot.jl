@@ -8,8 +8,8 @@ function force(data, units = uAstro;
     uLength = getuLength(units)
     uAcc = getuAcc(units)
 
-    R = [ustrip(uLength, norm(p.Pos - p0)) for p in Iterators.flatten(values(data))]
-    acc = [ustrip(uAcc, norm(p.Acc - a0)) for p in Iterators.flatten(values(data))]
+    R = [ustrip(uLength, norm(p.Pos - p0)) for p in data]
+    acc = [ustrip(uAcc, norm(p.Acc - a0)) for p in data]
     
     if savelog
         df = DataFrame(R = R, acc = acc)

@@ -54,7 +54,7 @@ _common_keyword_head_tail = """
 """
 
 _common_keyword_section = """
-- `section::Int64`: number of bins. Default is floor(Int64, countdata(data)^$(SectionIndex))
+- `section::Int64`: number of bins. Default is floor(Int64, length(data)^$(SectionIndex))
 """
 
 _common_keyword_timestamp = """

@@ -12,8 +12,8 @@ function densitycurve(data, units = uAstro;
     uLength = getuLength(units)
     uMass = getuMass(units)
     p0 = median(data, :Pos)
-    pos = [ustrip(uLength, p.Pos - p0) for p in Iterators.flatten(values(data))]
-    mass = [ustrip(uMass, p.Mass) for p in Iterators.flatten(values(data))]
+    pos = [ustrip(uLength, p.Pos - p0) for p in data]
+    mass = [ustrip(uMass, p.Mass) for p in data]
 
     R = norm.(pos)
     Rmean, Mmean = density(R, mass)

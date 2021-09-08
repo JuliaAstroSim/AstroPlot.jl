@@ -1,5 +1,6 @@
 module AstroPlot
 
+using Reexport
 using Unitful, UnitfulAstro
 using LaTeXStrings
 using Printf
@@ -14,12 +15,13 @@ using DocStringExtensions
 using FileIO
 using VideoIO
 using Images
+using StructArrays
 
 using ParallelOperations
-using PhysicalParticles
-using PhysicalTrees
-using PhysicalMeshes
-using AstroIO
+@reexport using PhysicalParticles
+@reexport using PhysicalTrees
+@reexport using PhysicalMeshes
+@reexport using AstroIO
 
 import Unitful: Units
 import AstroIO: jld2, gadget2, hdf5
