@@ -144,8 +144,14 @@ function pack_xy(data::Array{T,N}, u = nothing;
     return x, y
 end
 
-function pack_xy(data::StructArray, u = nothing;
+function pack_xy(data::StructArray{T,N,NT,Tu}, u = nothing;
     xaxis = :x,
-    yaxis = :y)
+    yaxis = :y) where T<:AbstractPoint where N where NT where Tu
+    return ustrip.(u, getproperty(data, xaxis)), ustrip.(u, getproperty(data, yaxis))
+end
+
+function pack_xy(data::StructArray{T,N,NT,Tu}, u = nothing;
+    xaxis = :x,
+    yaxis = :y) where T<:AbstractParticle where N where NT where Tu
     pack_xy(data.Pos, u; xaxis, yaxis)
 end

@@ -30,46 +30,6 @@ $_common_keyword_aspect
 julia> scene, layout = plot_positionslice(randn_pvector(100); title = "Positions")
 ```
 """
-function plot_positionslice(pos::Array{T, N}, u = nothing;
-                            xaxis = :x,
-                            yaxis = :y,
-                            xlabel = "",
-                            ylabel = "",
-                            xlims = nothing,
-                            ylims = nothing,
-                            aspect_ratio = 1.0,
-                            title = "Positions",
-                            resolution = (1600, 900),
-                            kw...) where T <: AbstractPoint where N
-    len = length(pos)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(pos[i], xaxis))
-        y[i] = ustrip(u, getproperty(pos[i], yaxis))
-    end
-
-    scene, layout = layoutscene(; resolution)
-
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
-        aspect = AxisAspect(aspect_ratio),
-    )
-
-    Makie.scatter!(ax, x, y; kw...)
-
-    if !isnothing(xlims)
-        Makie.xlims!(ax, xlims)
-    end
-
-    if !isnothing(ylims)
-        Makie.ylims!(ax, ylims)
-    end
-
-    return scene, layout
-end
-
 function plot_positionslice(data, u = nothing;
                             xaxis = :x,
                             yaxis = :y,
@@ -81,8 +41,7 @@ function plot_positionslice(data, u = nothing;
                             title = "Positions",
                             resolution = (1600, 900),
                             kw...)
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in data]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in data]
+    x, y = pack_xy(data, u; xaxis, yaxis)
 
     scene, layout = layoutscene(; resolution)
 
@@ -172,44 +131,6 @@ $_common_keyword_aspect
 julia> scene, layout = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
 ```
 """
-function plot_positionslice_adapt(pos::Array{T, N}, u = nothing;
-                                  xaxis = :x,
-                                  yaxis = :y,
-                                  xlabel = "",
-                                  ylabel = "",
-                                  xlen::Float64 = 1.0,
-                                  ylen::Float64 = 1.0,
-                                  aspect_ratio = 1.0,
-                                  title = "Positions",
-                                  resolution = (1600, 900),
-                                  kw...) where T <: AbstractPoint where N
-    len = length(pos)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(pos[i], xaxis))
-        y[i] = ustrip(u, getproperty(pos[i], yaxis))
-    end
-
-    xcenter = middle(x)
-    ycenter = middle(y)
-
-    scene, layout = layoutscene(; resolution)
-
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
-        aspect = AxisAspect(aspect_ratio),
-    )
-
-    Makie.scatter!(ax, x, y; kw...)
-
-    xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
-    ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
-
-    return scene, layout
-end
-
 function plot_positionslice_adapt(data, u = nothing;
                                   xaxis = :x,
                                   yaxis = :y,
@@ -221,8 +142,7 @@ function plot_positionslice_adapt(data, u = nothing;
                                   title = "Positions",
                                   resolution = (1600, 900),
                                   kw...)
-    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in data]
-    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in data]
+    x, y = pack_xy(data, u; xaxis, yaxis)
 
     xcenter = middle(x)
     ycenter = middle(y)
