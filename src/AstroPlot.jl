@@ -60,6 +60,9 @@ export
     plot_energy_kinetic, plot_energy_kinetic!,
     plot_profiling, plot_profiling!,
 
+    plot_momentum, plot_momentum!,
+    plot_momentum_angular,
+
     rotvel,
     radialvel,
     force,
@@ -105,6 +108,7 @@ include("analyse/density.jl")
 include("analyse/force.jl")
 include("analyse/radialforce.jl")
 include("analyse/radialpotential.jl")
+include("analyse/momentum.jl")
 
 include("snapshots/trajectory.jl")
 include("snapshots/positions.jl")
