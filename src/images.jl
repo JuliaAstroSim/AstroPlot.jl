@@ -18,7 +18,7 @@ function mosaicview(folder::String, filenamebase::String, Counts::Array, suffix:
         formatstring = "%04d",
         kw...
     )
-    imgnames = [joinpath(folder, string(filenamebase, (@eval @sprintf($formatstring, $i)), suffix)) for i in Counts]
+    imgnames = [joinpath(folder, string(filenamebase, Printf.format(Printf.Format(formatstring), i), suffix)) for i in Counts]
     imgs = load.(imgnames)
     mosaicview(imgs; kw...)
 end

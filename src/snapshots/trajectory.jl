@@ -141,7 +141,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        snapshot_index = @eval @sprintf($formatstring, $(i))
+        snapshot_index = Printf.format(Printf.Format(formatstring), i)
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
@@ -225,7 +225,7 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
 
     progress = Progress(length(Counts), "Loading data: ")
     for i in Counts
-        snapshot_index = @eval @sprintf($formatstring, $(Counts[i]))
+        snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
