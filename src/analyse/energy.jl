@@ -54,7 +54,7 @@ function plot_energy_kinetic(df::DataFrame;
     )
 
     plot_energy_kinetic!(ax, df; kw...)
-    return scene, layout
+    return scene, layout, df
 end
 
 """
@@ -96,7 +96,7 @@ function plot_energy_potential(df::DataFrame;
     )
 
     plot_energy_potential!(ax, df; kw...)
-    return scene, layout
+    return scene, layout, df
 end
 
 """
@@ -173,7 +173,7 @@ function plot_energy(df::DataFrame;
         leg = layout[1,2] = Legend(scene, p, names)
     end
 
-    return scene, layout
+    return scene, layout, df
 end
 
 """
@@ -255,7 +255,7 @@ function plot_energy_delta(df::DataFrame;
     scene, layout = layoutscene(; resolution)
     ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_energy_delta!(ax, df; kw...)
-    return scene, layout
+    return scene, layout, df
 end
 
 """

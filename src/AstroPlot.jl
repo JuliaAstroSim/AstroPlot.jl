@@ -61,7 +61,7 @@ export
     plot_profiling, plot_profiling!,
 
     plot_momentum, plot_momentum!,
-    plot_momentum_angular,
+    plot_momentum_angular, plot_momentum_angular!,
 
     rotvel,
     radialvel,
