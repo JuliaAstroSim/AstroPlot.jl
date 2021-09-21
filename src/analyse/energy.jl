@@ -284,9 +284,17 @@ end
 
 Sum kinetic energy (0.5 * Mass * Vel^2) of particles in `data`.
 """
-function sum_kinetic(data)
-    k = map(d -> kinetic_energy(d), Iterators.flatten(values(data)))
+function sum_kinetic(data::Array)
+    k = map(d -> kinetic_energy(d), data)
     return sum(k)
+end
+
+function sum_kinetic(data::StructArray)
+    s = zero(data.Potential[1])
+    @avxt for i in eachindex(data)
+        s += 0.5 * data.Mass[i] * data.Vel[i] * data.Vel[i]
+    end
+    return s
 end
 
 """
@@ -294,8 +302,12 @@ end
 
 Sum potential energy of particles in `data`. Potentials need to be computed in advance.
 """
-function sum_potential(data)
-    return sum([p.Potential for p in Iterators.flatten(values(data))])
+function sum_potential(data::Array)
+    return sum([p.Potential for p in data])
+end
+
+function sum_potential(data::StructArray)
+    return sum(data.Potential)
 end
 
 """
