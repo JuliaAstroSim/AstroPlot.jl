@@ -224,7 +224,7 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
     end
 
     progress = Progress(length(Counts), "Loading data: ")
-    for i in Counts
+    for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         

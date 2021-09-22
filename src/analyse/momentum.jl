@@ -1,5 +1,9 @@
-function plot_momentum!(ax, df::DataFrame, axis::Symbol; kw...)
-    Makie.lines!(ax, df.time, getproperty(df.momentum, axis); kw...)
+function plot_momentum!(ax, df::DataFrame, axis::Symbol; absolute = false, kw...)
+    if absolute
+        return Makie.lines!(ax, df.time, abs.(getproperty(df.momentum, axis)); kw...)
+    else
+        return Makie.lines!(ax, df.time, getproperty(df.momentum, axis); kw...)
+    end
 end
 
 function plot_momentum!(ax, df::DataFrame; axis = [:x, :y, :z], colors = nothing, kw...)
@@ -50,8 +54,12 @@ end
 
 
 
-function plot_momentum_angular!(ax, df::DataFrame, axis::Symbol; kw...)
-    Makie.lines!(ax, df.time, getproperty(df.angularmomentum, axis); kw...)
+function plot_momentum_angular!(ax, df::DataFrame, axis::Symbol; absolute = false, kw...)
+    if absolute
+        Makie.lines!(ax, df.time, abs.(getproperty(df.angularmomentum, axis)); kw...)
+    else
+        Makie.lines!(ax, df.time, getproperty(df.angularmomentum, axis); kw...)
+    end
 end
 
 function plot_momentum_angular!(ax, df::DataFrame; axis = [:x, :y, :z], colors = nothing, kw...)
