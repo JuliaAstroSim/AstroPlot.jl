@@ -32,9 +32,9 @@ function plot_makie(data::StructArray, u = u"kpc"; kw...)
 end
 
 """
-    plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
-    plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
-    plot_makie!(scene::Scene, data::StructArray, u = u"kpc"; kw...)
+    plot_makie!(scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
+    plot_makie!(scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
+    plot_makie!(scene, data::StructArray, u = u"kpc"; kw...)
 
 Plot `scatter` data points (in interactive mode)
 
@@ -46,17 +46,17 @@ plot_makie!(scene, d, nothing)
 d = randn_pvector(50, u"km")
 plot_makie!(scene, d, u"m")
 """
-function plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
+function plot_makie!(scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
     Makie.scatter!(scene, d; kw...)
 end
 
-function plot_makie!(scene::Scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
+function plot_makie!(scene, data::Array{T,1}, u = u"kpc"; kw...) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
     Makie.scatter!(scene, d; kw...)
 end
 
-function plot_makie!(scene::Scene, data::StructArray, u = u"kpc"; kw...)
+function plot_makie!(scene, data::StructArray, u = u"kpc"; kw...)
     plot_makie!(scene, data.Pos, u; kw...)
 end
 

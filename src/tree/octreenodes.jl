@@ -3,22 +3,22 @@
 
 Convert an `PhysicalTrees.OctreeNode` to `Rect3D`
 """
-function Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
+function RectNode(node::PhysicalTrees.OctreeNode, u = u"kpc")
     p = one(node.Center) * 0.5 * node.SideLength
-    return Makie.Rect3D(
+    return Rect3D(
         point3(ustrip(u, node.Center - p)),
         point3(ustrip(u, p * 2.0))
     )
 end
 
 """
-    plot_makie!(scene::Scene, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
+    plot_makie!(axis, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
 
 Plot tree nodes in `wireframe` mode
 """
-function plot_makie!(scene::Scene, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
+function plot_makie!(axis, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
     for n in nodes
-        wireframe!(scene, Rect(n, u); kw...)
+        wireframe!(axis, RectNode(n, u); kw...)
     end
 end
 
@@ -27,10 +27,18 @@ end
 
 Plot tree nodes in `wireframe` mode
 """
-function plot_makie(nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
-    scene = wireframe(Rect(first(nodes), u))
+function plot_makie(nodes::Array{T,N}, u = u"kpc";
+    interactive = true,
+    kw...
+) where T<:PhysicalTrees.OctreeNode where N
+    figure, axis, plot = wireframe(RectNode(first(nodes), u))
     for n in nodes[2:end]
-        wireframe!(scene, Rect(n, u); kw...)
+        wireframe!(axis, RectNode(n, u); kw...)
     end
-    return scene
+
+    if interactive
+        display(figure)
+    end
+
+    return figure, axis, plot
 end

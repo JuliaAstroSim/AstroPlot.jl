@@ -308,6 +308,7 @@ function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
                     FileType::AbstractOutputType, units = uAstro;
                     times = Counts,
+                    colors = nothing,
                     savelog = true,
                     savefolder = pwd(),
                     formatstring = "%04d",
@@ -358,7 +359,7 @@ function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
     plot_scaleradius!(AS, df; kw...)
 
     println("Plotting Lagrange radii")
-    LScenes, LNames = plot_lagrangeradii90!(SL, AL, LL, df; kw...)
+    LScenes, LNames = plot_lagrangeradii90!(SL, AL, LL, df; colors, kw...)
 
     return df
 end
