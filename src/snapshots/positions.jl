@@ -1,13 +1,16 @@
 """
-    function plot_positionslice!(scene, data, u = nothing; kw...)
+    function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
 
 Add 2D scatter plot of positions to `scene`.
 `data` can be array or dict of arrays, of points or particles.
 
+`collection`: filter the type of particles
+
 # Keywords
 $_common_keyword_axis
 """
-function plot_positionslice!(scene, data, u = nothing;
+function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
                              xaxis = :x,
                              yaxis = :y,
                              kw...)
@@ -15,11 +18,24 @@ function plot_positionslice!(scene, data, u = nothing;
     Makie.scatter!(scene, x, y; kw...)
 end
 
+function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    d = filter(p->p.Collection == collection, data)
+    if isempty(d)
+        @warn "No $collection particle found."
+        return scene
+    else
+        plot_positionslice!(scene, d, u; kw...)
+    end
+end
+
 """
-    function plot_positionslice(pos::Array{T, N}, u = nothing; kw...)
-    function plot_positionslice(data, u = nothing; kw...)
+    function plot_positionslice(pos::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
 
 2D scatter plot of positions
+
+`collection`: filter the type of particles
 
 # Keywords
 $_common_keyword_figure
@@ -30,7 +46,7 @@ $_common_keyword_aspect
 julia> scene, layout = plot_positionslice(randn_pvector(100); title = "Positions")
 ```
 """
-function plot_positionslice(data, u = nothing;
+function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
                             xaxis = :x,
                             yaxis = :y,
                             xlabel = "",
@@ -63,8 +79,18 @@ function plot_positionslice(data, u = nothing;
     return scene, layout
 end
 
+function plot_positionslice(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    d = filter(p->p.Collection == collection, data)
+    if isempty(d)
+        @warn "No $collection particle found."
+        return nothing
+    else
+        return plot_positionslice(d, u; kw...)
+    end
+end
+
 """
-    plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u = u"kpc"; kw...)
+    plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
 
 2D scatter plot of positions in snapshots
 
@@ -75,6 +101,7 @@ $_common_argument_snapshot
 $_common_keyword_figure
 $_common_keyword_snapshot
 $_common_keyword_aspect
+- `collection`: filter the type of particles
 
 # Examples
 ```jl
@@ -83,12 +110,13 @@ julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "s
 ```
 """
 function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                            suffix::String, FileType::AbstractOutputType, u = u"kpc";
+                            suffix::String, FileType::AbstractOutputType, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
                             times = Counts,
                             xaxis = :x,
                             yaxis = :y,
                             xlims = nothing,
                             ylims = nothing,
+                            collection::Union{Nothing, Collection} = nothing,
                             xlabel = "$(xaxis)$(axisunit(u))",
                             ylabel = "$(yaxis)$(axisunit(u))",
                             formatstring = "%04d",
@@ -104,9 +132,15 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
             data = read_jld(filename)
         end
     
-        scene, layout = plot_positionslice(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+        if isnothing(collection)
+            scene, layout = plot_positionslice(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
+        else
+            scene, layout = plot_positionslice(data, collection, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+                                        xaxis, yaxis, xlims, ylims, xlabel, ylabel,
+                                        kw...)
+        end
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
         Makie.save(outputfilename, scene)
@@ -116,10 +150,13 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
 end
 
 """
-    function plot_positionslice_adapt(pos::Array{T, N}, u = nothing; kw...)
-    function plot_positionslice_adapt(data, u = nothing; kw...)
+    function plot_positionslice_adapt(pos::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    function plot_positionslice_adapt(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
 
 Plot position slice with an adaptive center but fixed box length
+
+`collection`: filter the type of particles
 
 # Keywords
 $_common_keyword_figure
@@ -131,7 +168,7 @@ $_common_keyword_aspect
 julia> scene, layout = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
 ```
 """
-function plot_positionslice_adapt(data, u = nothing;
+function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
                                   xaxis = :x,
                                   yaxis = :y,
                                   xlabel = "",
@@ -162,8 +199,18 @@ function plot_positionslice_adapt(data, u = nothing;
     return scene, layout
 end
 
+function plot_positionslice_adapt(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+    d = filter(p->p.Collection == collection, data)
+    if isempty(d)
+        @warn "No $collection particle found."
+        return nothing
+    else
+        return plot_positionslice_adapt(d, u; kw...)
+    end
+end
+
 """
-    plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u = u"kpc"; kw...)
+    plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
 
 Plot position slice with an adaptive center but fixed box length
 
@@ -175,6 +222,7 @@ $_common_keyword_figure
 $_common_keyword_snapshot
 $_common_keyword_adapt_len
 $_common_keyword_aspect
+- `collection`: filter the type of particles
 
 # Examples
 ```jl
@@ -183,10 +231,11 @@ julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshot
 ```
 """
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                                  suffix::String, FileType::AbstractOutputType, u = u"kpc";
+                                  suffix::String, FileType::AbstractOutputType, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
                                   times = Counts,
                                   xaxis = :x,
                                   yaxis = :y,
+                                  collection::Union{Nothing, Collection} = nothing,
                                   xlabel = "$(xaxis)$(axisunit(u))",
                                   ylabel = "$(yaxis)$(axisunit(u))",
                                   xlen::Float64 = 0.2,
@@ -204,9 +253,15 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
             data = read_jld(filename)
         end
 
-        scene, layout = plot_positionslice_adapt(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+        if isnothing(collection)
+            scene, layout = plot_positionslice_adapt(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
+        else
+            scene, layout = plot_positionslice_adapt(data, collection, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+                                                 xaxis, yaxis, xlabel, ylabel, xlen, ylen,
+                                                 kw...)
+        end
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
         Makie.save(outputfilename, scene)
