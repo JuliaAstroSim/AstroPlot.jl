@@ -127,7 +127,7 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
     
         if FileType == gadget2()
-            data = read_gadget2_pos(filename)
+            header, data = read_gadget2(filename)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
@@ -248,7 +248,7 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
-            data = read_gadget2_pos(filename)
+            header, data = read_gadget2(filename)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
