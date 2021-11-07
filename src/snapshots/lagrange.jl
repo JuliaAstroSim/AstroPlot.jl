@@ -102,7 +102,7 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
 
     scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
-    leg = layout[1,2] = Legend(scene, scenes, columns)
+    leg = layout[:,3] = Legend(scene, scenes, columns)
 
     return scenes, columns
 end
@@ -171,7 +171,7 @@ function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
 
     scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
-    leg = layout[1,2] = Legend(scene, scenes, columns)
+    leg = layout[:,3] = Legend(scene, scenes, columns)
 
     return scenes, columns
 end
