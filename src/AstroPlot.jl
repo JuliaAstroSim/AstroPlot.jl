@@ -10,6 +10,7 @@ using ProgressMeter
 using DataFrames
 using CSV
 using GLMakie
+using CairoMakie
 using Colors
 using DocStringExtensions
 using FileIO
@@ -78,10 +79,13 @@ export
 
     # Mesh
     axisid,
+    slice3d,
     projection,
     projection_density,
     unicode_projection,
     unicode_projection_density,
+    unicode_slice,
+    plot_slice,
 
     # tools
     pack_xy,
@@ -103,6 +107,7 @@ include("comments.jl")
 include("PhysicalParticles.jl")
 
 include("mesh/cube.jl")
+include("mesh/slice.jl")
 include("mesh/projection.jl")
 
 include("tree/octreenodes.jl")

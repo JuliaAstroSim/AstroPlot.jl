@@ -51,28 +51,27 @@ function unicode_projection_density(mesh::MeshCartesianStatic;
     unicode_projection(mesh.rho; xfact, yfact, xoffset = xMin, yoffset = yMin)
 end
 
-function slice3d(a::AbstractArray, d::Int, n::Int)
-
-end
-
-function projection(mesh::MeshCartesianStatic;
-    
-    )
-
-end
-
 function projection_density(mesh::MeshCartesianStatic;
         resolution = (1600, 900),
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)", ylabel = "$(yaxis)",
         title = "Density projection",
     )
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    xid = axisid(xaxis)
+    yid = axisid(yaxis)
+    d = 6 - xid - yid
+    
+    s = collect(size(mesh.rho))
+    popat!(s, d)
+    
+    rho = reshape(sum(mesh.rho, dims = d), s...)
+    pos = slice3d(mesh.pos, d, 1)
+    
+    x, y = pack_xy(pos; xaxis, yaxis)
+    
+    f = Figure(; resolution)
+    ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title)
+    CairoMakie.heatmap!(ax, x, y, rho)
 
-
-
-    Makie.heatmap!(ax)
-
-    return scene, layout
+    return f
 end
