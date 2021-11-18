@@ -76,6 +76,13 @@ export
     plot_lagrangeradii, plot_lagrangeradii!,
     plot_lagrangeradii90, plot_lagrangeradii90!,
 
+    # Mesh
+    axisid,
+    projection,
+    projection_density,
+    unicode_projection,
+    unicode_projection_density,
+
     # tools
     pack_xy,
     sortarrays!,
@@ -96,6 +103,7 @@ include("comments.jl")
 include("PhysicalParticles.jl")
 
 include("mesh/cube.jl")
+include("mesh/projection.jl")
 
 include("tree/octreenodes.jl")
 include("tree/octree.jl")

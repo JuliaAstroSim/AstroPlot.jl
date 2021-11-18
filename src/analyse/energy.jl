@@ -45,14 +45,7 @@ function plot_energy_kinetic(df::DataFrame;
                      resolution = (1600, 900),
                      kw...)
     scene, layout = layoutscene(; resolution)
-    
-    ax = layout[1,1] = GLMakie.Axis(
-        scene,
-        xlabel = xlabel,
-        ylabel = ylabel,
-        title = title,
-    )
-
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_energy_kinetic!(ax, df; kw...)
     return scene, layout, df
 end
@@ -87,14 +80,7 @@ function plot_energy_potential(df::DataFrame;
                      resolution = (1600, 900),
                      kw...)
     scene, layout = layoutscene(; resolution)
-    
-    ax = layout[1,1] = GLMakie.Axis(
-        scene,
-        xlabel = xlabel,
-        ylabel = ylabel,
-        title = title,
-    )
-
+    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
     plot_energy_potential!(ax, df; kw...)
     return scene, layout, df
 end
@@ -346,7 +332,7 @@ function plot_energy(
         total = Float64[],
     )
     
-    progress = Progress(length(Counts), "Loading data and precessing: ")
+    progress = Progress(length(Counts), "Loading data and precessing: "; showspeed=true)
     for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
