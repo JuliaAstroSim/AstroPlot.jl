@@ -14,6 +14,7 @@ function unicode_projection(ρ;
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)", ylabel = "$(yaxis)",
         zlabel = "ρ",
+        title = "Projection",
         colormap = :inferno,
         kw...
     )
@@ -27,9 +28,9 @@ function unicode_projection(ρ;
     rho = reshape(sum(ρ, dims = d), s...)
 
     if xid > yid
-        UnicodePlots.heatmap(transpose(rho); xlabel, ylabel, zlabel, colormap, kw...)
+        UnicodePlots.heatmap(transpose(rho); xlabel, ylabel, zlabel, title, colormap, kw...)
     else
-        UnicodePlots.heatmap(rho; xlabel, ylabel, zlabel, colormap, kw...)
+        UnicodePlots.heatmap(rho; xlabel, ylabel, zlabel, title, colormap, kw...)
     end
 end
 
@@ -52,10 +53,12 @@ function unicode_projection_density(mesh::MeshCartesianStatic;
 end
 
 function projection_density(mesh::MeshCartesianStatic;
-        resolution = (1600, 900),
+        resolution = (900, 900),
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)", ylabel = "$(yaxis)",
         title = "Density projection",
+        aspect = AxisAspect(1),
+        kw...
     )
     xid = axisid(xaxis)
     yid = axisid(yaxis)
@@ -70,8 +73,12 @@ function projection_density(mesh::MeshCartesianStatic;
     x, y = pack_xy(pos; xaxis, yaxis)
     
     f = Figure(; resolution)
-    ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title)
-    CairoMakie.heatmap!(ax, x, y, rho)
+    ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
 
+    if xid > yid
+        CairoMakie.heatmap!(ax, x, y, transpose(rho); kw...)
+    else
+        CairoMakie.heatmap!(ax, x, y, rho; kw...)
+    end
     return f
 end

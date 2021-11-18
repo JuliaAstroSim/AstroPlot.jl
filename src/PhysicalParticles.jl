@@ -158,28 +158,16 @@ $_common_keyword_axis
 function pack_xy(data::Array{T,N}, u = nothing;
                  xaxis = :x,
                  yaxis = :y) where T <: AbstractPoint where N
-    len = length(data)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(data[i], xaxis))
-        y[i] = ustrip(u, getproperty(data[i], yaxis))
-    end
+    x = [ustrip(u, getproperty(p, xaxis)) for p in data]
+    y = [ustrip(u, getproperty(p, yaxis)) for p in data]
     return x, y
 end
 
 function pack_xy(data::Array{T,N}, u = nothing;
                  xaxis = :x,
                  yaxis = :y) where T <: AbstractParticle where N
-    len = length(data)
-    x = zeros(len)
-    y = zeros(len)
-
-    for i in 1:len
-        x[i] = ustrip(u, getproperty(data.Pos[i], xaxis))
-        y[i] = ustrip(u, getproperty(data.Pos[i], yaxis))
-    end
+    x = [ustrip(u, getproperty(p.Pos, xaxis)) for p in data]
+    y = [ustrip(u, getproperty(p.Pos, yaxis)) for p in data]
     return x, y
 end
 

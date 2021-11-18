@@ -79,6 +79,7 @@ export
 
     # Mesh
     axisid,
+    axis_cartesian,
     slice3d,
     projection,
     projection_density,
