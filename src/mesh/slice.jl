@@ -8,6 +8,15 @@ function slice3d(a::AbstractArray{T,3}, d::Int, n::Int) where T
     end
 end
 
+"""
+    function unicode_slice(data::AbstractArray{T,3}, n::Int; kw...)
+
+Plot 2D slice of a 3D array. Vector plot is not supported in unicode mode.
+
+# Keywords
+$_common_keyword_axis_label
+$_common_keyword_unicode_colormap
+"""
 function unicode_slice(data::AbstractArray{T,3}, n::Int;
         xaxis = :x,
         yaxis = :y,
@@ -32,6 +41,15 @@ function unicode_slice(data::AbstractArray{T,3}, n::Int;
     end
 end
 
+"""
+    function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
+
+Plot 2D slice of 3D data `symbol` in `mesh`.
+
+# Keywords
+$_common_keyword_axis_label
+$_common_keyword_unicode_colormap
+"""
 function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
         xaxis = :x,
         yaxis = :y,
@@ -51,6 +69,12 @@ function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
     unicode_slice(getfield(mesh, symbol), n; xfact, yfact, xoffset = xMin, yoffset = yMin)    
 end
 
+"""
+    function axis_cartesian(pos::StructArray, axis::Symbol)
+    function axis_cartesian(mesh::MeshCartesianStatic, axis::Symbol)
+
+Return 1D axis points of 3D Cartesian positions.
+"""
 function axis_cartesian(pos::StructArray, axis::Symbol)
     if axis == :x
         return pos.x[:,1,1]
@@ -64,6 +88,14 @@ function axis_cartesian(pos::StructArray, axis::Symbol)
 end
 axis_cartesian(mesh::MeshCartesianStatic, axis::Symbol) = axis_cartesian(mesh.pos, axis)
 
+"""
+    function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int;
+
+Plot 2D slice of 3D data.
+
+# Keywords
+$_common_keyword_axis_label
+"""
 function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int;
         xaxis = :x,
         yaxis = :y,
@@ -94,6 +126,15 @@ function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::Abstrac
     end
 end
 
+"""
+    function plot_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
+
+Plot 2D slice of 3D data `symbol` in `mesh`.
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_aspect
+"""
 function plot_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
         resolution = (900, 900),
         xaxis = :x, yaxis = :y,

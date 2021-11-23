@@ -1,5 +1,7 @@
 # AstroPlot.jl
 
+Ready-to-use plotting functions of astrophysical N-body simulation data.
+
 [![codecov](https://codecov.io/gh/JuliaAstroSim/AstroPlot.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstroSim/AstroPlot.jl)
 
 ## Installation
@@ -9,6 +11,14 @@
 ```
 
 ## Usage
+
+### Plot points
+
+
+
+### Plot particles
+
+
 
 ### Plot a cube
 

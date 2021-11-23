@@ -17,12 +17,13 @@ _common_keyword_lims = """
 
 _common_keyword_title = "- `title`: title line of the figure\n"
 _common_keyword_label_title = _common_keyword_label * _common_keyword_title
+_common_keyword_axis_label_title = _common_keyword_axis * _common_keyword_label_title
 
 _common_keyword_aspect = "- `aspect_ratio`: aspect ratio of axes. Default is `1.0` to avoid stretching. Pass to `Makie` as `AxisAspect(aspect_ratio)`\n"
 
 _common_keyword_figure = """
 - `resolution`: figure size
-""" * _common_keyword_title * _common_keyword_axis_label * _common_keyword_lims
+""" * _common_keyword_axis_label_title * _common_keyword_lims
 
 _common_keyword_adapt_len = """
 - `xlen::Float64`: box length at x-axis
@@ -69,4 +70,8 @@ _common_keyword_energy = """
 - `colorpotential`: color of potential energy curve. Default is `:red`
 - `colorkinetic`: color of kinetic energy curve. Default is `:blue`
 - `colortotal`: color of total energy curve. Default is `:black`
+"""
+
+_common_keyword_unicode_colormap = """
+- `colormap = :inferno`: color map of `heatmap` plot
 """
