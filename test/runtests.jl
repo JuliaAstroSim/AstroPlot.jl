@@ -1,21 +1,52 @@
 using Test
 
-using PhysicalTrees, PhysicalParticles, UnitfulAstro, PhysicalMeshes
+using PhysicalParticles
+using PhysicalTrees, PhysicalMeshes
+using Unitful, UnitfulAstro
 
 using AstroPlot
 using AstroIO
 using GLMakie
+using CairoMakie
 
 function plotsuccess(result)
     return !isnothing(result)
 end
 
-header, data = read_gadget2("snapshots/snapshot_0000.gadget2")
+header, data = read_gadget2("snapshots/snapshot_0000.gadget2", uAstro, uGadget2)
 
 @testset "Mesh" begin
-    scene = plot_makie(Cube(PVector(0.0,0.0,0.0), PVector(1.0,1.0,1.0)), nothing)
-    result = Makie.save("cube.png", scene)
-    @test plotsuccess(result)
+    @testset "Cube" begin
+        c = Cube(PVector(0.0,0.0,0.0), PVector(1.0,1.0,1.0))
+        scene = plot_makie(c, nothing)
+        result = Makie.save("cube.png", scene)
+        @test plotsuccess(result)
+    
+        f = Figure()
+        ax = Axis(f[1,1])
+        plot_makie!(ax, c, nothing)
+        result = Makie.save("cube_axis.png", f)
+        @test plotsuccess(result)
+    end
+
+    @testset "MeshCartesianStatic" begin
+        h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
+        m = MeshCartesianStatic(d)
+        
+        result = unicode_projection_density(m)
+        @test plotsuccess(result)
+
+        f = projection_density(m)
+        Makie.save("mesh_projection_rho.png", f)
+        @test plotsuccess(f)
+
+        result = unicode_slice(m, :rho, 5)
+        @test plotsuccess(result)
+
+        f = plot_slice(m, :pos, 5)
+        result = Makie.save("mesh_slice_rho.png", f)
+        @test plotsuccess(result)
+    end
 end
 
 @testset "Tree" begin

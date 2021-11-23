@@ -5,8 +5,8 @@ function Rect(c::Cube{T}, u = u"kpc") where T<:Number
     )
 end
 
-function plot_makie!(scene::Scene, c::Cube{T}, u = u"kpc"; kw...) where T<:Number
-    Makie.wireframe!(scene, Rect(c, u); kw...)
+function plot_makie!(ax, c::Cube{T}, u = u"kpc"; kw...) where T<:Number
+    Makie.wireframe!(ax, Rect(c, u); kw...)
 end
 
 function plot_makie(c::Cube{T}, u = u"kpc"; kw...) where T<:Number
