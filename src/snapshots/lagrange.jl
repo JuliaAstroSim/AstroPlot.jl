@@ -4,12 +4,12 @@
 
 Return a unitless array of positions relative to the center.
 """
-function pos_from_center(particles, u = u"kpc")
+function pos_from_center(particles::AbstractArray{T,1}, u = u"kpc") where T <: AbstractParticle
     p0 = median(particles, :Pos)
     return [ustrip(u, p.Pos - p0) for p in particles]
 end
 
-function pos_from_center(pos::Array{T,1}, u = u"kpc") where T <: AbstractPoint
+function pos_from_center(pos::AbstractArray{T,1}, u = u"kpc") where T <: AbstractPoint
     p0 = median(pos)
     return [ustrip(u, p - p0) for p in pos]
 end
@@ -225,7 +225,7 @@ julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
 """
 function plot_radii(folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
-                    FileType::AbstractOutputType, units = uAstro;
+                    FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                     times = Counts,
                     savelog = true,
                     savefolder = pwd(),
@@ -256,7 +256,7 @@ function plot_radii(folder::String, filenamebase::String,
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
-            data = read_gadget2_pos(filename)
+            data = read_gadget2_pos(filename, units, fileunits)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
@@ -306,7 +306,7 @@ julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
 """
 function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
-                    FileType::AbstractOutputType, units = uAstro;
+                    FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                     times = Counts,
                     colors = nothing,
                     savelog = true,
@@ -337,7 +337,7 @@ function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
-            header, data = read_gadget2(filename)
+            header, data = read_gadget2(filename, units, fileunits)
         elseif FileType == jld2()
             data = read_jld(filename)
         end

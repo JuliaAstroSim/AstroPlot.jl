@@ -127,8 +127,10 @@ function plot_energy(df::DataFrame;
 
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
         df.energy = df.potential + df.kinetic
+    elseif hasproperty(df, :energy) && !hasproperty(df, :potential) && !hasproperty(df, :kinetic)
+    elseif hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
     else
-        error("Please output energy (or potential and kinetic energy) in file $datafile")
+        error("Please output energy (or potential and kinetic energy) in datafile")
     end
 
     p1 = plot_energy!(ax, df; color = colortotal, kw...)
@@ -137,7 +139,7 @@ function plot_energy(df::DataFrame;
     
     if potential
         if !(hasproperty(df, :potential))
-            @warn "There is no potential energy data in file $datafile"
+            @warn "There is no potential energy data in datafile"
         else
             p2 = plot_energy_potential!(ax, df; color = colorpotential, kw...)
             push!(p, p2)
@@ -147,7 +149,7 @@ function plot_energy(df::DataFrame;
 
     if kinetic
         if !(hasproperty(df, :kinetic))
-            @warn "There is no kinetic energy data in file $datafile"
+            @warn "There is no kinetic energy data in datafile"
         else
             p3 = plot_energy_kinetic!(ax, df; color = colorkinetic, kw...)
             push!(p, p3)
@@ -203,6 +205,8 @@ function plot_energy_delta!(ax, df::DataFrame;
                             kw...)
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
         df.energy = df.potential + df.kinetic
+    elseif hasproperty(df, :energy) && !hasproperty(df, :potential) && !hasproperty(df, :kinetic)
+    elseif hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
     else
         error("Please output energy (or potential and kinetic energy) in file $datafile")
     end

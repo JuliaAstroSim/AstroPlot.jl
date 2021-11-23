@@ -1,5 +1,5 @@
 function Rect(c::Cube{T}, u = u"kpc") where T<:Number
-    return Makie.Rect3D(
+    return Makie.Rect3(
         point3(ustrip(u, c.below)),
         point3(ustrip(u, c.top - c.below))
     )

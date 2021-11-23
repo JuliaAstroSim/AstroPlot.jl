@@ -1,11 +1,11 @@
 """
     Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
 
-Convert an `PhysicalTrees.OctreeNode` to `Rect3D`
+Convert an `PhysicalTrees.OctreeNode` to `Rect3`
 """
 function RectNode(node::PhysicalTrees.OctreeNode, u = u"kpc")
     p = one(node.Center) * 0.5 * node.SideLength
-    return Rect3D(
+    return Rect3(
         point3(ustrip(u, node.Center - p)),
         point3(ustrip(u, p * 2.0))
     )

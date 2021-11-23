@@ -110,15 +110,15 @@ julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "s
 ```
 """
 function plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                            suffix::String, FileType::AbstractOutputType, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+                            suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                             times = Counts,
                             xaxis = :x,
                             yaxis = :y,
                             xlims = nothing,
                             ylims = nothing,
                             collection::Union{Nothing, Collection} = nothing,
-                            xlabel = "$(xaxis)$(axisunit(u))",
-                            ylabel = "$(yaxis)$(axisunit(u))",
+                            xlabel = "$(xaxis)$(axisunit(getuLength(units)))",
+                            ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
                             formatstring = "%04d",
                             kw...)
     progress = Progress(length(Counts), "Loading data and plotting: "; showspeed=true)
@@ -127,17 +127,17 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
     
         if FileType == gadget2()
-            header, data = read_gadget2(filename)
+            header, data = read_gadget2(filename, units, fileunits)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
     
         if isnothing(collection)
-            scene, layout = plot_positionslice(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            scene, layout = plot_positionslice(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
         else
-            scene, layout = plot_positionslice(data, collection, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            scene, layout = plot_positionslice(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
         end
@@ -231,13 +231,13 @@ julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshot
 ```
 """
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1},
-                                  suffix::String, FileType::AbstractOutputType, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+                                  suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                                   times = Counts,
                                   xaxis = :x,
                                   yaxis = :y,
                                   collection::Union{Nothing, Collection} = nothing,
-                                  xlabel = "$(xaxis)$(axisunit(u))",
-                                  ylabel = "$(yaxis)$(axisunit(u))",
+                                  xlabel = "$(xaxis)$(axisunit(getuLength(units)))",
+                                  ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
                                   xlen::Float64 = 0.2,
                                   ylen::Float64 = 0.2,
                                   formatstring = "%04d",
@@ -248,17 +248,17 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
         
         if FileType == gadget2()
-            header, data = read_gadget2(filename)
+            header, data = read_gadget2(filename, units, fileunits)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
 
         if isnothing(collection)
-            scene, layout = plot_positionslice_adapt(data, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            scene, layout = plot_positionslice_adapt(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
         else
-            scene, layout = plot_positionslice_adapt(data, collection, u; title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            scene, layout = plot_positionslice_adapt(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
         end

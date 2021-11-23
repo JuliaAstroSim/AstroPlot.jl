@@ -14,6 +14,7 @@ function plotsuccess(result)
 end
 
 header, data = read_gadget2("snapshots/snapshot_0000.gadget2", uAstro, uGadget2)
+h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
 
 @testset "Mesh" begin
     @testset "Cube" begin
@@ -30,7 +31,6 @@ header, data = read_gadget2("snapshots/snapshot_0000.gadget2", uAstro, uGadget2)
     end
 
     @testset "MeshCartesianStatic" begin
-        h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
         m = MeshCartesianStatic(d)
         
         result = unicode_projection_density(m)
@@ -56,8 +56,8 @@ end
 
     d = randn_pvector(15)
     t = octree(d)
-    scene = plot_makie(t)
-    result = Makie.save("tree.png", scene)
+    figure, axis, plot = plot_makie(t)
+    result = Makie.save("tree.png", figure)
     @test plotsuccess(result)
 end
 
@@ -108,12 +108,12 @@ end
 end
 
 @testset "Unitcode Plot" begin
-    result = unicode_scatter(data)
+    result = unicode_scatter(d, nothing)
     @test plotsuccess(result)
 
-    result = unicode_density(data)
+    result = unicode_density(d, nothing)
     @test plotsuccess(result)
 
-    result = unicode_rotationcurve(data)
+    result = unicode_rotationcurve(d, nothing)
     @test plotsuccess(result)
 end
