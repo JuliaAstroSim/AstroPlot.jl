@@ -129,7 +129,7 @@ end
 function plot_momentum(
     folder::String, filenamebase::String,
     Counts::Vector{Int64}, suffix::String,
-    FileType::AbstractOutputType, units = uAstro;
+    FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
     times = Counts,
     savelog = true,
     savefolder = pwd(),
@@ -151,7 +151,7 @@ function plot_momentum(
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
-            header, data = read_gadget2(filename)
+            header, data = read_gadget2(filename, units, fileunits)
         elseif FileType == jld2()
             data = read_jld(filename)
         end

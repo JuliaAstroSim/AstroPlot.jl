@@ -280,11 +280,20 @@ function sum_kinetic(data::Array)
 end
 
 function sum_kinetic(data::StructArray)
-    s = zero(data.Potential[1])
-    @avxt for i in eachindex(data)
-        s += 0.5 * data.Mass[i] * data.Vel[i] * data.Vel[i]
+    s = similar(data.Potential) .* zero(data.Mass[1])
+    block = ceil(Int64, length(data) / Threads.nthreads())
+    Threads.@threads for k in 1:Threads.nthreads()
+        Head = block * (k-1) + 1
+        Tail = block * k
+        if k == Threads.nthreads()
+            Tail = length(data)
+        end
+
+        for i in Head:Tail
+            @inbounds s[i] = 0.5 * data.Mass[i] * data.Vel[i] * data.Vel[i]
+        end
     end
-    return s
+    return sum(s)
 end
 
 """
@@ -293,11 +302,11 @@ end
 Sum potential energy of particles in `data`. Potentials need to be computed in advance.
 """
 function sum_potential(data::Array)
-    return sum([p.Potential for p in data])
+    return sum([p.Potential * p.Mass for p in data])
 end
 
 function sum_potential(data::StructArray)
-    return sum(data.Potential)
+    return sum(data.Potential .* data.Mass)
 end
 
 """
@@ -318,7 +327,7 @@ $_common_keyword_energy
 function plot_energy(
     folder::String, filenamebase::String,
     Counts::Vector{Int64}, suffix::String,
-    FileType::AbstractOutputType, units = uAstro;
+    FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
     times = Counts,
     savelog = true,
     savefolder = pwd(),
@@ -342,7 +351,7 @@ function plot_energy(
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
 
         if FileType == gadget2()
-            header, data = read_gadget2(filename, pot = true)
+            header, data = read_gadget2(filename, units, fileunits, pot = true)
         elseif FileType == jld2()
             data = read_jld(filename)
         end
