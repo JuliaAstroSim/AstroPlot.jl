@@ -4,3 +4,6 @@ test/snapshots/*.png
 test/radii.csv
 test/density.csv
 test/rotationcurve.csv
+
+docs/build
+docs/Manifest.toml
