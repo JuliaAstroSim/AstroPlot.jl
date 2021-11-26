@@ -1,5 +1,5 @@
 """
-    function plot_trajectory!(ax, pos::Array{T,1}; kw...)
+$(SIGNATURES)
         
 Plot `pos` as particle trajectory
 
@@ -43,7 +43,7 @@ function plot_trajectory!(ax, pos::Array{T,1};
 end
 
 """
-    function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc"; kw...)
+$(SIGNATURES)
 
 # Keywords
 $_common_keyword_figure
@@ -163,7 +163,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 end
 
 """
-    function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
+$(SIGNATURES)
 
 Plot trajectories in `ax`
 

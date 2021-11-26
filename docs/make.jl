@@ -37,6 +37,12 @@ makedocs(
         "Home" => "index.md",
         "Manual" => Any[
             "manual/guide.md",
+            "manual/analyse.md",
+            "manual/snapshots.md",
+            "manual/tree.md",
+            "manual/mesh.md",
+            "manual/video.md",
+            "manual/mosaic.md",
         ],
         "Library" => Any[
             "lib/Methods.md",
