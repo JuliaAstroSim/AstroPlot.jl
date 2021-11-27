@@ -190,7 +190,7 @@ function plot_momentum(
         angularmomentum = StructArray{PVector{Float64}}(undef, length(Counts)),
     )
     
-    progress = Progress(length(Counts), "Loading data and precessing: "; showspeed=true)
+    progress = Progress(length(Counts), "Loading data and precessing: "; #=showspeed=true=#)
     for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))

@@ -33,4 +33,5 @@ function png2video(dir::String, filenamebase::String, suffix::String, outfile::S
             write(writer, img)
         end
     end
+    return true
 end
