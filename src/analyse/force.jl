@@ -1,3 +1,11 @@
+"""
+    force(data, units = uAstro; kw...)
+
+Compute acceleration magnitude distribution of spherically symmetric system
+
+# Keywords
+$_common_keyword_log
+"""
 function force(data, units = uAstro;
         savelog::Bool = true,
         savefolder = pwd(),
@@ -21,6 +29,15 @@ function force(data, units = uAstro;
     return R, acc
 end
 
+"""
+    unicode_force(data, units = uAstro; kw...)
+
+Plot acceleration magnitude distribution of spherically symmetric system in `REPL`
+
+# Keywords
+$_common_keyword_label_title
+$_common_keyword_timestamp
+"""
 function unicode_force(data, units = uAstro;
         timestamp = nothing,
         savelog::Bool = false,
@@ -35,6 +52,14 @@ function unicode_force(data, units = uAstro;
     UnicodePlots.scatterplot(log10.(R), log10.(acc); xlabel, ylabel, title, kw...)
 end
 
+"""
+    plot_force!(ax, data, units = uAstro; kw...)
+
+Plot acceleration magnitude distribution of spherically symmetric system
+
+# Keywords
+$_common_keyword_log
+"""
 function plot_force!(ax, data, units = uAstro;
         savelog = true,
         savefolder = pwd(),
@@ -44,6 +69,16 @@ function plot_force!(ax, data, units = uAstro;
     Makie.scatter!(ax, log10.(R), log10.(acc); kw...)
 end
 
+"""
+    plot_force(data, units = uAstro; kw...)
+
+Plot acceleration magnitude distribution of spherically symmetric system
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_timestamp
+"""
 function plot_force(data, units = uAstro;
         timestamp = nothing,
         savelog = true,

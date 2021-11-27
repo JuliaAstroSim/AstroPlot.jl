@@ -49,12 +49,14 @@ mosaicview
 
 ```@docs
 rotationcurve
+densitycurve
 rotvel
 radialvel
 force
 radialforce
 radialpotential
 distribution
+pos_from_center
 lagrange_radii
 ```
 
@@ -72,4 +74,50 @@ pos_from_center
 axisid
 axis_cartesian
 slice3d
+```
+
+### energy evolution
+
+```docs
+plot_energy
+plot_energy_kinetic
+plot_energy_potential
+plot_energy_delta
+plot_energy_delta!
+kinetic_energy
+sum_kinetic
+sum_potential
+```
+
+### momentum evolution
+
+```@docs
+plot_momentum
+plot_momentum_angular
+```
+
+### radii evolution
+
+```@docs
+plot_scaleradius
+plot_lagrangeradii
+plot_lagrangeradii!
+plot_lagrangeradii90
+plot_lagrangeradii90!
+plot_radii
+plot_radii!
+```
+
+### force distribution
+
+```docs
+plot_force
+plot_force!
+```
+
+### density distribution
+
+```@docs
+plot_density
+plot_density!
 ```

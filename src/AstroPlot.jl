@@ -44,11 +44,23 @@ export
     plot_peano,
 
     # Analyse
+    rotvel,
+    radialvel,
+    distribution,
+
     rotationcurve,
     plot_rotationcurve, plot_rotationcurve!,
+
+    densitycurve,
     plot_densitycurve, plot_densitycurve!,
+
+    radialforce,
     plot_radialforce, plot_radialforce!,
+    
+    force,
     plot_force, plot_force!,
+    
+    radialpotential,
     plot_radialpotential, plot_radialpotential!,
 
     plot_trajectory, plot_trajectory!,
@@ -64,13 +76,6 @@ export
 
     plot_momentum, plot_momentum!,
     plot_momentum_angular, plot_momentum_angular!,
-
-    rotvel,
-    radialvel,
-    force,
-    radialforce,
-    radialpotential,
-    distribution,
 
     lagrange_radii,
     plot_radii, plot_radii!,

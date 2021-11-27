@@ -253,6 +253,9 @@ function plot_energy_delta(datafile::String; kw...)
 
 Plot delta energy (last one minus previous one) in `datafile` which is a
 `CSV` file containing columns named `time` and `energy`
+
+# Keywords
+$_common_keyword_figure
 """
 function plot_energy_delta(datafile::String; kw...)
     df = DataFrame(CSV.File(datafile))
@@ -310,9 +313,9 @@ function sum_potential(data::StructArray)
 end
 
 """
-    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
+    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2; kw...)
 
-Compute kinetic energy and sum potential energy of particles in each snapshot
+Compute kinetic energy and sum potential energy of particles in each snapshot.
 Return a Tuple of `scene` and `layout`
 
 # Arguments

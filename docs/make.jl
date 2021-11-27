@@ -49,6 +49,7 @@ makedocs(
         ],
         #"contributing.md",
     ],
+    workdir = joinpath(@__DIR__, "../test"),
     #strict = !("strict=false" in ARGS),
     #doctest = ("doctest=only" in ARGS) ? :only : true,
 )

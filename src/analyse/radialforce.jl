@@ -1,9 +1,22 @@
+"""
+    radialforce(a0, acc, p0, pos)
+
+Compute radial acceleration magnitude relative to center `p0`
+"""
 function radialforce(a0, acc, p0, pos)
     a = acc - a0
     pn = normalize(ustrip(pos - p0))
     return abs(a * pn)
 end
 
+"""
+    radialforce(data, units = uAstro; kw...)
+
+Compute radial acceleration magnitude relative to center
+
+# Keywords
+$_common_keyword_log
+"""
 function radialforce(data, units = uAstro;
         savelog::Bool = true,
         savefolder = pwd(),
@@ -27,6 +40,15 @@ function radialforce(data, units = uAstro;
     return R, acc
 end
 
+"""
+    unicode_radialforce(data, units = uAstro; kw...)
+
+Plot radial acceleration magnitude relative to center in `REPL`
+
+# Keywords
+$_common_keyword_label_title
+$_common_keyword_timestamp
+"""
 function unicode_radialforce(data, units = uAstro;
         timestamp = nothing,
         savelog::Bool = false,
@@ -41,6 +63,15 @@ function unicode_radialforce(data, units = uAstro;
     UnicodePlots.scatterplot(log10.(R), log10.(acc); xlabel, ylabe, title, kw...)
 end
 
+"""
+    plot_radialforce!(ax, data, units = uAstro; kw...)
+
+Plot radial acceleration magnitude relative to center
+
+# Keywords
+$_common_keyword_log
+$_common_keyword_timestamp
+"""
 function plot_radialforce!(ax, data, units = uAstro;
         savelog = true,
         savefolder = pwd(),
@@ -50,6 +81,16 @@ function plot_radialforce!(ax, data, units = uAstro;
     Makie.scatter!(ax, log10.(R), log10.(acc); kw...)
 end
 
+"""
+    plot_radialforce(data, units = uAstro; kw...)
+
+Plot radial acceleration magnitude relative to center
+
+# Keywords
+$_common_keyword_figure
+$_common_keyword_log
+$_common_keyword_timestamp
+"""
 function plot_radialforce(data, units = uAstro;
         timestamp = nothing,
         savelog = true,

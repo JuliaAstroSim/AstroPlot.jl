@@ -133,6 +133,16 @@ function distribution(x::Array, y::Array;
     end
 end
 
+"""
+    rotvel(vel::PVector, pos::PVector)
+
+Rotational velocity magnitude at `pos` relative to origin.
+"""
 rotvel(vel::PVector, pos::PVector) = vel * normalize(cross(cross(pos, vel), pos))
 
+"""
+radialvel(vel::PVector, pos::PVector)
+
+Radial velocity magnitude at `pos` relative to origin.
+"""
 radialvel(vel::PVector, pos::PVector) = vel * normalize(pos)

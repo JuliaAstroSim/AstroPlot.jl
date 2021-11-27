@@ -1,7 +1,7 @@
 """
     function densitycurve(data, units = uAstro; kw...)
 
-Plot radial mass density curve of spherically symmetric system
+Compute radial mass density curve of spherically symmetric system
 
 # Keywords
 $_common_keyword_log

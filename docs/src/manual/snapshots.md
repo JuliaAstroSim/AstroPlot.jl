@@ -1,1 +1,4 @@
 # Plot snapshots
+
+```@example snapshots
+```
