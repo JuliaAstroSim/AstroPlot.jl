@@ -15,7 +15,7 @@ jobs:
         os:
           - ubuntu-latest
           #- macOS-latest
-          - windows-latest
+          #- windows-latest
         arch:
           - x64
     steps:
@@ -33,7 +33,7 @@ jobs:
         run: |
           using Pkg;
           # dev mono repo versions
-          pkg"dev . AstroPlot"
+          pkg"dev ../ AstroPlot"
       - name: Run the tests
         continue-on-error: true
         run: >
