@@ -19,7 +19,6 @@ using VideoIO
 using Images
 using StructArrays
 using LoopVectorization
-using Polyester
 
 using ParallelOperations
 @reexport using PhysicalParticles
