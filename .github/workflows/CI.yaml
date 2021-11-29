@@ -33,7 +33,7 @@ jobs:
         run: |
           using Pkg;
           # dev mono repo versions
-          pkg"dev ../ AstroPlot"
+          pkg"dev ."
       - name: Run the tests
         continue-on-error: true
         run: >
