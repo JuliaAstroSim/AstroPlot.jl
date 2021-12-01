@@ -17,6 +17,9 @@ scene
 ```
 
 ```@example analysis
+using AstroIO
+header, data = read_gadget2("plummer/snapshot_0000.gadget2", uAstro, uGadget2)
+
 scene, layout = plot_densitycurve(data)
 scene
 ```

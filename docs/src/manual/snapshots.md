@@ -12,14 +12,14 @@ plot_positionslice("mosaic/", "snapshot_", collect(0:100), ".gadget2", gadget2()
 
 ```@example snapshots
 scene, layout = plot_trajectory(
-    "snapshots/", "snapshot_", collect(0:20:200), [1,2,3], ".gadget2", gadget2(),
+    "plummer/", "snapshot_", collect(0:20:200), [1,2,3], ".gadget2", gadget2(),
 )
 scene
 ```
 
 ```@example snapshots
 ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
-    "snapshots/", "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
+    "plummer/", "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
     times = collect(0.0:0.01:0.1) * u"Gyr", title = "Direct Sum const",
 )
 ScaleScene

@@ -13,7 +13,7 @@ scene = plot_makie(c, nothing)
 ## Static Cartesian Mesh
 
 ```@repl mesh
-using AstroIC
+using AstroIO
 h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
 
 m = MeshCartesianStatic(d)
