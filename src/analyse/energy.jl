@@ -286,6 +286,10 @@ function sum_kinetic(data::StructArray)
     s = similar(data.Potential) .* zero(data.Mass[1])
     block = ceil(Int64, length(data) / Threads.nthreads())
     Threads.@threads for k in 1:Threads.nthreads()
+        if k > length(s)
+            continue
+        end
+
         Head = block * (k-1) + 1
         Tail = block * k
         if k == Threads.nthreads()
