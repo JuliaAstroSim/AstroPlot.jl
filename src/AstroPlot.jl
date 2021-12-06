@@ -95,7 +95,6 @@ export
     plot_slice,
 
     # tools
-    pack_xy,
     sortarrays!,
     pos_from_center,
 
