@@ -105,15 +105,15 @@ function projection_density(mesh::MeshCartesianStatic;
     rho = reshape(sum(mesh.rho, dims = d), s...)
     pos = slice3d(mesh.pos, d, 1)
     
-    x, y = pack_xy(pos; xaxis, yaxis)
+    xy = pack_xy(pos; xaxis, yaxis)
     
     f = Figure(; resolution)
     ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect = AxisAspect(aspect_ratio))
 
     if xid > yid
-        CairoMakie.heatmap!(ax, x, y, transpose(rho); kw...)
+        CairoMakie.heatmap!(ax, xy[:,1], xy[:,2], transpose(rho); kw...)
     else
-        CairoMakie.heatmap!(ax, x, y, rho; kw...)
+        CairoMakie.heatmap!(ax, xy[:,1], xy[:,2], rho; kw...)
     end
     return f
 end

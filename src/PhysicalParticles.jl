@@ -2,6 +2,19 @@ function point3(p::PVector)
     return Makie.Point3(p.x, p.y, p.z)
 end
 
+function estimate_markersize(S::Real)
+    return 0.0001 / sqrt(S)
+end
+
+function estimate_markersize(data, u; xaxis = :x, yaxis = :y)
+    e = extent(data)
+    xMax = getfield(e, Symbol(string(xaxis) * "Max"))
+    xMin = getfield(e, Symbol(string(xaxis) * "Min"))
+    yMax = getfield(e, Symbol(string(yaxis) * "Max"))
+    yMin = getfield(e, Symbol(string(yaxis) * "Min"))
+    return estimate_markersize(ustrip(u*u, (xMax - xMin) * (yMax - yMin)))
+end
+
 """
     plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:PVector
     plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D
@@ -22,14 +35,24 @@ d = randn_pvector(50, u"km")
 plot_makie(d, u"m")
 ```
 """
-function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:PVector
+function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+    markersize = estimate_markersize(data, u),
+    markerspace=SceneSpace,
+    resolution = (1000, 1000),
+    kw...
+) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
-    return Makie.scatter(d; kw...)
+    return Makie.scatter(d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
-function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D
+function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+    markersize = estimate_markersize(data, u),
+    markerspace=SceneSpace,
+    resolution = (1000, 1000),
+    kw...
+) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
-    return Makie.scatter(d; kw...)
+    return Makie.scatter(d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
 function plot_makie(data::StructArray, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
@@ -66,14 +89,24 @@ d = randn_pvector(50, u"km")
 plot_makie!(scene, d, u"m")
 ```
 """
-function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:PVector
+function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+    markersize = estimate_markersize(data, u),
+    markerspace=SceneSpace,
+    resolution = (1000, 1000),
+    kw...
+) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
-    Makie.scatter!(scene, d; kw...)
+    Makie.scatter!(scene, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
-function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D
+function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+    markersize = estimate_markersize(data, u),
+    markerspace=SceneSpace,
+    resolution = (1000, 1000),
+    kw...
+) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
-    Makie.scatter!(scene, d; kw...)
+    Makie.scatter!(scene, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
 function plot_makie!(scene, data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu

@@ -13,9 +13,11 @@ $_common_keyword_axis
 function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
                              xaxis = :x,
                              yaxis = :y,
+                             markersize = estimate_markersize(data, u; xaxis, yaxis),
+                             markerspace=SceneSpace,
                              kw...)
-    x, y = pack_xy(data, u; xaxis, yaxis)
-    Makie.scatter!(scene, x, y; kw...)
+    xy = pack_xy(data; xaxis, yaxis)
+    Makie.scatter!(scene, ustrip.(u, xy); markersize, markerspace, kw...)
 end
 
 function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
@@ -55,9 +57,11 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
                             ylims = nothing,
                             aspect_ratio = 1.0,
                             title = "Positions",
-                            resolution = (1600, 900),
+                            markersize = (isnothing(xlims) && isnothing(ylims)) ? estimate_markersize(data, u; xaxis, yaxis) : estimate_markersize((xlims[2] - xlims[1]) * (ylims[2] - ylims[1])),
+                            markerspace=SceneSpace,
+                            resolution = (1000, 1000),
                             kw...)
-    x, y = pack_xy(data, u; xaxis, yaxis)
+    xy = pack_xy(data; xaxis, yaxis)
 
     scene, layout = layoutscene(; resolution)
 
@@ -66,7 +70,7 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y; kw...)
+    Makie.scatter!(ax, ustrip.(u, xy); markersize, markerspace, kw...)
 
     if !isnothing(xlims)
         Makie.xlims!(ax, xlims)
@@ -177,9 +181,11 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
                                   ylen::Float64 = 1.0,
                                   aspect_ratio = 1.0,
                                   title = "Positions",
-                                  resolution = (1600, 900),
+                                  markersize = estimate_markersize(xlen * ylen),
+                                  markerspace=SceneSpace,
+                                  resolution = (1000, 1000),
                                   kw...)
-    x, y = pack_xy(data, u; xaxis, yaxis)
+    xy = pack_xy(data; xaxis, yaxis)
 
     xcenter = middle(x)
     ycenter = middle(y)
@@ -191,7 +197,7 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, x, y; kw...)
+    Makie.scatter!(ax, ustrip.(u, xy); markersize, markerspace, kw...)
 
     xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
     ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
