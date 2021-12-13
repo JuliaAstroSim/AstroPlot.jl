@@ -1,16 +1,14 @@
 """
-    function plot_profiling(datafile::String; kw...)
-    function plot_profiling!(ax, layout, index, datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot profiling curves
 
-# Keywords:
+## Keywords:
 - `title`: title line of the figure
 - `resolution`: figure size
 $_common_keyword_label
 - `colors`
 
-# Examples
+## Examples
 ```jl
 julia> scene, layout = plot_profiling("profiling.csv")
 ```

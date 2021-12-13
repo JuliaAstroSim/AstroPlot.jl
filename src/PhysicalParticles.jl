@@ -16,11 +16,7 @@ function estimate_markersize(data, u; xaxis = :x, yaxis = :y)
 end
 
 """
-    plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:PVector
-    plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D
-    plot_makie(data::StructArray, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
-    plot_makie(data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
-
+$(TYPEDSIGNATURES)
 Plot `scatter` data points (in interactive mode)
 
 `collection`: filter the type of particles
@@ -70,11 +66,7 @@ function plot_makie(data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection:
 end
 
 """
-    plot_makie!(scene, data::Array{T,1}, where T<:AbstractParticle3D where N where NT where Tu u"kpc"; kw...) where T<:PVector
-    plot_makie!(scene, data::Array{T,1}, where T<:AbstractParticle3D where N where NT where Tu u"kpc"; kw...) where T<:AbstractParticle3D
-    plot_makie!(scene, data::StructArray, where T<:AbstractParticle3D where N where NT where Tu u"kpc"; kw...)
-    plot_makie!(scene, data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
-
+$(TYPEDSIGNATURES)
 Plot `scatter` data points (in interactive mode)
 
 `collection`: filter the type of particles
@@ -124,19 +116,15 @@ function plot_makie!(scene, data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, col
 end
 
 """
-    function unicode_scatter(data::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractPoint where N
-    function unicode_scatter(data::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle where N
-    function unicode_scatter(data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle where N where NT where Tu
-    function unicode_scatter(data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle where N where NT where Tu
-
+$(TYPEDSIGNATURES)
 Scatter plot of points or particles in REPL
 
 `collection`: filter the type of particles
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label
 
-# Examples
+## Examples
 julia> `unicode_scatter(randn_pvector(100))`
 """
 function unicode_scatter(data::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";

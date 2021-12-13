@@ -1,6 +1,5 @@
 """
-    radialforce(a0, acc, p0, pos)
-
+$(TYPEDSIGNATURES)
 Compute radial acceleration magnitude relative to center `p0`
 """
 function radialforce(a0, acc, p0, pos)
@@ -10,11 +9,10 @@ function radialforce(a0, acc, p0, pos)
 end
 
 """
-    radialforce(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Compute radial acceleration magnitude relative to center
 
-# Keywords
+## Keywords
 $_common_keyword_log
 """
 function radialforce(data, units = uAstro;
@@ -41,11 +39,10 @@ function radialforce(data, units = uAstro;
 end
 
 """
-    unicode_radialforce(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot radial acceleration magnitude relative to center in `REPL`
 
-# Keywords
+## Keywords
 $_common_keyword_label_title
 $_common_keyword_timestamp
 """
@@ -64,11 +61,10 @@ function unicode_radialforce(data, units = uAstro;
 end
 
 """
-    plot_radialforce!(ax, data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot radial acceleration magnitude relative to center
 
-# Keywords
+## Keywords
 $_common_keyword_log
 $_common_keyword_timestamp
 """
@@ -82,11 +78,10 @@ function plot_radialforce!(ax, data, units = uAstro;
 end
 
 """
-    plot_radialforce(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot radial acceleration magnitude relative to center
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_log
 $_common_keyword_timestamp

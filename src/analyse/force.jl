@@ -1,9 +1,8 @@
 """
-    force(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Compute acceleration magnitude distribution of spherically symmetric system
 
-# Keywords
+## Keywords
 $_common_keyword_log
 """
 function force(data, units = uAstro;
@@ -30,11 +29,10 @@ function force(data, units = uAstro;
 end
 
 """
-    unicode_force(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot acceleration magnitude distribution of spherically symmetric system in `REPL`
 
-# Keywords
+## Keywords
 $_common_keyword_label_title
 $_common_keyword_timestamp
 """
@@ -53,11 +51,10 @@ function unicode_force(data, units = uAstro;
 end
 
 """
-    plot_force!(ax, data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot acceleration magnitude distribution of spherically symmetric system
 
-# Keywords
+## Keywords
 $_common_keyword_log
 """
 function plot_force!(ax, data, units = uAstro;
@@ -70,11 +67,10 @@ function plot_force!(ax, data, units = uAstro;
 end
 
 """
-    plot_force(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot acceleration magnitude distribution of spherically symmetric system
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_log
 $_common_keyword_timestamp

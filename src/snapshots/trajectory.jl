@@ -1,9 +1,9 @@
 """
-$(SIGNATURES)
+$(TYPEDSIGNATURES)
         
 Plot `pos` as particle trajectory
 
-# Keywords
+## Keywords
 $_common_keyword_axis
 $_common_keyword_lims
 - `color`: color of the trajectory line
@@ -43,9 +43,9 @@ function plot_trajectory!(ax, pos::Array{T,1};
 end
 
 """
-$(SIGNATURES)
+$(TYPEDSIGNATURES)
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 - colors: use different colors for different particles
 $_common_keyword_aspect
@@ -100,21 +100,21 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
 end
 
 """
-$(SIGNATURES)
+$(TYPEDSIGNATURES)
 
 Plot trajectories of particles from a series of snapshots
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 - `ids`: plot trajectories of selected particles whose ID is in `ids`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 - `colors`: use different colors for different particles
 $_common_keyword_snapshot
 $_common_keyword_aspect
 
-# Examples
+## Examples
 ```jl
 julia scene, layout, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
             [1,2,3], ".gadget2", gadget2(), dpi = 300, resolution = (800,800))
@@ -163,11 +163,11 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
 end
 
 """
-$(SIGNATURES)
+$(TYPEDSIGNATURES)
 
 Plot trajectories in `ax`
 
-# Keywords
+## Keywords
 $_common_keyword_axis
 $_common_keyword_lims
 """
@@ -196,14 +196,14 @@ function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoin
 end
 
 """
-$(SIGNATURES)
+$(TYPEDSIGNATURES)
 
 Plot trajectories in `ax`
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
-# Keywords
+## Keywords
 $_common_keyword_axis
 $_common_keyword_lims
 $_common_keyword_snapshot

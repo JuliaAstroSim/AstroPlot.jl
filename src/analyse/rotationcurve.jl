@@ -1,9 +1,8 @@
 """
-    function rotationcurve(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Return `Tuple(Rmean, Vmean, Rstd, Vstd)`, where `mean` is mean value, `std` means standard deviation.
 
-# Keywords
+## Keywords
 $_common_keyword_head_tail
 $_common_keyword_log
 $_common_keyword_section
@@ -39,11 +38,10 @@ function rotationcurve(data, units = uAstro;
 end
 
 """
-    function unicode_rotationcurve(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot rotation curve in `REPL`
 
-# Keywords
+## Keywords
 $_common_keyword_head_tail
 $_common_keyword_log
 $_common_keyword_section
@@ -65,11 +63,10 @@ function unicode_rotationcurve(data, units = uAstro;
 end
 
 """
-    function plot_rotationcurve!(ax, data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot rotation curve in `ax`
 
-# Keywords
+## Keywords
 $_common_keyword_head_tail
 $_common_keyword_log
 $_common_keyword_section
@@ -91,11 +88,10 @@ function plot_rotationcurve!(ax, data, units = uAstro;
 end
 
 """
-    function plot_rotationcurve(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot rotation curve
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_head_tail
 $_common_keyword_log

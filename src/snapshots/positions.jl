@@ -1,13 +1,11 @@
 """
-    function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-    function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-
+$(TYPEDSIGNATURES)
 Add 2D scatter plot of positions to `scene`.
 `data` can be array or dict of arrays, of points or particles.
 
 `collection`: filter the type of particles
 
-# Keywords
+## Keywords
 $_common_keyword_axis
 """
 function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
@@ -31,19 +29,16 @@ function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothi
 end
 
 """
-    function plot_positionslice(pos::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-    function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-    function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-
+$(TYPEDSIGNATURES)
 2D scatter plot of positions
 
 `collection`: filter the type of particles
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_aspect
 
-# Examples
+## Examples
 ```jl
 julia> scene, layout = plot_positionslice(randn_pvector(100); title = "Positions")
 ```
@@ -94,20 +89,19 @@ function plot_positionslice(data, collection::Collection, u::Union{Nothing, Unit
 end
 
 """
-    plot_positionslice(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::gadget2, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
-
+$(TYPEDSIGNATURES)
 2D scatter plot of positions in snapshots
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_snapshot
 $_common_keyword_aspect
 - `collection`: filter the type of particles
 
-# Examples
+## Examples
 ```jl
 julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), dpi = 300, resolution = (800,800),
         xlims = (-0.05, +0.05), ylims = (-0.05, +0.05), times = collect(0.0:0.01:0.1) * u"Gyr")
@@ -154,20 +148,17 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
 end
 
 """
-    function plot_positionslice_adapt(pos::Array{T, N}, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-    function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-    function plot_positionslice_adapt(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
-
+$(TYPEDSIGNATURES)
 Plot position slice with an adaptive center but fixed box length
 
 `collection`: filter the type of particles
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_adapt_len
 $_common_keyword_aspect
 
-# Examples
+## Examples
 ```jl
 julia> scene, layout = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
 ```
@@ -216,21 +207,20 @@ function plot_positionslice_adapt(data, collection::Collection, u::Union{Nothing
 end
 
 """
-    plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1}, ::jld2, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
-
+$(TYPEDSIGNATURES)
 Plot position slice with an adaptive center but fixed box length
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_snapshot
 $_common_keyword_adapt_len
 $_common_keyword_aspect
 - `collection`: filter the type of particles
 
-# Examples
+## Examples
 ```jl
 julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
         dpi = 300, resolution = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")

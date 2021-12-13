@@ -1,9 +1,8 @@
 """
-    function sortarrays!(by::Array, another::Array; kw...)
-
+$(TYPEDSIGNATURES)
 Sort two arrays at the same time. `kw` is passed to `Base.sort!`.
 
-# Examples
+## Examples
 ```jl
 julia> a = [1,3,2]
 julia> b = ["a", "b", "c"]
@@ -31,16 +30,15 @@ function sortarrays!(by::Array, another::Array; kw...)
 end
 
 """
-    function density(r::Array, m::Array; kw...)
-
+$(TYPEDSIGNATURES)
 Compute radial mass density. Assuming that the system is spherically symmetric.
 Return a `Tuple` of mean radius and mass density in each bin
 
-# Arguments
+## Arguments
 - `r`: array of radii of particles relative to center
 - `m`: array of masses of particles
 
-# Keywords
+## Keywords
 $_common_keyword_section
 """
 function density(r::Array, m::Array;
@@ -76,12 +74,11 @@ function density(r::Array, m::Array;
 end
 
 """
-    function distribution(x::Array, y::Array; kw...)
-
+$(TYPEDSIGNATURES)
 Compute how quantity `y` is distributed along `x`. For example, rotation velocity along radius.
 Return `Tuple(xmean, ymean, xstd, ystd)`, where `mean` is mean value, `std` means standard deviation.
 
-# Keywords
+## Keywords
 $_common_keyword_section
 $_common_keyword_head_tail
 """
@@ -134,15 +131,13 @@ function distribution(x::Array, y::Array;
 end
 
 """
-    rotvel(vel::PVector, pos::PVector)
-
+$(TYPEDSIGNATURES)
 Rotational velocity magnitude at `pos` relative to origin.
 """
 rotvel(vel::PVector, pos::PVector) = vel * normalize(cross(cross(pos, vel), pos))
 
 """
-radialvel(vel::PVector, pos::PVector)
-
+$(TYPEDSIGNATURES)
 Radial velocity magnitude at `pos` relative to origin.
 """
 radialvel(vel::PVector, pos::PVector) = vel * normalize(pos)

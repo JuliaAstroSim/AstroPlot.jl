@@ -1,9 +1,8 @@
 """
-    function densitycurve(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Compute radial mass density curve of spherically symmetric system
 
-# Keywords
+## Keywords
 $_common_keyword_log
 """
 function densitycurve(data, units = uAstro;
@@ -29,11 +28,10 @@ function densitycurve(data, units = uAstro;
 end
 
 """
-    function unicode_density(data, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot radial mass density curve of spherically symmetric system in `REPL`
 
-# Keywords
+## Keywords
 $_common_keyword_label_title
 $_common_keyword_timestamp
 """

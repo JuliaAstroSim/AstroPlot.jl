@@ -9,11 +9,10 @@ function slice3d(a::AbstractArray{T,3}, d::Int, n::Int) where T
 end
 
 """
-    function unicode_slice(data::AbstractArray{T,3}, n::Int; kw...)
-
+$(TYPEDSIGNATURES)
 Plot 2D slice of a 3D array. Vector plot is not supported in unicode mode.
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label
 $_common_keyword_unicode_colormap
 """
@@ -42,11 +41,10 @@ function unicode_slice(data::AbstractArray{T,3}, n::Int;
 end
 
 """
-    function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
-
+$(TYPEDSIGNATURES)
 Plot 2D slice of 3D data `symbol` in `mesh`.
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label
 $_common_keyword_unicode_colormap
 """
@@ -70,9 +68,7 @@ function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
 end
 
 """
-    function axis_cartesian(pos::StructArray, axis::Symbol)
-    function axis_cartesian(mesh::MeshCartesianStatic, axis::Symbol)
-
+$(TYPEDSIGNATURES)
 Return 1D axis points of 3D Cartesian positions.
 """
 function axis_cartesian(pos::StructArray, axis::Symbol)
@@ -89,11 +85,10 @@ end
 axis_cartesian(mesh::MeshCartesianStatic, axis::Symbol) = axis_cartesian(mesh.pos, axis)
 
 """
-    function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int;
-
+$(TYPEDSIGNATURES)
 Plot 2D slice of 3D data.
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label
 """
 function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int;
@@ -127,11 +122,10 @@ function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::Abstrac
 end
 
 """
-    function plot_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
-
+$(TYPEDSIGNATURES)
 Plot 2D slice of 3D data `symbol` in `mesh`.
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_aspect
 """

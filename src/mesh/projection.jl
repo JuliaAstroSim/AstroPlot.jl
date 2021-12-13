@@ -1,5 +1,5 @@
 """
-    function axisid(axis::Symbol)
+$(TYPEDSIGNATURES)
 
 Convert axis to `Int`
 - return `1` if `axis == :x`
@@ -19,11 +19,10 @@ function axisid(axis::Symbol)
 end
 
 """
-    function unicode_projection(ρ; kw...)
-
+$(TYPEDSIGNATURES)
 Plot 2D projection sum over one dimension.
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label_title
 $_common_keyword_unicode_colormap
 """
@@ -52,11 +51,10 @@ function unicode_projection(ρ;
 end
 
 """
-    function unicode_projection_density(mesh::MeshCartesianStatic; kw...)
-
+$(TYPEDSIGNATURES)
 Plot 2D projection sum of mesh density over one dimension.
 
-# Keywords
+## Keywords
 $_common_keyword_axis_label_title
 $_common_keyword_unicode_colormap
 """
@@ -79,11 +77,10 @@ function unicode_projection_density(mesh::MeshCartesianStatic;
 end
 
 """
-    function projection_density(mesh::MeshCartesianStatic; kw...)
-
+$(TYPEDSIGNATURES)
 Plot 2D projection sum of mesh density over one dimension.
 
-# Keywords
+## Keywords
 $_common_keyword_aspect
 $_common_keyword_figure
 """

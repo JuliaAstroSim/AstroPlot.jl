@@ -29,11 +29,10 @@ function plot_energy_kinetic!(ax, datafile::String; kw...)
 end
 
 """
-    function plot_energy_kinetic(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Plot kinetic energy in `df` which contains columns named `time` and `kinetic`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_kinetic(df::DataFrame;
@@ -51,11 +50,10 @@ function plot_energy_kinetic(df::DataFrame;
 end
 
 """
-    function plot_energy_kinetic(datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot kinetic energy in `datafile` which contains columns named `time` and `kinetic`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_kinetic(datafile::String; kw...)
@@ -64,11 +62,10 @@ function plot_energy_kinetic(datafile::String; kw...)
 end
 
 """
-    function plot_energy_potential(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Plot potential energy in `df` which contains columns named `time` and `potential`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_potential(df::DataFrame;
@@ -86,11 +83,10 @@ function plot_energy_potential(df::DataFrame;
 end
 
 """
-    function plot_energy_potential(datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot potential energy in `datafile` which contains columns named `time` and `potential`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_potential(datafile::String; kw...)
@@ -99,12 +95,11 @@ function plot_energy_potential(datafile::String; kw...)
 end
 
 """
-    function plot_energy(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Plot energy data in `df` which contains columns named `time` and `energy`.
 `kinetic` and `potential` columns are optional.
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 $_common_keyword_log
 $_common_keyword_energy
@@ -165,12 +160,11 @@ function plot_energy(df::DataFrame;
 end
 
 """
-    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro; kw...)
-
+$(TYPEDSIGNATURES)
 Plot energy (last one minus previous one) in `datafile` which is a
 `CSV` file containing columns named `time` and `energy`. `kinetic` and `potential` columns are optional.
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
 # Keywords
@@ -194,11 +188,10 @@ function energy_delta(df::DataFrame)
 end
 
 """
-    function plot_energy_delta!(ax, df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Compute and plot delta energy in `df` which contains columns named `time` and `energy`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_delta!(ax, df::DataFrame;
@@ -215,8 +208,7 @@ function plot_energy_delta!(ax, df::DataFrame;
 end
 
 """
-    function plot_energy_delta!(ax, datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot delta energy (last one minus previous one) in `datafile` which is a
 `CSV` file containing columns named `time` and `energy`
 """
@@ -227,11 +219,10 @@ function plot_energy_delta!(ax, datafile::String;
 end
 
 """
-    function plot_energy_delta(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Compute and plot delta energy in `df` which contains columns named `time` and `energy`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_delta(df::DataFrame;
@@ -249,12 +240,11 @@ function plot_energy_delta(df::DataFrame;
 end
 
 """
-function plot_energy_delta(datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot delta energy (last one minus previous one) in `datafile` which is a
 `CSV` file containing columns named `time` and `energy`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_energy_delta(datafile::String; kw...)
@@ -263,8 +253,7 @@ function plot_energy_delta(datafile::String; kw...)
 end
 
 """
-    function kinetic_energy(p::AbstractParticle)
-
+$(TYPEDSIGNATURES)
 Compute kinetic energy of a particle using the equation:
     0.5 * Mass * Vel^2
 """
@@ -273,8 +262,7 @@ function kinetic_energy(p::AbstractParticle)
 end
 
 """
-    function sum_kinetic(data)
-
+$(TYPEDSIGNATURES)
 Sum kinetic energy (0.5 * Mass * Vel^2) of particles in `data`.
 """
 function sum_kinetic(data::Array)
@@ -304,28 +292,27 @@ function sum_kinetic(data::StructArray)
 end
 
 """
-    function sum_kinetic(data)
-
+$(TYPEDSIGNATURES)
 Sum potential energy of particles in `data`. Potentials need to be computed in advance.
 """
 function sum_potential(data::Array)
     return sum([p.Potential * p.Mass for p in data])
 end
 
+"$(TYPEDSIGNATURES)"
 function sum_potential(data::StructArray)
     return sum(data.Potential .* data.Mass)
 end
 
 """
-    function plot_energy(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2; kw...)
-
+$(TYPEDSIGNATURES)
 Compute kinetic energy and sum potential energy of particles in each snapshot.
 Return a Tuple of `scene` and `layout`
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
-# Keywords
+## Keywords
 $_common_keyword_snapshot
 $_common_keyword_figure
 $_common_keyword_log

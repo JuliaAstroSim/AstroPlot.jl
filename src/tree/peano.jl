@@ -1,6 +1,5 @@
 """
-    plot_peano(bits::Int = 1)
-
+$(TYPEDSIGNATURES)
 Interactively plot Hilber-Peano curve with `Makie`.
 It is recommanded that `bits <= 6` to avoid lagging problems.
 """

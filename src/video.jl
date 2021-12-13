@@ -1,17 +1,16 @@
 """
-    function png2video(dir::String, filenamebase::String, suffix::String, outfile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Convert all figure end with `suffix` to video. Filenames are organized as `filenamebase0000suffix`.
 For `png` files like `pos_0000.png`, set `filenamebase = "pos_"` and `suffix = ".png"`
 
 It basically calls `VideoIO.open_video_out`
 
-# Keywords
+## Keywords
 - `encoder_options`: keywords supported by `FFMPEG`. Default value `(crf=23, preset="medium")` is suitable for most cases
 - `framerate`: fps (frame per second). Default `24`
 - `codec_name`: name of video encoder. Default `nothing`. Try `libx264`, `libx265`, `libx264rgb` and more options in `FFMPEG`
 
-# Examples
+## Examples
 ```jl
 julia> png2video("output", "pos_", ".png", "test.mp4")
 ```

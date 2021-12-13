@@ -16,11 +16,10 @@ function plot_momentum!(ax, df::DataFrame; axis = [:x, :y, :z], colors = nothing
 end
 
 """
-plot_momentum(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Plot total momentum in `df` which contains columns named `time` and `momentum`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_momentum(df::DataFrame;
@@ -52,11 +51,10 @@ function plot_momentum(df::DataFrame;
 end
 
 """
-    plot_momentum(datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot total momentum in `datafile` which is a `CSV` file containing columns named `time` and `momentum`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_momentum(datafile::String; kw...)
@@ -88,11 +86,10 @@ function plot_momentum_angular!(ax, df::DataFrame; axis = [:x, :y, :z], colors =
 end
 
 """
-plot_momentum_angular(df::DataFrame; kw...)
-
+$(TYPEDSIGNATURES)
 Plot total angular momentum in `df` which contains columns named `time` and `angularmomentum`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_momentum_angular(df::DataFrame;
@@ -124,11 +121,10 @@ function plot_momentum_angular(df::DataFrame;
 end
 
 """
-    plot_momentum_angular(datafile::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot total angular momentum in `datafile` which is a `CSV` file containing columns named `time` and `angularmomentum`
 
-# Keywords
+## Keywords
 $_common_keyword_figure
 """
 function plot_momentum_angular(datafile::String; kw...)
@@ -159,14 +155,13 @@ function sum_angular_momentum(data::StructArray)
 end
 
 """
-    plot_momentum(folder::String, filenamebase::String, Counts::Vector{Int64}, suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2; kw...)
-
+$(TYPEDSIGNATURES)
 Plot total momentum and total angular momentum of particles in each snapshot.
 
-# Arguments
+## Arguments
 $_common_argument_snapshot
 
-# Keywords
+## Keywords
 $_common_keyword_snapshot
 $_common_keyword_figure
 $_common_keyword_log

@@ -1,15 +1,14 @@
 import Images.mosaicview
 
 """
-    function mosaicview(folder::String, filenamebase::String, Counts::Array, suffix::String; kw...)
-
-# Arguments
+$(TYPEDSIGNATURES)
+## Arguments
 - `folder`: directory holding snapshots
 - `filenamebase`, `Counts`, `suffix`:
     snapshots are commonly named as `snapshot_0000.gadget2`, in this way `filenamebase = "snapshot_"`, `suffix = ".gadget2`.
     `Counts` is an array to choose snapshots, and it is printed to formatted string (controled by keyword `formatstring`) in `for` loops.
 
-# Examples
+## Examples
 ```jl
 julia> mosaicview("output", "pos_", collect(0:10:490), ".png"; fillvalue=0.5, npad=5, ncol=10, rowmajor=true)
 ```
@@ -24,8 +23,7 @@ function mosaicview(folder::String, filenamebase::String, Counts::Array, suffix:
 end
 
 """
-    function mosaicview(folder::String, filenamebase::String, suffix::String; kw...)
-
+$(TYPEDSIGNATURES)
 Plot all files matching `filenamebase` and `suffix` in `folder` to mosaic view.
 """
 function mosaicview(folder::String, filenamebase::String, suffix::String; kw...)

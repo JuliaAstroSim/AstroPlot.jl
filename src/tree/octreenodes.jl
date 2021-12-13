@@ -1,6 +1,5 @@
 """
-    Rect(node::PhysicalTrees.OctreeNode, u = u"kpc")
-
+$(TYPEDSIGNATURES)
 Convert an `PhysicalTrees.OctreeNode` to `Rect3`
 """
 function RectNode(node::PhysicalTrees.OctreeNode, u = u"kpc")
@@ -12,8 +11,7 @@ function RectNode(node::PhysicalTrees.OctreeNode, u = u"kpc")
 end
 
 """
-    plot_makie!(axis, nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
-
+$(TYPEDSIGNATURES)
 Plot tree nodes in `wireframe` mode
 """
 function plot_makie!(axis, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
@@ -23,8 +21,7 @@ function plot_makie!(axis, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:Physic
 end
 
 """
-    plot_makie(nodes::Array{T,N}; kw...) where T<:PhysicalTrees.OctreeNode where N
-
+$(TYPEDSIGNATURES)
 Plot tree nodes in `wireframe` mode
 """
 function plot_makie(nodes::Array{T,N}, u = u"kpc";
