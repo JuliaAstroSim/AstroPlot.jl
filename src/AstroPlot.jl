@@ -93,6 +93,7 @@ export
     unicode_projection_density,
     unicode_slice,
     plot_slice,
+    plot_mesh_heatmap,
 
     # tools
     sortarrays!,

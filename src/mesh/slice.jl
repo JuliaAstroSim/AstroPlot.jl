@@ -137,9 +137,43 @@ function plot_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
         aspect = AxisAspect(1),
         kw...
     )
-
     f = Figure(;resolution)
     ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
     plot_slice!(ax, mesh.pos, getfield(mesh, symbol), n; xaxis, yaxis, kw...)
+    return f
+end
+
+"""
+$(TYPEDSIGNATURES)
+"""
+function plot_mesh_heatmap(d;
+    resolution = (1080,900),
+    title = "Heatmap",
+    aspect = AxisAspect(1),
+    kw...
+)
+    f = Figure(; resolution)
+    a = CairoMakie.Axis(f[1, 1]; title, aspect)
+    ht = CairoMakie.heatmap!(a, d; kw...)
+    CairoMakie.Colorbar(f[1, 2], ht)
+    return f
+end
+
+"""
+$(TYPEDSIGNATURES)
+"""
+function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol;
+    resolution = (1080,900),
+    title = "Heatmap",
+    aspect = AxisAspect(1),
+    kw...
+)
+    x = axis_cartesian(m.pos, :x)
+    y = axis_cartesian(m.pos, :y)
+
+    f = Figure(; resolution)
+    a = CairoMakie.Axis(f[1,1]; title, aspect)
+    ht = CairoMakie.heatmap!(a, x, y, getfield(m, symbol); kw...)
+    CairoMakie.Colorbar(f[1,2], ht)
     return f
 end
