@@ -16,10 +16,10 @@ Plot 2D slice of a 3D array. Vector plot is not supported in unicode mode.
 $_common_keyword_axis_label
 $_common_keyword_unicode_colormap
 """
-function unicode_slice(data::AbstractArray{T,3}, n::Int;
+function unicode_slice(data::AbstractArray{T,3}, n::Int, units = nothing;
         xaxis = :x,
         yaxis = :y,
-        xlabel = "$(xaxis)", ylabel = "$(yaxis)",
+        xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
         colormap = :inferno,
         kw...
     ) where T
@@ -27,7 +27,7 @@ function unicode_slice(data::AbstractArray{T,3}, n::Int;
     yid = axisid(yaxis)
     d = 6 - xid - yid
 
-    z = slice3d(data, d, n)
+    z = ustrip.(slice3d(data, d, n))
 
     if data isa StructArray
         error("Vector plot is not supported!")
@@ -42,29 +42,29 @@ end
 
 """
 $(TYPEDSIGNATURES)
-Plot 2D slice of 3D data `symbol` in `mesh`.
+Plot 2D slice of 3D data `symbol` in `m`.
 
 ## Keywords
 $_common_keyword_axis_label
 $_common_keyword_unicode_colormap
 """
-function unicode_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
+function unicode_slice(m::MeshCartesianStatic, symbol::Symbol, n::Int, units = nothing;
         xaxis = :x,
         yaxis = :y,
         kw...
     )
-    config = mesh.config
+    config = m.config
     xid = axisid(xaxis)
     yid = axisid(yaxis)
-    xMin = config.Min[xid]
-    xMax = config.Max[xid]
-    yMin = config.Min[yid]
-    yMax = config.Max[yid]
-    s = size(mesh.rho)
+    xMin = ustrip.(getuLength(units), config.Min[xid])
+    xMax = ustrip.(getuLength(units), config.Max[xid])
+    yMin = ustrip.(getuLength(units), config.Min[yid])
+    yMax = ustrip.(getuLength(units), config.Max[yid])
+    s = size(m.rho)
     xfact = (xMax - xMin) / s[xid]
     yfact = (yMax - yMin) / s[yid]
 
-    unicode_slice(getfield(mesh, symbol), n; xfact, yfact, xoffset = xMin, yoffset = yMin)    
+    unicode_slice(getfield(m, symbol), n, units; xfact, yfact, xoffset = xMin, yoffset = yMin)    
 end
 
 """
@@ -82,7 +82,7 @@ function axis_cartesian(pos::StructArray, axis::Symbol)
         error("Only [:x, :y, :z] supported!")
     end 
 end
-axis_cartesian(mesh::MeshCartesianStatic, axis::Symbol) = axis_cartesian(mesh.pos, axis)
+axis_cartesian(m::MeshCartesianStatic, axis::Symbol) = axis_cartesian(m.pos, axis)
 
 """
 $(TYPEDSIGNATURES)
@@ -91,62 +91,63 @@ Plot 2D slice of 3D data.
 ## Keywords
 $_common_keyword_axis_label
 """
-function plot_slice!(ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int;
+function plot_slice!(f::Figure, ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int, units = nothing;
         xaxis = :x,
         yaxis = :y,
-        xlabel = "$(xaxis)", ylabel = "$(yaxis)",
         kw...
     ) where T where S
     xid = axisid(xaxis)
     yid = axisid(yaxis)
     d = 6 - xid - yid
 
-    x = axis_cartesian(pos, xaxis)
-    y = axis_cartesian(pos, yaxis)
+    x = ustrip.(getuLength(units), axis_cartesian(pos, xaxis))
+    y = ustrip.(getuLength(units), axis_cartesian(pos, yaxis))
     z = slice3d(data, d, n)
     
     if data isa StructArray # arrows plot
-        ux, uy = pack_xy(z; xaxis, yaxis)
+        ux, uy = ustrip.(pack_xy(z; xaxis, yaxis))
         if xid > yid
-            CairoMakie.arrows!(ax, x, y, uy, ux; xlabel, ylabel, kw...)
+            CairoMakie.arrows!(ax, x, y, uy, ux; kw...)
         else
-            CairoMakie.arrows!(ax, x, y, ux, uy; xlabel, ylabel, kw...)
+            CairoMakie.arrows!(ax, x, y, ux, uy; kw...)
         end
     else
         if xid > yid
-            CairoMakie.heatmap!(ax, x, y, Array(transpose(z)); xlabel, ylabel, kw...)
+            ht = CairoMakie.heatmap!(ax, x, y, ustrip.(Array(transpose(z))); kw...)
+            CairoMakie.Colorbar(f[1,2], ht)
         else
-            CairoMakie.heatmap!(ax, x, y, Array(z); xlabel, ylabel, kw...)
+            ht = CairoMakie.heatmap!(ax, x, y, ustrip.(Array(z)); kw...)
+            CairoMakie.Colorbar(f[1,2], ht)
         end
     end
 end
 
 """
 $(TYPEDSIGNATURES)
-Plot 2D slice of 3D data `symbol` in `mesh`.
+Plot 2D slice of 3D data `symbol` in `m`.
 
 ## Keywords
 $_common_keyword_figure
 $_common_keyword_aspect
 """
-function plot_slice(mesh::MeshCartesianStatic, symbol::Symbol, n::Int;
-        resolution = (900, 900),
+function plot_slice(m::MeshCartesianStatic, symbol::Symbol, n::Int, units = nothing;
+        resolution = (1080, 900),
         xaxis = :x, yaxis = :y,
-        xlabel = "$(xaxis)", ylabel = "$(yaxis)",
-        title = "Density slice",
+        xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
+        title = string(symbol) * " slice",
         aspect = AxisAspect(1),
         kw...
     )
     f = Figure(;resolution)
     ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
-    plot_slice!(ax, mesh.pos, getfield(mesh, symbol), n; xaxis, yaxis, kw...)
+    plot_slice!(f, ax, m.pos, getfield(m, symbol), n, units; xaxis, yaxis, kw...)
     return f
 end
 
 """
 $(TYPEDSIGNATURES)
 """
-function plot_mesh_heatmap(d;
+function plot_mesh_heatmap(d, units = nothing;
     resolution = (1080,900),
     title = "Heatmap",
     aspect = AxisAspect(1),
@@ -154,7 +155,7 @@ function plot_mesh_heatmap(d;
 )
     f = Figure(; resolution)
     a = CairoMakie.Axis(f[1, 1]; title, aspect)
-    ht = CairoMakie.heatmap!(a, d; kw...)
+    ht = CairoMakie.heatmap!(a, ustrip.(d); kw...)
     CairoMakie.Colorbar(f[1, 2], ht)
     return f
 end
@@ -162,18 +163,18 @@ end
 """
 $(TYPEDSIGNATURES)
 """
-function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol;
+function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol, units = nothing;
     resolution = (1080,900),
     title = "Heatmap",
     aspect = AxisAspect(1),
     kw...
 )
-    x = axis_cartesian(m.pos, :x)
-    y = axis_cartesian(m.pos, :y)
+    x = ustrip.(getuLength(units), axis_cartesian(m.pos, :x))
+    y = ustrip.(getuLength(units), axis_cartesian(m.pos, :y))
 
     f = Figure(; resolution)
     a = CairoMakie.Axis(f[1,1]; title, aspect)
-    ht = CairoMakie.heatmap!(a, x, y, getfield(m, symbol); kw...)
+    ht = CairoMakie.heatmap!(a, x, y, ustrip.(getfield(m, symbol)); kw...)
     CairoMakie.Colorbar(f[1,2], ht)
     return f
 end

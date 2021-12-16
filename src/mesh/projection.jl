@@ -26,10 +26,10 @@ Plot 2D projection sum over one dimension.
 $_common_keyword_axis_label_title
 $_common_keyword_unicode_colormap
 """
-function unicode_projection(ρ;
+function unicode_projection(ρ, units = nothing;
         xaxis = :x, yaxis = :y,
-        xlabel = "$(xaxis)", ylabel = "$(yaxis)",
-        zlabel = "ρ",
+        xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
+        zlabel = "ρ$(axisunit(getuDensity(units)))",
         title = "Projection",
         colormap = :inferno,
         kw...
@@ -41,7 +41,7 @@ function unicode_projection(ρ;
     s = collect(size(ρ))
     popat!(s, d)
 
-    rho = reshape(sum(ρ, dims = d), s...)
+    rho = ustrip.(getuDensity(units), reshape(sum(ρ, dims = d), s...))
 
     if xid > yid
         UnicodePlots.heatmap(transpose(rho); xlabel, ylabel, zlabel, title, colormap, kw...)
@@ -58,22 +58,22 @@ Plot 2D projection sum of mesh density over one dimension.
 $_common_keyword_axis_label_title
 $_common_keyword_unicode_colormap
 """
-function unicode_projection_density(mesh::MeshCartesianStatic;
+function unicode_projection_density(mesh::MeshCartesianStatic, units = nothing;
         xaxis = :x, yaxis = :y,
         kw...
     )
     config = mesh.config
     xid = axisid(xaxis)
     yid = axisid(yaxis)
-    xMin = config.Min[xid]
-    xMax = config.Max[xid]
-    yMin = config.Min[yid]
-    yMax = config.Max[yid]
+    xMin = ustrip(getuLength(units), config.Min[xid])
+    xMax = ustrip(getuLength(units), config.Max[xid])
+    yMin = ustrip(getuLength(units), config.Min[yid])
+    yMax = ustrip(getuLength(units), config.Max[yid])
     s = size(mesh.rho)
     xfact = (xMax - xMin) / s[xid]
     yfact = (yMax - yMin) / s[yid]
 
-    unicode_projection(mesh.rho; xfact, yfact, xoffset = xMin, yoffset = yMin)
+    unicode_projection(mesh.rho, units; xfact, yfact, xoffset = xMin, yoffset = yMin)
 end
 
 """
@@ -84,10 +84,10 @@ Plot 2D projection sum of mesh density over one dimension.
 $_common_keyword_aspect
 $_common_keyword_figure
 """
-function projection_density(mesh::MeshCartesianStatic;
+function projection_density(mesh::MeshCartesianStatic, units = nothing;
         resolution = (900, 900),
         xaxis = :x, yaxis = :y,
-        xlabel = "$(xaxis)", ylabel = "$(yaxis)",
+        xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
         title = "Density projection",
         aspect_ratio = 1.0,
         kw...
@@ -99,10 +99,10 @@ function projection_density(mesh::MeshCartesianStatic;
     s = collect(size(mesh.rho))
     popat!(s, d)
     
-    rho = reshape(sum(mesh.rho, dims = d), s...)
+    rho = ustrip.(getuDensity(units), reshape(sum(mesh.rho, dims = d), s...))
     pos = slice3d(mesh.pos, d, 1)
     
-    xy = pack_xy(pos; xaxis, yaxis)
+    xy = ustrip.(getuLength(units), pack_xy(pos; xaxis, yaxis))
     
     f = Figure(; resolution)
     ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect = AxisAspect(aspect_ratio))
