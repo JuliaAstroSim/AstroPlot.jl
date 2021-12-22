@@ -116,6 +116,11 @@ function plot_energy(df::DataFrame;
                      colorpotential = :red,
                      colorkinetic = :blue,
                      colortotal = :black,
+                     tellheight = false,
+                     tellwidth = false,
+                     halign = :right,
+                     valign = :top,
+                     margin = (10, 10, 10, 10),
                      kw...)
     scene, layout = layoutscene(; resolution)
     ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
@@ -153,7 +158,9 @@ function plot_energy(df::DataFrame;
     end
 
     if length(p) > 1
-        leg = layout[1,2] = Legend(scene, p, names)
+        leg = layout[1,1] = Legend(scene, p, names;
+            tellheight, tellwidth, halign, valign, margin,
+        )
     end
 
     return scene, layout, df
