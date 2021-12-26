@@ -75,6 +75,7 @@ $_common_keyword_axis_label
 """
 function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
                             colors = ColorSchemes.tab10.colors,
+                            legend = true,
                             kw...)
     if isnothing(colors)
         colors = [RGB(rand(3)...) for i in 1:10]
@@ -97,14 +98,16 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
 
     scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
-    leg = layout[1,1] = Legend(
-        scene, scenes, columns,
-        tellheight = false,
-        tellwidth = false,
-        halign = :right,
-        valign = :top,
-        margin = (10, 10, 10, 10),
-    )
+    if legend
+        leg = layout[1,1] = Legend(
+            scene, scenes, columns,
+            tellheight = false,
+            tellwidth = false,
+            halign = :right,
+            valign = :top,
+            margin = (10, 10, 10, 10),
+        )
+    end
 
     return scenes, columns
 end
@@ -150,6 +153,7 @@ $_common_keyword_axis_label
 """
 function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
                                colors = ColorSchemes.tab10.colors,
+                               legend = true,
                                kw...)
     if isnothing(colors)
         colors = [RGB(rand(3)...) for i in 1:10]
@@ -171,14 +175,16 @@ function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
 
     scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
-    leg = layout[1,1] = Legend(
-        scene, scenes, columns,
-        tellheight = false,
-        tellwidth = false,
-        halign = :right,
-        valign = :top,
-        margin = (10, 10, 10, 10),
-    )
+    if legend
+        leg = layout[1,1] = Legend(
+            scene, scenes, columns,
+            tellheight = false,
+            tellwidth = false,
+            halign = :right,
+            valign = :top,
+            margin = (10, 10, 10, 10),
+        )
+    end
 
     return scenes, columns
 end
