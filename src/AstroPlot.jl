@@ -10,7 +10,6 @@ using ProgressMeter
 using DataFrames
 using CSV
 using GLMakie
-using CairoMakie
 using Colors
 using ColorSchemes
 using DocStringExtensions

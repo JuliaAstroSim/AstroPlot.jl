@@ -39,8 +39,6 @@ end
 $(TYPEDSIGNATURES)
 Plot evolution of scale radius by time. `df` contains columns named `Time` and `ScaleRadius`
 
-Return a `Tuple` of scene and layout
-
 ## Keywords
 $_common_keyword_label
 - `title`: title line of the figure
@@ -52,28 +50,26 @@ function plot_scaleradius(df::DataFrame, uTime, uLength;
                           title = "Scale radius",
                           resolution = (1600, 900),
                           kw...)
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
+    ax = GLMakie.Axis(
+        fig[1,1]; title, xlabel, ylabel,
     )
 
     plot_scaleradius!(ax, df; kw...)
 
-    return scene, layout
+    return fig
 end
 
 """
 $(TYPEDSIGNATURES)
 Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
 
-Return a `Tuple` of scenes and layouts of different line plots
-
 ## Keywords
 $_common_keyword_title
 $_common_keyword_axis_label
 """
-function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
+function plot_lagrangeradii!(fig, ax, df::DataFrame;
                             colors = ColorSchemes.tab10.colors,
                             legend = true,
                             kw...)
@@ -99,8 +95,8 @@ function plot_lagrangeradii!(scene, ax, layout, df::DataFrame;
     scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
     if legend
-        leg = layout[1,1] = Legend(
-            scene, scenes, columns,
+        leg = Legend(
+            fig[1,1], scenes, columns,
             tellheight = false,
             tellwidth = false,
             halign = :right,
@@ -116,8 +112,6 @@ end
 $(TYPEDSIGNATURES)
 Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L100`
 
-Return a `Tuple` of scene and layout
-
 ## Keywords
 $_common_keyword_title
 $_common_keyword_axis_label
@@ -129,15 +123,15 @@ function plot_lagrangeradii(df::DataFrame, uTime, uLength;
                             colors = ColorSchemes.tab10.colors,
                             resolution = (1600, 900),
                             kw...)
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
+    ax = GLMakie.Axis(
+        fig[1,1]; title, xlabel, ylabel,
     )
 
-    plot_lagrangeradii!(scene, ax, layout, df; colors, kw...)
+    plot_lagrangeradii!(fig, ax, df; colors, kw...)
 
-    return scene, layout
+    return fig
 end
 
 """
@@ -145,13 +139,11 @@ $(TYPEDSIGNATURES)
 Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L90`
 `L100` is omitted, because in most cases, those escaping particles may over distort the figure.
 
-Return a `Tuple` of scenes and layouts of different line plots
-
 ## Keywords
 $_common_keyword_title
 $_common_keyword_axis_label
 """
-function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
+function plot_lagrangeradii90!(fig, ax, df::DataFrame;
                                colors = ColorSchemes.tab10.colors,
                                legend = true,
                                kw...)
@@ -176,8 +168,8 @@ function plot_lagrangeradii90!(scene, ax, layout, df::DataFrame;
     scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
     if legend
-        leg = layout[1,1] = Legend(
-            scene, scenes, columns,
+        leg = Legend(
+            fig[1,1], scenes, columns,
             tellheight = false,
             tellwidth = false,
             halign = :right,
@@ -194,8 +186,6 @@ $(TYPEDSIGNATURES)
 Plot evolution of Lagrange radii by time. `df` contains columns named `Time` and `L10`, `L20`, ..., `L90`
 `L100` is omitted, because in most cases, those escaping particles may over distort the figure.
 
-Return a `Tuple` of scene and layout
-
 ## Keywords
 $_common_keyword_title
 $_common_keyword_axis_label
@@ -206,22 +196,22 @@ function plot_lagrangeradii90(df::DataFrame, uTime, uLength;
                               title = "Lagrange radii",
                               resolution = (1600, 900),
                               kw...)
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
+    ax = GLMakie.Axis(
+        fig[1,1]; title, xlabel, ylabel,
     )
 
-    plot_lagrangeradii90!(scene, ax, layout, df; kw...)
+    plot_lagrangeradii90!(fig, ax, df; kw...)
 
-    return scene, layout
+    return fig
 end
 
 """
 $(TYPEDSIGNATURES)
 Plot scale radius and Lagrange radii (up to 90% by default)
 
-Return `Tuple(ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df)`. `df` contains radii data
+Return `Tuple(FigScale, FigLagrange, df)`. `df` contains radii data
 
 ## Arguments
 $_common_argument_snapshot
@@ -231,7 +221,7 @@ $_common_keyword_snapshot
 
 ## Examples
 ```julia
-julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
+julia> FigScale, FigLagrange, df = plot_radii(
     joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
     times = collect(0.0:0.01:0.1) * u"Gyr", title = "Radii plot")
 ```
@@ -289,12 +279,12 @@ function plot_radii(folder::String, filenamebase::String,
     end
 
     println("Plotting scale radius")
-    ScaleScene, ScaleLayout = plot_scaleradius(df, uTime, uLength; kw...)
+    FigScale = plot_scaleradius(df, uTime, uLength; kw...)
 
     println("Plotting Lagrange radii 90%")
-    LagrangeScene, LagrangeLayout = plot_lagrangeradii90(df, uTime, uLength; kw...)
+    FigLagrange = plot_lagrangeradii90(df, uTime, uLength; kw...)
 
-    return ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df
+    return FigScale, FigLagrange, df
 end
 
 """
@@ -303,10 +293,9 @@ Plot scale radius and Lagrange radii (up to 90% by default)
 Return radii data in `Dict`
 
 ## Arguments
-- `AS`: `Axis` of scale radius scene
-- `SL`: Lagrange radii scene
-- `AL`: `Axis` of Lagrange radii scene
-- `LL`: `layout` of Lagrange radii scene
+- `AxisScale`: `Axis` of scale radius figure
+- `FigLagrange`: Lagrange radii figure
+- `AxisLagrange`: `Axis` of Lagrange radii figure
 $_common_argument_snapshot
 
 ## Keywords
@@ -314,12 +303,12 @@ $_common_keyword_snapshot
 
 ## Examples
 ```julia
-julia> ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
+julia> FigScale, FigLagrange, df = plot_radii(
     joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
     times = collect(0.0:0.01:0.1) * u"Gyr", title = "Radii plot")
 ```
 """
-function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
+function plot_radii!(AxisScale, FigLagrange, AxisLagrange, folder::String, filenamebase::String,
                     Counts::Array{Int64,1}, suffix::String,
                     FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                     times = Counts,
@@ -372,10 +361,10 @@ function plot_radii!(AS, SL, AL, LL, folder::String, filenamebase::String,
     end
 
     println("Plotting scale radius")
-    plot_scaleradius!(AS, df; kw...)
+    plot_scaleradius!(AxisScale, df; kw...)
 
     println("Plotting Lagrange radii")
-    LScenes, LNames = plot_lagrangeradii90!(SL, AL, LL, df; colors, kw...)
+    LScenes, LNames = plot_lagrangeradii90!(FigLagrange, AxisLagrange, df; colors, kw...)
 
     return df
 end

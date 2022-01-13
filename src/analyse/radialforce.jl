@@ -98,8 +98,8 @@ function plot_radialforce(data, units = uAstro;
         title = "Radial Force" * ts,
         kw...
     )
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax  = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_radialforce!(ax, data, units; savelog, savefolder, markersize, kw...)
-    return scene, layout
+    return fig
 end

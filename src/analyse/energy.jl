@@ -43,10 +43,10 @@ function plot_energy_kinetic(df::DataFrame;
                      ylabel = "E [$uEnergy]",
                      resolution = (1600, 900),
                      kw...)
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_kinetic!(ax, df; kw...)
-    return scene, layout, df
+    return fig, df
 end
 
 """
@@ -76,10 +76,10 @@ function plot_energy_potential(df::DataFrame;
                      ylabel = "E [$uEnergy]",
                      resolution = (1600, 900),
                      kw...)
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_potential!(ax, df; kw...)
-    return scene, layout, df
+    return fig, df
 end
 
 """
@@ -122,8 +122,8 @@ function plot_energy(df::DataFrame;
                      valign = :top,
                      margin = (10, 10, 10, 10),
                      kw...)
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
 
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
         df.energy = df.potential + df.kinetic
@@ -158,12 +158,12 @@ function plot_energy(df::DataFrame;
     end
 
     if length(p) > 1
-        leg = layout[1,1] = Legend(scene, p, names;
+        leg = Legend(fig[1,1], p, names;
             tellheight, tellwidth, halign, valign, margin,
         )
     end
 
-    return scene, layout, df
+    return fig, df
 end
 
 """
@@ -240,10 +240,10 @@ function plot_energy_delta(df::DataFrame;
                            ylabel = "dE$(axisunit(uEnergy))",
                            resolution = (1600, 900),
                            kw...)
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_delta!(ax, df; kw...)
-    return scene, layout, df
+    return fig, df
 end
 
 """
@@ -304,7 +304,6 @@ end
 """
 $(TYPEDSIGNATURES)
 Compute kinetic energy and sum potential energy of particles in each snapshot.
-Return a Tuple of `scene` and `layout`
 
 ## Arguments
 $_common_argument_snapshot

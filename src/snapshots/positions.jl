@@ -1,6 +1,6 @@
 """
 $(TYPEDSIGNATURES)
-Add 2D scatter plot of positions to `scene`.
+Add 2D scatter plot of positions to `fig`.
 `data` can be array or dict of arrays, of points or particles.
 
 `collection`: filter the type of particles
@@ -8,23 +8,25 @@ Add 2D scatter plot of positions to `scene`.
 ## Keywords
 $_common_keyword_axis
 """
-function plot_positionslice!(scene, data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
+function plot_positionslice!(fig, data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
                              xaxis = :x,
                              yaxis = :y,
                              markersize = estimate_markersize(data, u; xaxis, yaxis),
                              markerspace=SceneSpace,
                              kw...)
-    xy = pack_xy(data; xaxis, yaxis)
-    Makie.scatter!(scene, ustrip.(u, xy); markersize, markerspace, kw...)
+    xu, yu = pack_xy(data; xaxis, yaxis)
+    x = ustrip.(u, xu)
+    y = ustrip.(u, yu)
+    Makie.scatter!(fig, x, y; markersize, markerspace, kw...)
 end
 
-function plot_positionslice!(scene, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
+function plot_positionslice!(fig, data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
     d = filter(p->p.Collection == collection, data)
     if isempty(d)
         @warn "No $collection particle found."
-        return scene
+        return fig
     else
-        plot_positionslice!(scene, d, u; kw...)
+        plot_positionslice!(fig, d, u; kw...)
     end
 end
 
@@ -40,7 +42,7 @@ $_common_keyword_aspect
 
 ## Examples
 ```jl
-julia> scene, layout = plot_positionslice(randn_pvector(100); title = "Positions")
+julia> fig = plot_positionslice(randn_pvector(100); title = "Positions")
 ```
 """
 function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
@@ -56,16 +58,18 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
                             markerspace=SceneSpace,
                             resolution = (1000, 1000),
                             kw...)
-    xy = pack_xy(data; xaxis, yaxis)
+    xu, yu = pack_xy(data; xaxis, yaxis)
+    x = ustrip.(u, xu)
+    y = ustrip.(u, yu)
 
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
+    ax = GLMakie.Axis(
+        fig[1,1]; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, ustrip.(u, xy); markersize, markerspace, kw...)
+    Makie.scatter!(ax, x, y; markersize, markerspace, kw...)
 
     if !isnothing(xlims)
         Makie.xlims!(ax, xlims)
@@ -75,7 +79,7 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
         Makie.ylims!(ax, ylims)
     end
 
-    return scene, layout
+    return fig
 end
 
 function plot_positionslice(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
@@ -132,17 +136,17 @@ function plot_positionslice(folder::String, filenamebase::String, Counts::Array{
         end
     
         if isnothing(collection)
-            scene, layout = plot_positionslice(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            fig = plot_positionslice(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
         else
-            scene, layout = plot_positionslice(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            fig = plot_positionslice(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                         xaxis, yaxis, xlims, ylims, xlabel, ylabel,
                                         kw...)
         end
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
-        Makie.save(outputfilename, scene)
+        Makie.save(outputfilename, fig)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
     return true
@@ -161,7 +165,7 @@ $_common_keyword_aspect
 
 ## Examples
 ```jl
-julia> scene, layout = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
+julia> fig = plot_positionslice_adapt(randn_pvector(100); title = "Positions")
 ```
 """
 function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = nothing;
@@ -177,24 +181,26 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
                                   markerspace=SceneSpace,
                                   resolution = (1000, 1000),
                                   kw...)
-    xy = pack_xy(data; xaxis, yaxis)
+    xu, yu = pack_xy(data; xaxis, yaxis)
+    x = ustrip.(u, xu)
+    y = ustrip.(u, yu)
 
     xcenter = middle(x)
     ycenter = middle(y)
 
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; title, xlabel, ylabel,
+    ax = GLMakie.Axis(
+        fig[1,1]; title, xlabel, ylabel,
         aspect = AxisAspect(aspect_ratio),
     )
 
-    Makie.scatter!(ax, ustrip.(u, xy); markersize, markerspace, kw...)
+    Makie.scatter!(ax, x, y; markersize, markerspace, kw...)
 
-    xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
-    ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
+    Makie.xlims!(ax, xcenter - 0.5 * xlen, xcenter + 0.5 * xlen)
+    Makie.ylims!(ax, ycenter - 0.5 * ylen, ycenter + 0.5 * ylen)
 
-    return scene, layout
+    return fig
 end
 
 function plot_positionslice_adapt(data, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = nothing; kw...)
@@ -252,17 +258,17 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
         end
 
         if isnothing(collection)
-            scene, layout = plot_positionslice_adapt(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            fig = plot_positionslice_adapt(data, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
         else
-            scene, layout = plot_positionslice_adapt(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
+            fig = plot_positionslice_adapt(data, collection, getuLength(units); title = "Positions at " * @sprintf("%.6f ", ustrip(times[i])) * string(unit(times[i])),
                                                  xaxis, yaxis, xlabel, ylabel, xlen, ylen,
                                                  kw...)
         end
 
         outputfilename = joinpath(folder, string("pos_", snapshot_index, ".png"))
-        Makie.save(outputfilename, scene)
+        Makie.save(outputfilename, fig)
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
     return true

@@ -33,7 +33,7 @@ function plot_peano(bits::Int = 1)
     data = [reshape(p, 1, len); reshape(x, 1, len); reshape(y, 1, len); reshape(z, 1, len)]
     data = sortslices(data, dims = 2)
 
-    scene = lines(data[2,:], data[3,:], data[4,:])
+    fig = lines(data[2,:], data[3,:], data[4,:])
 
-    return scene
+    return fig
 end

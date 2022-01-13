@@ -56,8 +56,8 @@ function plot_radialpotential(data, units = uAstro;
         title = "Radial Potential" * ts,
         kw...
     )
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_radialpotential!(ax, data, units; savelog, savefolder, markersize, kw...)
-    return scene, layout
+    return fig
 end

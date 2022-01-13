@@ -83,8 +83,8 @@ function plot_densitycurve(data, units = uAstro;
                            savefolder = pwd(),
                            resolution = (1600, 900),
                            kw...)
-    scene, layout = layoutscene(; resolution)
-    ax = layout[1,1] = GLMakie.Axis(scene; xlabel, ylabel, title)
+    fig = Figure(; resolution)
+    ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_densitycurve!(ax, data, units;  savelog, savefolder, kw...)
-    return scene, layout
+    return fig
 end

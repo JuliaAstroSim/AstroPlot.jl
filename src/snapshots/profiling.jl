@@ -10,7 +10,7 @@ $_common_keyword_label
 
 ## Examples
 ```jl
-julia> scene, layout = plot_profiling("profiling.csv")
+julia> fig = plot_profiling("profiling.csv")
 ```
 """
 function plot_profiling(datafile::String;
@@ -20,17 +20,17 @@ function plot_profiling(datafile::String;
                         resolution = (1600, 900),
                         kw...)
     df = DataFrame(CSV.File(datafile))
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene; xlabel, ylabel, title,
+    ax = GLMakie.Axis(
+        fig[1,1]; xlabel, ylabel, title,
     )
 
     columns = names(df)
     scenes = [Makie.lines!(ax, df[!,columns[1]], log10.(df[!,columns[k]]),  color = RGB(rand(3)...); kw...) for k in 2:length(columns)]
 
-    leg = layout[1,1] = Legend(
-        scene, scenes,
+    leg = GLMakie.Legend(
+        fig[1,1], scenes,
         columns[2:end],
         tellheight = false,
         tellwidth = false,
@@ -39,10 +39,10 @@ function plot_profiling(datafile::String;
         margin = (10, 10, 10, 10),
     )
 
-    return scene, layout
+    return fig
 end
 
-function plot_profiling!(ax, layout, index, datafile::String;
+function plot_profiling!(ax, index, datafile::String;
                         colors = nothing,
                         kw...)
     df = DataFrame(CSV.File(datafile))

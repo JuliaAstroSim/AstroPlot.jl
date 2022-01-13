@@ -7,7 +7,7 @@ using PhysicalMeshes
 using AstroPlot
 
 c = Cube(PVector(0.0,0.0,0.0), PVector(1.0,1.0,1.0))
-scene = plot_makie(c, nothing)
+fig = plot_makie(c, nothing)
 ```
 
 ## Static Cartesian Mesh

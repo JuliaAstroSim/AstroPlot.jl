@@ -12,7 +12,8 @@ function estimate_markersize(data, u; xaxis = :x, yaxis = :y)
     xMin = getfield(e, Symbol(string(xaxis) * "Min"))
     yMax = getfield(e, Symbol(string(yaxis) * "Max"))
     yMin = getfield(e, Symbol(string(yaxis) * "Min"))
-    return estimate_markersize(ustrip(u*u, (xMax - xMin) * (yMax - yMin)))
+    u2 = isnothing(u) ? nothing : u*u
+    return estimate_markersize(ustrip(u2, (xMax - xMin) * (yMax - yMin)))
 end
 
 """
@@ -75,44 +76,48 @@ Plot `scatter` data points (in interactive mode)
 
 ```julia
 d = randn_pvector(50)
-plot_makie!(scene, d, nothing)
+plot_makie!(fig, d, nothing)
 
 d = randn_pvector(50, u"km")
-plot_makie!(scene, d, u"m")
+plot_makie!(fig, d, u"m")
 ```
 """
-function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
     resolution = (1000, 1000),
     kw...
 ) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
-    Makie.scatter!(scene, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    Makie.scatter!(fig, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
-function plot_makie!(scene, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
+function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
     resolution = (1000, 1000),
     kw...
 ) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
-    Makie.scatter!(scene, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    Makie.scatter!(fig, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
 end
 
-function plot_makie!(scene, data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
-    plot_makie!(scene, data.Pos, u; kw...)
+function plot_makie!(fig, data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
+    plot_makie!(fig, data.Pos, u; kw...)
 end
 
-function plot_makie!(scene, data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
+function plot_makie!(fig, data::Union{Array{T,N}, StructArray{T,N,NT,Tu}}, collection::Collection, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu
     d = filter(p->p.Collection == collection, data)
     if isempty(d)
         @warn "No $collection particle found."
         return nothing
     else
-        plot_makie!(scene, d, u; kw...)
+        plot_makie!(fig, d, u; kw...)
     end
+end
+
+function plot_makie!(fig, data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractPoint3D where N where NT where Tu
+    plot_makie!(fig, Array(data), u; kw...)
 end
 
 """

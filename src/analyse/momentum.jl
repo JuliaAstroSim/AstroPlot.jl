@@ -34,10 +34,10 @@ function plot_momentum(df::DataFrame;
         colors = nothing,
         kw...
     )
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene,
+    ax = GLMakie.Axis(
+        fig[1,1],
         xlabel = xlabel,
         ylabel = ylabel,
         title = title,
@@ -47,7 +47,7 @@ function plot_momentum(df::DataFrame;
 
     axislegend(ax, scenes, string.("P", axis), position = legendposition)
 
-    return scene, layout, df
+    return fig, df
 end
 
 """
@@ -104,10 +104,10 @@ function plot_momentum_angular(df::DataFrame;
         colors = nothing,
         kw...
     )
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
 
-    ax = layout[1,1] = GLMakie.Axis(
-        scene,
+    ax = GLMakie.Axis(
+        fig[1,1],
         xlabel = xlabel,
         ylabel = ylabel,
         title = title,
@@ -117,7 +117,7 @@ function plot_momentum_angular(df::DataFrame;
 
     axislegend(ax, scenes, string.("L", axis), position = legendposition)
 
-    return scene, layout, df
+    return fig, df
 end
 
 """

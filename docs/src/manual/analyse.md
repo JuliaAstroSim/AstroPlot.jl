@@ -2,29 +2,24 @@
 
 ```@example analysis
 using AstroPlot
-scene, layout = plot_profiling("profiling.csv")
-scene
+fig = plot_profiling("profiling.csv")
 ```
 
 ```@example analysis
-scene, layout = plot_energy("energy.csv")
-scene
+fig = plot_energy("energy.csv")
 ```
 
 ```@example analysis
-scene, layout = plot_energy_delta("energy.csv")
-scene
+fig = plot_energy_delta("energy.csv")
 ```
 
 ```@example analysis
 using AstroIO
 header, data = read_gadget2("plummer/snapshot_0000.gadget2", uAstro, uGadget2)
 
-scene, layout = plot_densitycurve(data)
-scene
+fig = plot_densitycurve(data)
 ```
 
 ```@example analysis
-scene, layout = plot_rotationcurve(data)
-scene
+fig = plot_rotationcurve(data)
 ```

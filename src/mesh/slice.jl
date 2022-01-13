@@ -91,7 +91,7 @@ Plot 2D slice of 3D data.
 ## Keywords
 $_common_keyword_axis_label
 """
-function plot_slice!(f::Figure, ax::CairoMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int, units = nothing;
+function plot_slice!(f::Figure, ax::GLMakie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int, units = nothing;
         xaxis = :x,
         yaxis = :y,
         kw...
@@ -107,17 +107,17 @@ function plot_slice!(f::Figure, ax::CairoMakie.Axis, pos::AbstractArray{T,3}, da
     if data isa StructArray # arrows plot
         ux, uy = ustrip.(pack_xy(z; xaxis, yaxis))
         if xid > yid
-            CairoMakie.arrows!(ax, x, y, uy, ux; kw...)
+            GLMakie.arrows!(ax, x, y, uy, ux; kw...)
         else
-            CairoMakie.arrows!(ax, x, y, ux, uy; kw...)
+            GLMakie.arrows!(ax, x, y, ux, uy; kw...)
         end
     else
         if xid > yid
-            ht = CairoMakie.heatmap!(ax, x, y, ustrip.(Array(transpose(z))); kw...)
-            CairoMakie.Colorbar(f[1,2], ht)
+            ht = GLMakie.heatmap!(ax, x, y, ustrip.(Array(transpose(z))); kw...)
+            GLMakie.Colorbar(f[1,2], ht)
         else
-            ht = CairoMakie.heatmap!(ax, x, y, ustrip.(Array(z)); kw...)
-            CairoMakie.Colorbar(f[1,2], ht)
+            ht = GLMakie.heatmap!(ax, x, y, ustrip.(Array(z)); kw...)
+            GLMakie.Colorbar(f[1,2], ht)
         end
     end
 end
@@ -139,7 +139,7 @@ function plot_slice(m::MeshCartesianStatic, symbol::Symbol, n::Int, units = noth
         kw...
     )
     f = Figure(;resolution)
-    ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
+    ax = GLMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
     plot_slice!(f, ax, m.pos, getfield(m, symbol), n, units; xaxis, yaxis, kw...)
     return f
 end
@@ -154,9 +154,9 @@ function plot_mesh_heatmap(d, units = nothing;
     kw...
 )
     f = Figure(; resolution)
-    a = CairoMakie.Axis(f[1, 1]; title, aspect)
-    ht = CairoMakie.heatmap!(a, ustrip.(d); kw...)
-    CairoMakie.Colorbar(f[1, 2], ht)
+    a = GLMakie.Axis(f[1, 1]; title, aspect)
+    ht = GLMakie.heatmap!(a, ustrip.(d); kw...)
+    GLMakie.Colorbar(f[1, 2], ht)
     return f
 end
 
@@ -173,8 +173,8 @@ function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol, units = nothi
     y = ustrip.(getuLength(units), axis_cartesian(m.pos, :y))
 
     f = Figure(; resolution)
-    a = CairoMakie.Axis(f[1,1]; title, aspect)
-    ht = CairoMakie.heatmap!(a, x, y, ustrip.(getfield(m, symbol)); kw...)
-    CairoMakie.Colorbar(f[1,2], ht)
+    a = GLMakie.Axis(f[1,1]; title, aspect)
+    ht = GLMakie.heatmap!(a, x, y, ustrip.(getfield(m, symbol)); kw...)
+    GLMakie.Colorbar(f[1,2], ht)
     return f
 end

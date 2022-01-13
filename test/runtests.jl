@@ -1,3 +1,7 @@
+#=
+cd("AstroPlot.jl/test")
+=#
+
 using Test
 
 using PhysicalParticles
@@ -7,24 +11,23 @@ using Unitful, UnitfulAstro
 using AstroPlot
 using AstroIO
 using GLMakie
-using CairoMakie
 
 function plotsuccess(result)
     return !isnothing(result)
 end
 
-header, data = read_gadget2("plummer/snapshot_0000.gadget2", uAstro, uGadget2)
-h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
+header, data = read_gadget2("plummer/snapshot_0000.gadget2", uAstro, uGadget2, type=Star)
+h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2, type=Star)
 
 @testset "Mesh" begin
     @testset "Cube" begin
         c = Cube(PVector(0.0,0.0,0.0), PVector(1.0,1.0,1.0))
-        scene = plot_makie(c, nothing)
-        result = Makie.save("cube.png", scene)
+        fig = plot_makie(c, nothing)
+        result = Makie.save("cube.png", fig)
         @test plotsuccess(result)
     
         f = Figure()
-        ax = Axis(f[1,1])
+        ax = Axis3(f[1,1])
         plot_makie!(ax, c, nothing)
         result = Makie.save("cube_axis.png", f)
         @test plotsuccess(result)
@@ -50,8 +53,8 @@ h, d = read_gadget2("plummer_unitless.gadget2", nothing, uGadget2)
 end
 
 @testset "Tree" begin
-    scene = plot_peano(3)
-    result = Makie.save("peano.png", scene)
+    fig = plot_peano(3)
+    result = Makie.save("peano.png", fig)
     @test plotsuccess(result)
 
     d = randn_pvector(15)
@@ -62,24 +65,24 @@ end
 end
 
 @testset "Analyse" begin
-    scene, layout = plot_profiling("profiling.csv")
-    result = Makie.save("profiling.png", scene)
+    fig = plot_profiling("profiling.csv")
+    result = Makie.save("profiling.png", fig)
     @test plotsuccess(result)
 
-    scene, layout = plot_energy("energy.csv")
-    result = Makie.save("energy.png", scene)
+    fig, df = plot_energy("energy.csv")
+    result = Makie.save("energy.png", fig)
     @test plotsuccess(result)
 
-    scene, layout = plot_energy_delta("energy.csv")
+    fig, df = plot_energy_delta("energy.csv")
     result = Makie.save("energydelta.png")
     @test plotsuccess(result)
 
-    scene, layout = plot_densitycurve(data)
-    result = Makie.save("density.png", scene)
+    fig = plot_densitycurve(data)
+    result = Makie.save("density.png", fig)
     @test plotsuccess(result)
 
-    scene, layout = plot_rotationcurve(data)
-    result = Makie.save("rotationcurve.png", scene)
+    fig = plot_rotationcurve(data)
+    result = Makie.save("rotationcurve.png", fig)
     @test plotsuccess(result)
 end
 
@@ -91,18 +94,18 @@ end
     )
     @test plotsuccess(result)
 
-    scene, layout = plot_trajectory(
+    fig, pos = plot_trajectory(
         "plummer/", "snapshot_", collect(0:20:200), [1,2,3], ".gadget2", gadget2(),
     )
-    result = Makie.save("trajectory.png", scene)
+    result = Makie.save("trajectory.png", fig)
     @test plotsuccess(result)
 
-    ScaleScene, ScaleLayout, LagrangeScene, LagrangeLayout, df = plot_radii(
+    FigScale, FigLagrange, df = plot_radii(
         "plummer/", "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
         times = collect(0.0:0.01:0.1) * u"Gyr", title = "Direct Sum const",
     )
-    result1 = Makie.save("ScaleRadius.png", ScaleScene)
-    result2 = Makie.save("LagrangeRadii.png", LagrangeScene)
+    result1 = Makie.save("ScaleRadius.png", FigScale)
+    result2 = Makie.save("LagrangeRadii.png", FigLagrange)
     @test plotsuccess(result1)
     @test plotsuccess(result2)
     

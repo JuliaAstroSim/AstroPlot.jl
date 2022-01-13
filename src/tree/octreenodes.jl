@@ -14,7 +14,7 @@ end
 $(TYPEDSIGNATURES)
 Plot tree nodes in `wireframe` mode
 """
-function plot_makie!(axis, nodes::Array{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
+function plot_makie!(axis, nodes::AbstractArray{T,N}, u = u"kpc"; kw...) where T<:PhysicalTrees.OctreeNode where N
     for n in nodes
         wireframe!(axis, RectNode(n, u); kw...)
     end

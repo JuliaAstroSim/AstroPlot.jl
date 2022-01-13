@@ -84,7 +84,7 @@ Plot 2D projection sum of mesh density over one dimension.
 $_common_keyword_aspect
 $_common_keyword_figure
 """
-function projection_density(mesh::MeshCartesianStatic, units = nothing;
+function projection_density(m::MeshCartesianStatic, units = nothing;
         resolution = (900, 900),
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
@@ -96,21 +96,23 @@ function projection_density(mesh::MeshCartesianStatic, units = nothing;
     yid = axisid(yaxis)
     d = 6 - xid - yid
     
-    s = collect(size(mesh.rho))
+    s = collect(size(m.rho))
     popat!(s, d)
     
-    rho = ustrip.(getuDensity(units), reshape(sum(mesh.rho, dims = d), s...))
-    pos = slice3d(mesh.pos, d, 1)
+    rho = ustrip.(getuDensity(units), reshape(sum(m.rho, dims = d), s...))
+    pos = slice3d(m.pos, d, 1)
     
-    xy = ustrip.(getuLength(units), pack_xy(pos; xaxis, yaxis))
+    xu, yu = pack_xy(pos; xaxis, yaxis)
+    x = ustrip.(getuLength(units), xu)
+    y = ustrip.(getuLength(units), yu)
     
     f = Figure(; resolution)
-    ax = CairoMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect = AxisAspect(aspect_ratio))
+    ax = GLMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect = AxisAspect(aspect_ratio))
 
     if xid > yid
-        CairoMakie.heatmap!(ax, xy[:,1], xy[:,2], transpose(rho); kw...)
+        GLMakie.heatmap!(ax, x, y, transpose(rho); kw...)
     else
-        CairoMakie.heatmap!(ax, xy[:,1], xy[:,2], rho; kw...)
+        GLMakie.heatmap!(ax, x, y, rho; kw...)
     end
     return f
 end

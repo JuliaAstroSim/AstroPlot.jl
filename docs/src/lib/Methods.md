@@ -28,7 +28,7 @@ plot_makie!
 plot_peano
 ```
 
-## CairoMakie
+## GLMakie
 
 ```@docs
 projection

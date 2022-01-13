@@ -62,10 +62,10 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          colors = nothing,
                          resolution = (1600, 900),
                          kw...)
-    scene, layout = layoutscene(; resolution)
+    fig = Figure(; resolution)
     
-    ax = layout[1,1] = GLMakie.Axis(
-        scene,
+    ax = GLMakie.Axis(
+        fig[1,1],
         xlabel = xlabel,
         ylabel = ylabel,
         title = title,
@@ -78,8 +78,8 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
         scenes = [plot_trajectory!(ax, ustrip.(u, pos[collect(keys(pos))[i]]); xaxis, yaxis, color = colors[i], kw...) for i in 1:length(keys(pos))]
     end
 
-    leg = layout[1,1] = Legend(
-        scene, scenes,
+    leg = Legend(
+        fig[1,1], scenes,
         string.(keys(pos)),
         tellheight = false,
         tellwidth = false,
@@ -96,7 +96,7 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
         Makie.ylims!(ax, ylims)
     end
 
-    return scene, layout
+    return fig
 end
 
 """
@@ -116,7 +116,7 @@ $_common_keyword_aspect
 
 ## Examples
 ```jl
-julia scene, layout, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
+julia fig, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
             [1,2,3], ".gadget2", gadget2(), dpi = 300, resolution = (800,800))
 ```
 """
@@ -159,8 +159,8 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 
-    scene, layout = plot_trajectory(pos, getuLength(units); xaxis, yaxis, xlims, ylims, xlabel, ylabel, aspect_ratio, title, colors, kw...)
-    return scene, layout, pos
+    fig = plot_trajectory(pos, getuLength(units); xaxis, yaxis, xlims, ylims, xlabel, ylabel, aspect_ratio, title, colors, kw...)
+    return fig, pos
 end
 
 """
@@ -172,7 +172,7 @@ Plot trajectories in `ax`
 $_common_keyword_axis
 $_common_keyword_lims
 """
-function plot_trajectory!(scene, layout, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
+function plot_trajectory!(fig, ax, pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          xaxis = :x,
                          yaxis = :y,
                          xlims = nothing,
@@ -209,7 +209,7 @@ $_common_keyword_axis
 $_common_keyword_lims
 $_common_keyword_snapshot
 """
-function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::String, Counts::Array{Int64,1},
+function plot_trajectory!(fig, ax, folder::String, filenamebase::String, Counts::Array{Int64,1},
                          ids::Array{Int64,1}, suffix::String, FileType::AbstractOutputType, units = uAstro, fileunits = uGadget2;
                          xaxis = :x,
                          yaxis = :y,
@@ -244,6 +244,6 @@ function plot_trajectory!(scene, layout, ax, folder::String, filenamebase::Strin
         next!(progress, showvalues = [("iter", i), ("file", filename)])
     end
 
-    return plot_trajectory!(scene, layout, ax, pos, getuLength(units);
+    return plot_trajectory!(fig, ax, pos, getuLength(units);
             xaxis, yaxis, xlims, ylims, colors,kw...)
 end
