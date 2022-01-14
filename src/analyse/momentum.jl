@@ -8,9 +8,9 @@ end
 
 # If having `range step cannot be zero` error from Makie, try Plots.jl instead
 # Ref:
-# - https://github.com/JuliaPlots/Makie.jl/issues/1579
-# - https://github.com/JuliaPlots/Makie.jl/issues/1040
 # - https://github.com/JuliaPlots/Makie.jl/issues/931
+# - https://github.com/JuliaPlots/Makie.jl/issues/1196
+# - https://github.com/JuliaPlots/Makie.jl/issues/1373
 function plot_momentum!(ax, df::DataFrame; axis = [:x, :y, :z], colors = nothing, kw...)
     if isnothing(colors)
         scenes = [plot_momentum!(ax, df, axis[i]; color = RGB(rand(3)...), kw...) for i in 1:length(axis)]
