@@ -49,6 +49,7 @@ function plot_scaleradius(df::DataFrame, uTime, uLength;
                           ylabel = "r$(axisunit(uLength))",
                           title = "Scale radius",
                           resolution = (1600, 900),
+                          legend = false,
                           kw...)
     fig = Figure(; resolution)
 
@@ -56,7 +57,18 @@ function plot_scaleradius(df::DataFrame, uTime, uLength;
         fig[1,1]; title, xlabel, ylabel,
     )
 
-    plot_scaleradius!(ax, df; kw...)
+    p = plot_scaleradius!(ax, df; kw...)
+
+    if legend
+        Legend(
+            fig[1,1], [p], ["scale radius"],
+            tellheight = false,
+            tellwidth = false,
+            halign = :right,
+            valign = :top,
+            margin = (10, 10, 10, 10),
+        )
+    end
 
     return fig
 end
@@ -95,7 +107,7 @@ function plot_lagrangeradii!(fig, ax, df::DataFrame;
     scenes = [p10, p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
     if legend
-        leg = Legend(
+        Legend(
             fig[1,1], scenes, columns,
             tellheight = false,
             tellwidth = false,
@@ -168,7 +180,7 @@ function plot_lagrangeradii90!(fig, ax, df::DataFrame;
     scenes = [p9, p8, p7, p6, p5, p4, p3, p2, p1]
     columns = ["90%", "80%", "70%", "60%", "50%", "40%", "30%", "20%", "10%"]
     if legend
-        leg = Legend(
+        Legend(
             fig[1,1], scenes, columns,
             tellheight = false,
             tellwidth = false,
@@ -279,7 +291,7 @@ function plot_radii(folder::String, filenamebase::String,
     end
 
     println("Plotting scale radius")
-    FigScale = plot_scaleradius(df, uTime, uLength; kw...)
+    FigScale = plot_scaleradius(df, uTime, uLength)
 
     println("Plotting Lagrange radii 90%")
     FigLagrange = plot_lagrangeradii90(df, uTime, uLength; kw...)
