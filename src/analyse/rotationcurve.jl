@@ -106,9 +106,9 @@ function plot_rotationcurve(data, units = uAstro;
                               title = "Rotation Curve" * (isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp))),
                               savelog = true,
                               savefolder = pwd(),
-                              resolution = (1600, 900),
-                              kw...) where T<:AbstractParticle3D
-    fig = Figure(; resolution)
+                              size = (1600, 900),
+                              kw...)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_rotationcurve!(ax, data, units;  rmhead, rmtail, savelog, savefolder, kw...)
     return fig

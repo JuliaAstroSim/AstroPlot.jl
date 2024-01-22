@@ -60,9 +60,9 @@ function plot_trajectory(pos::Dict{Int64, Array{AbstractPoint,1}}, u = u"kpc";
                          aspect_ratio = 1.0,
                          title = "Trajectory",
                          colors = nothing,
-                         resolution = (1600, 900),
+                         size = (1600, 900),
                          kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     
     ax = GLMakie.Axis(
         fig[1,1],
@@ -117,7 +117,7 @@ $_common_keyword_aspect
 ## Examples
 ```jl
 julia fig, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
-            [1,2,3], ".gadget2", gadget2(), dpi = 300, resolution = (800,800))
+            [1,2,3], ".gadget2", gadget2(), dpi = 300, size = (800,800))
 ```
 """
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},

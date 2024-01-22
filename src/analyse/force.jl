@@ -80,14 +80,14 @@ function plot_force(data, units = uAstro;
         savelog = true,
         savefolder = pwd(),
         markersize = 0.1,
-        resolution = (1600, 900),
+        size = (1600, 900),
         ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
         xlabel = "log(R$(axisunit(getuLength(units))))",
         ylabel = "log(Acc$(axisunit(getuAcc(units))))",
         title = "Force" * ts,
         kw...
     )
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_force!(ax, data, units; savelog, savefolder, markersize, kw...)
     return fig

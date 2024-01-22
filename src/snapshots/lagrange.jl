@@ -42,16 +42,16 @@ Plot evolution of scale radius by time. `df` contains columns named `Time` and `
 ## Keywords
 $_common_keyword_label
 - `title`: title line of the figure
-- `resolution`: figure size
+- `size`: figure size
 """
 function plot_scaleradius(df::DataFrame, uTime, uLength;
                           xlabel = "t$(axisunit(uTime))",
                           ylabel = "r$(axisunit(uLength))",
                           title = "Scale radius",
-                          resolution = (1600, 900),
+                          size = (1600, 900),
                           legend = false,
                           kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; title, xlabel, ylabel,
@@ -133,9 +133,9 @@ function plot_lagrangeradii(df::DataFrame, uTime, uLength;
                             ylabel = "r$(axisunit(uLength))",
                             title = "Lagrange radii",
                             colors = ColorSchemes.tab10.colors,
-                            resolution = (1600, 900),
+                            size = (1600, 900),
                             kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; title, xlabel, ylabel,
@@ -206,9 +206,9 @@ function plot_lagrangeradii90(df::DataFrame, uTime, uLength;
                               xlabel = "t [$uTime]",
                               ylabel = "r [$uLength]",
                               title = "Lagrange radii",
-                              resolution = (1600, 900),
+                              size = (1600, 900),
                               kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; title, xlabel, ylabel,

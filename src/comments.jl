@@ -22,7 +22,7 @@ _common_keyword_axis_label_title = _common_keyword_axis * _common_keyword_label_
 _common_keyword_aspect = "- `aspect_ratio`: aspect ratio of axes. Default is `1.0` to avoid stretching. Pass to `Makie` as `AxisAspect(aspect_ratio)`\n"
 
 _common_keyword_figure = """
-- `resolution`: figure size
+- `size`: figure size
 """ * _common_keyword_axis_label_title * _common_keyword_lims
 
 _common_keyword_adapt_len = """

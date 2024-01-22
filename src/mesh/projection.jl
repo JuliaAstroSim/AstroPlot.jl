@@ -85,7 +85,7 @@ $_common_keyword_aspect
 $_common_keyword_figure
 """
 function projection_density(m::MeshCartesianStatic, units = nothing;
-        resolution = (900, 900),
+        size = (900, 900),
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
         title = "Density projection",
@@ -106,7 +106,7 @@ function projection_density(m::MeshCartesianStatic, units = nothing;
     x = ustrip.(getuLength(units), xu)
     y = ustrip.(getuLength(units), yu)
     
-    f = Figure(; resolution)
+    f = Figure(; size)
     ax = GLMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect = AxisAspect(aspect_ratio))
 
     if xid > yid

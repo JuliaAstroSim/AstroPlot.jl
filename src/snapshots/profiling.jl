@@ -4,7 +4,7 @@ Plot profiling curves
 
 ## Keywords:
 - `title`: title line of the figure
-- `resolution`: figure size
+- `size`: figure size
 $_common_keyword_label
 - `colors`
 
@@ -17,10 +17,10 @@ function plot_profiling(datafile::String;
                         title = "Profiling",
                         xlabel = "step",
                         ylabel = "t [ns]",
-                        resolution = (1600, 900),
+                        size = (1600, 900),
                         kw...)
     df = DataFrame(CSV.File(datafile))
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; xlabel, ylabel, title,

@@ -49,14 +49,14 @@ function plot_radialpotential(data, units = uAstro;
         savelog = true,
         savefolder = pwd(),
         markersize = 0.1,
-        resolution = (1600, 900),
+        size = (1600, 900),
         xlabel = "log(R$(axisunit(getuLength(units))))",
         ylabel = "log(Potential$(axisunit(getuEnergy(units))))",
         ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
         title = "Radial Potential" * ts,
         kw...
     )
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_radialpotential!(ax, data, units; savelog, savefolder, markersize, kw...)
     return fig

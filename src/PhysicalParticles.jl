@@ -35,21 +35,21 @@ plot_makie(d, u"m")
 function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
-    resolution = (1000, 1000),
+    size = (1000, 1000),
     kw...
 ) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
-    return Makie.scatter(d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    return Makie.scatter(d; markersize, markerspace, figure = (size = size,), kw...)
 end
 
 function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
-    resolution = (1000, 1000),
+    size = (1000, 1000),
     kw...
 ) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
-    return Makie.scatter(d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    return Makie.scatter(d; markersize, markerspace, figure = (size = size,), kw...)
 end
 
 function plot_makie(data::StructArray, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...)
@@ -85,21 +85,21 @@ plot_makie!(fig, d, u"m")
 function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
-    resolution = (1000, 1000),
+    size = (1000, 1000),
     kw...
 ) where T<:PVector
     d = [point3(ustrip(u, p)) for p in data]
-    Makie.scatter!(fig, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    Makie.scatter!(fig, d; markersize, markerspace, figure = (size = size,), kw...)
 end
 
 function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
     markerspace=SceneSpace,
-    resolution = (1000, 1000),
+    size = (1000, 1000),
     kw...
 ) where T<:AbstractParticle3D
     d = [point3(ustrip(u, p.Pos)) for p in data]
-    Makie.scatter!(fig, d; markersize, markerspace, figure = (resolution = resolution,), kw...)
+    Makie.scatter!(fig, d; markersize, markerspace, figure = (size = size,), kw...)
 end
 
 function plot_makie!(fig, data::StructArray{T,N,NT,Tu}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc"; kw...) where T<:AbstractParticle3D where N where NT where Tu

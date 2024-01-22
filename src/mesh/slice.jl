@@ -131,14 +131,14 @@ $_common_keyword_figure
 $_common_keyword_aspect
 """
 function plot_slice(m::MeshCartesianStatic, symbol::Symbol, n::Int, units = nothing;
-        resolution = (1080, 900),
+        size = (1080, 900),
         xaxis = :x, yaxis = :y,
         xlabel = "$(xaxis)$(axisunit(getuLength(units)))", ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
         title = string(symbol) * " slice",
         aspect = AxisAspect(1),
         kw...
     )
-    f = Figure(;resolution)
+    f = Figure(;size)
     ax = GLMakie.Axis(f[1,1]; xlabel, ylabel, title, aspect)
     plot_slice!(f, ax, m.pos, getfield(m, symbol), n, units; xaxis, yaxis, kw...)
     return f
@@ -148,12 +148,12 @@ end
 $(TYPEDSIGNATURES)
 """
 function plot_mesh_heatmap(d, units = nothing;
-    resolution = (1080,900),
+    size = (1080,900),
     title = "Heatmap",
     aspect = AxisAspect(1),
     kw...
 )
-    f = Figure(; resolution)
+    f = Figure(; size)
     a = GLMakie.Axis(f[1, 1]; title, aspect)
     ht = GLMakie.heatmap!(a, ustrip.(d); kw...)
     GLMakie.Colorbar(f[1, 2], ht)
@@ -164,7 +164,7 @@ end
 $(TYPEDSIGNATURES)
 """
 function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol, units = nothing;
-    resolution = (1080,900),
+    size = (1080,900),
     title = "Heatmap",
     aspect = AxisAspect(1),
     kw...
@@ -172,7 +172,7 @@ function plot_mesh_heatmap(m::MeshCartesianStatic, symbol::Symbol, units = nothi
     x = ustrip.(getuLength(units), axis_cartesian(m.pos, :x))
     y = ustrip.(getuLength(units), axis_cartesian(m.pos, :y))
 
-    f = Figure(; resolution)
+    f = Figure(; size)
     a = GLMakie.Axis(f[1,1]; title, aspect)
     ht = GLMakie.heatmap!(a, x, y, ustrip.(getfield(m, symbol)); kw...)
     GLMakie.Colorbar(f[1,2], ht)

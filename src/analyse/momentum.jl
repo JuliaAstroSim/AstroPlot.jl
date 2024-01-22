@@ -33,13 +33,13 @@ function plot_momentum(df::DataFrame;
         title = "Total Momentum",
         xlabel = "t [$uTime]",
         ylabel = "P [$uMomentum]",
-        resolution = (1600, 900),
+        size = (1600, 900),
         legendposition = :rt,
         axis = [:x, :y, :z],
         colors = nothing,
         kw...
     )
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1],
@@ -103,13 +103,13 @@ function plot_momentum_angular(df::DataFrame;
         title = "Total Angular Momentum",
         xlabel = "t [$uTime]",
         ylabel = "L [$uMomentumAngular]",
-        resolution = (1600, 900),
+        size = (1600, 900),
         legendposition = :rt,
         axis = [:x, :y, :z],
         colors = nothing,
         kw...
     )
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1],

@@ -56,13 +56,13 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
                             title = "Positions",
                             markersize = (isnothing(xlims) && isnothing(ylims)) ? estimate_markersize(data, u; xaxis, yaxis) : estimate_markersize((xlims[2] - xlims[1]) * (ylims[2] - ylims[1])),
                             markerspace=SceneSpace,
-                            resolution = (1000, 1000),
+                            size = (1000, 1000),
                             kw...)
     xu, yu = pack_xy(data; xaxis, yaxis)
     x = ustrip.(u, xu)
     y = ustrip.(u, yu)
 
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; title, xlabel, ylabel,
@@ -107,7 +107,7 @@ $_common_keyword_aspect
 
 ## Examples
 ```jl
-julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), dpi = 300, resolution = (800,800),
+julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), dpi = 300, size = (800,800),
         xlims = (-0.05, +0.05), ylims = (-0.05, +0.05), times = collect(0.0:0.01:0.1) * u"Gyr")
 ```
 """
@@ -179,7 +179,7 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
                                   title = "Positions",
                                   markersize = estimate_markersize(xlen * ylen),
                                   markerspace=SceneSpace,
-                                  resolution = (1000, 1000),
+                                  size = (1000, 1000),
                                   kw...)
     xu, yu = pack_xy(data; xaxis, yaxis)
     x = ustrip.(u, xu)
@@ -188,7 +188,7 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
     xcenter = middle(x)
     ycenter = middle(y)
 
-    fig = Figure(; resolution)
+    fig = Figure(; size)
 
     ax = GLMakie.Axis(
         fig[1,1]; title, xlabel, ylabel,
@@ -230,7 +230,7 @@ $_common_keyword_aspect
 ## Examples
 ```jl
 julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
-        dpi = 300, resolution = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")
+        dpi = 300, size = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")
 ```
 """
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1},

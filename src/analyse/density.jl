@@ -81,9 +81,9 @@ function plot_densitycurve(data, units = uAstro;
                            title = "Rotation Curve" * ts,
                            savelog = true,
                            savefolder = pwd(),
-                           resolution = (1600, 900),
+                           size = (1600, 900),
                            kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_densitycurve!(ax, data, units;  savelog, savefolder, kw...)
     return fig

@@ -41,9 +41,9 @@ function plot_energy_kinetic(df::DataFrame;
                      title = "Kinetic Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
-                     resolution = (1600, 900),
+                     size = (1600, 900),
                      kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_kinetic!(ax, df; kw...)
     return fig, df
@@ -74,9 +74,9 @@ function plot_energy_potential(df::DataFrame;
                      title = "Potential Energy",
                      xlabel = "t [$uTime]",
                      ylabel = "E [$uEnergy]",
-                     resolution = (1600, 900),
+                     size = (1600, 900),
                      kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_potential!(ax, df; kw...)
     return fig, df
@@ -110,7 +110,7 @@ function plot_energy(df::DataFrame;
                      title = "Energy",
                      xlabel = "t$(axisunit(uTime))",
                      ylabel = "E$(axisunit(uEnergy))",
-                     resolution = (1600, 900),
+                     size = (1600, 900),
                      potential = true,
                      kinetic = true,
                      colorpotential = :red,
@@ -122,7 +122,7 @@ function plot_energy(df::DataFrame;
                      valign = :top,
                      margin = (10, 10, 10, 10),
                      kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
 
     if !hasproperty(df, :energy) && hasproperty(df, :potential) && hasproperty(df, :kinetic)
@@ -238,9 +238,9 @@ function plot_energy_delta(df::DataFrame;
                            title = "Delta Energy",
                            xlabel = "t$(axisunit(uTime))",
                            ylabel = "dE$(axisunit(uEnergy))",
-                           resolution = (1600, 900),
+                           size = (1600, 900),
                            kw...)
-    fig = Figure(; resolution)
+    fig = Figure(; size)
     ax = GLMakie.Axis(fig[1,1]; xlabel, ylabel, title)
     plot_energy_delta!(ax, df; kw...)
     return fig, df
