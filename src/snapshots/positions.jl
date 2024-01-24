@@ -12,7 +12,7 @@ function plot_positionslice!(fig, data, u::Union{Nothing, Unitful.FreeUnits} = n
                              xaxis = :x,
                              yaxis = :y,
                              markersize = estimate_markersize(data, u; xaxis, yaxis),
-                             markerspace=SceneSpace,
+                             markerspace=:data,
                              kw...)
     xu, yu = pack_xy(data; xaxis, yaxis)
     x = ustrip.(u, xu)
@@ -55,7 +55,7 @@ function plot_positionslice(data, u::Union{Nothing, Unitful.FreeUnits} = nothing
                             aspect_ratio = 1.0,
                             title = "Positions",
                             markersize = (isnothing(xlims) && isnothing(ylims)) ? estimate_markersize(data, u; xaxis, yaxis) : estimate_markersize((xlims[2] - xlims[1]) * (ylims[2] - ylims[1])),
-                            markerspace=SceneSpace,
+                            markerspace=:data,
                             size = (1000, 1000),
                             kw...)
     xu, yu = pack_xy(data; xaxis, yaxis)
@@ -173,12 +173,12 @@ function plot_positionslice_adapt(data, u::Union{Nothing, Unitful.FreeUnits} = n
                                   yaxis = :y,
                                   xlabel = "",
                                   ylabel = "",
-                                  xlen::Float64 = 1.0,
-                                  ylen::Float64 = 1.0,
+                                  xlen = 1.0,
+                                  ylen = 1.0,
                                   aspect_ratio = 1.0,
                                   title = "Positions",
                                   markersize = estimate_markersize(xlen * ylen),
-                                  markerspace=SceneSpace,
+                                  markerspace=:data,
                                   size = (1000, 1000),
                                   kw...)
     xu, yu = pack_xy(data; xaxis, yaxis)
@@ -241,8 +241,8 @@ function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::
                                   collection::Union{Nothing, Collection} = nothing,
                                   xlabel = "$(xaxis)$(axisunit(getuLength(units)))",
                                   ylabel = "$(yaxis)$(axisunit(getuLength(units)))",
-                                  xlen::Float64 = 0.2,
-                                  ylen::Float64 = 0.2,
+                                  xlen = 0.2,
+                                  ylen = 0.2,
                                   formatstring = "%04d",
                                   type = Star,
                                   kw...)

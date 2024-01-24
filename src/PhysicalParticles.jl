@@ -3,7 +3,7 @@ function point3(p::PVector)
 end
 
 function estimate_markersize(S::Real)
-    return 0.0001 / sqrt(S)
+    return 0.1 / sqrt(S)
 end
 
 function estimate_markersize(data, u; xaxis = :x, yaxis = :y)
@@ -34,7 +34,7 @@ plot_makie(d, u"m")
 """
 function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
-    markerspace=SceneSpace,
+    markerspace=:data,
     size = (1000, 1000),
     kw...
 ) where T<:PVector
@@ -44,7 +44,7 @@ end
 
 function plot_makie(data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
-    markerspace=SceneSpace,
+    markerspace=:data,
     size = (1000, 1000),
     kw...
 ) where T<:AbstractParticle3D
@@ -84,7 +84,7 @@ plot_makie!(fig, d, u"m")
 """
 function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
-    markerspace=SceneSpace,
+    markerspace=:data,
     size = (1000, 1000),
     kw...
 ) where T<:PVector
@@ -94,7 +94,7 @@ end
 
 function plot_makie!(fig, data::Array{T,1}, u::Union{Nothing, Unitful.FreeUnits} = u"kpc";
     markersize = estimate_markersize(data, u),
-    markerspace=SceneSpace,
+    markerspace=:data,
     size = (1000, 1000),
     kw...
 ) where T<:AbstractParticle3D

@@ -1,5 +1,6 @@
 module AstroPlot
 
+using PrecompileTools
 using Reexport
 using Unitful, UnitfulAstro
 using LaTeXStrings
@@ -137,4 +138,5 @@ include("snapshots/profiling.jl")
 include("video.jl")
 include("images.jl")
 
+include("precompile.jl")
 end
