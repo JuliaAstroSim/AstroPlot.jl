@@ -46,7 +46,7 @@
         )
 
         plot_positionslice(joinpath(foldertest, "mosaic/"), "snapshot_", collect(1:9:100), ".gadget2", gadget2(),
-            dpi = 300, size = (800,800),
+            size = (800,800),
             xlims = (-0.06, +0.06), ylims = (-0.06, +0.06),
             times = collect(0.0:0.00005:0.005) * u"Gyr",
         )
@@ -55,7 +55,7 @@
         png2video(joinpath(foldertest, "mosaic/"), "pos_", ".png", joinpath(foldertest, "TDE.mp4"))
 
         unicode_scatter(d, nothing)
-        unicode_density(d, nothing)
-        unicode_rotationcurve(d, nothing)
+        unicode_density(d, nothing, savefolder = foldertest)
+        unicode_rotationcurve(d, nothing, savefolder = foldertest)
     end
 end

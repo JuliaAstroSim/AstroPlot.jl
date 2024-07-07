@@ -113,7 +113,7 @@ end
 
 @testset "Mosaic view" begin
     plot_positionslice("mosaic/", "snapshot_", collect(1:9:100), ".gadget2", gadget2(),
-        dpi = 300, size = (800,800),
+        size = (800,800),
         xlims = (-0.06, +0.06), ylims = (-0.06, +0.06),
         times = collect(0.0:0.00005:0.005) * u"Gyr",
     )

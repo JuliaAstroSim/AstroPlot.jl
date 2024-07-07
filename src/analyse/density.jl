@@ -41,8 +41,10 @@ function unicode_density(data, units = uAstro;
                          ylabel = "Mass" * axisunit(getuMass(units)),
                          ts = isnothing(timestamp) ? "" : @sprintf(" at %.6f ", ustrip(timestamp)) * string(unit(timestamp)),
                          title = "Rotation Curve" * ts,
+                         savelog = true,
+                         savefolder = pwd(),
                          kw...)
-    Rmean, Mmean = densitycurve(data, units)
+    Rmean, Mmean = densitycurve(data, units; savelog, savefolder)
     UnicodePlots.lineplot(Rmean, Mmean; xlabel, ylabel, title, kw...)
 end
 

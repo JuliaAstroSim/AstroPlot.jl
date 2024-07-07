@@ -107,7 +107,7 @@ $_common_keyword_aspect
 
 ## Examples
 ```jl
-julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), dpi = 300, size = (800,800),
+julia plot_positionslice(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(), size = (800,800),
         xlims = (-0.05, +0.05), ylims = (-0.05, +0.05), times = collect(0.0:0.01:0.1) * u"Gyr")
 ```
 """
@@ -230,7 +230,7 @@ $_common_keyword_aspect
 ## Examples
 ```jl
 julia> plot_positionslice_adapt(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
-        dpi = 300, size = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")
+        size = (800,800), xlen = 0.1, ylen = 0.1, times = collect(0.0:0.01:0.1) * u"Gyr")
 ```
 """
 function plot_positionslice_adapt(folder::String, filenamebase::String, Counts::Array{Int64,1},

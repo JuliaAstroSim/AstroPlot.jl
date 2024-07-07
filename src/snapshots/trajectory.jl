@@ -117,7 +117,7 @@ $_common_keyword_aspect
 ## Examples
 ```jl
 julia fig, pos = plot_trajectory(joinpath(pathof(AstroPlot), "../../test/snapshots"), "snapshot_", collect(0:20:200),
-            [1,2,3], ".gadget2", gadget2(), dpi = 300, size = (800,800))
+            [1,2,3], ".gadget2", gadget2(), size = (800,800))
 ```
 """
 function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int64,1},
