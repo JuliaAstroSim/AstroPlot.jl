@@ -1,7 +1,7 @@
 name = "AstroPlot"
 uuid = "00b67d96-df8a-4e04-ab4d-0170e12eeaec"
 authors = ["islent <leoislent@gmail.com>"]
-version = "0.1.2"
+version = "0.1.3"
 
 [deps]
 AstroIO = "c85a633c-0c3f-44a2-bffe-7f9d0681b3e7"
@@ -40,7 +40,7 @@ Colors = "0.12"
 DataFrames = "1"
 DocStringExtensions = "0.8, 0.9"
 FileIO = "1"
-GLMakie = "0.9"
+GLMakie = "0.9, 0.10"
 Images = "0.25, 0.26"
 LaTeXStrings = "1"
 LoopVectorization = "0.12"

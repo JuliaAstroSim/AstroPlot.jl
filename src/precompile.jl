@@ -1,6 +1,8 @@
 @setup_workload begin
     @compile_workload begin
         foldertest = joinpath(@__DIR__, "../test")
+        # foldertemp = joinpath(tempdir(), "AstroPlot.jl")
+
         header, data = read_gadget2(joinpath(foldertest, "plummer/snapshot_0000.gadget2"), uAstro, uGadget2, type=Star)
         h, d = read_gadget2(joinpath(foldertest, "plummer_unitless.gadget2"), nothing, uGadget2, type=Star)
 
@@ -25,8 +27,8 @@
         fig = plot_profiling(joinpath(foldertest, "profiling.csv"))
         fig, df = plot_energy(joinpath(foldertest, "energy.csv"))
         fig, df = plot_energy_delta(joinpath(foldertest, "energy.csv"))
-        fig = plot_densitycurve(data)
-        fig = plot_rotationcurve(data)
+        fig = plot_densitycurve(data, savefolder = foldertest)
+        fig = plot_rotationcurve(data, savefolder = foldertest)
 
         #TODO: there is something wrong???
         plot_positionslice(
@@ -40,6 +42,7 @@
         FigScale, FigLagrange, df = plot_radii(
             joinpath(foldertest, "plummer/"), "snapshot_", collect(0:20:200), ".gadget2", gadget2(),
             times = collect(0.0:0.01:0.1) * u"Gyr", title = "Direct Sum const",
+            savefolder = foldertest,
         )
 
         plot_positionslice(joinpath(foldertest, "mosaic/"), "snapshot_", collect(1:9:100), ".gadget2", gadget2(),
@@ -49,7 +52,7 @@
         )
         plt = mosaicview(joinpath(foldertest, "mosaic/"), "pos_", collect(1:9:100), ".png"; fillvalue = 0.5, npad = 3, ncol = 4, rowmajor = true)
 
-        png2video(joinpath(foldertest, "mosaic/"), "pos_", ".png", "TDE.mp4")
+        png2video(joinpath(foldertest, "mosaic/"), "pos_", ".png", joinpath(foldertest, "TDE.mp4"))
 
         unicode_scatter(d, nothing)
         unicode_density(d, nothing)
