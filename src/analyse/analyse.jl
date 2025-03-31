@@ -20,10 +20,17 @@ julia> b
  "b"
 ```
 """
+function sortarrays(by::Array, another::Array; kw...)
+    out_by = deepcopy(by)
+    out_another = deepcopy(another)
+    sortarrays!(out_by, out_another)
+    return out_by, out_another
+end
+
 function sortarrays!(by::Array, another::Array; kw...)
     data = Pair.(by, another; kw...)
     sort!(data, by = x->x.first)
-    for i in 1:length(data)
+    for i in eachindex(data)
         @inbounds by[i] = data[i].first
         @inbounds another[i] = data[i].second
     end
