@@ -93,48 +93,83 @@ function distribution(x::Array, y::Array;
                       section::Int64 = floor(Int64, length(x)^SectionIndex),
                       rmhead::Int64 = 0,
                       rmtail::Int64 = 0,
+                      uniform_interval::Bool = false,
                       )
-    data = Pair.(x,y)
-    sort!(data, by = x->x.first)
+    # Check if section is valid
+    section <= 0 && throw(ArgumentError("section must be a positive integer"))
+    length(x) == length(y) || throw(DimensionMismatch("x and y must have the same length"))
 
-    column = div(length(x), section)
-    d = reshape(data[1 : section * column], section, column)
+    data = StructArray(Pair.(x[1+rmhead:end-rmtail],y[1+rmhead:end-rmtail]))
+    N = length(data)
+    if N == 0
+        return Float64[], Float64[], Float64[], Float64[]
+    end
+    
+    sort!(data, by = x->x.first)
+    # x_sorted =
 
     xmean = empty(x)
     xstd = empty(x)
     ymean = empty(y)
     ystd = empty(y)
 
-    for col in 1:column
-        xslice = [p.first for p in d[:,col]]
-        push!(xmean, mean(xslice))
-        push!(xstd, std(xslice))
+    if uniform_interval
+        # Uniform interval binning
+        xmin = data.first[1]
+        xmax = data.first[end]
+        dx = (xmax - xmin) / section
+        bin_edges = xmin .+ (0:section) .* dx
+        
+        start = 1
+        for i in 1:section
+            # Set right edge: left-closed, right-open for all but last bin
+            right_edge = i < section ? bin_edges[i+1] : Inf * x[end]
+            end_idx = searchsortedfirst(data.first, right_edge)
+            bin = @view data[start:end_idx-1]
+            start = end_idx
 
-        yslice = [p.second for p in d[:,col]]
-        push!(ymean, mean(yslice))
-        push!(ystd, std(yslice))
-    end
+            if isempty(bin)
+                push!(xmean, NaN)
+                push!(xstd, NaN)
+                push!(ymean, NaN)
+                push!(ystd, NaN)
+            else
+                xslice = bin.first
+                push!(xmean, mean(xslice))
+                push!(xstd, std(xslice))
 
-    margin = length(x) - section * column
-    if margin == 0
-        return xmean[1+rmhead : end-rmtail],
-               ymean[1+rmhead : end-rmtail],
-               xstd[1+rmhead : end-rmtail],
-               ystd[1+rmhead : end-rmtail]
+                yslice = bin.second
+                push!(ymean, mean(yslice))
+                push!(ystd, std(yslice))
+            end
+        end
     else
-        xslice = [p.first for p in d[end-margin : end]]
-        push!(xmean, mean(xslice))
-        push!(xstd, std(xslice))
+        N >= section || throw(ArgumentError("Number of data points ($N) must be ≥ number of bins ($section)"))
 
-        yslice = [p.second for p in d[end-margin : end]]
-        push!(ymean, mean(yslice))
-        push!(ystd, std(yslice))
+        bin_counts = div(N, section)
+        remainder = N % section
+        
+        # Calculate bin lengths (first 'remainder' bins have bin_counts+1 points)
+        lengths = vcat(fill(bin_counts + 1, remainder), fill(bin_counts, section - remainder))
+        
+        start = 1
+        for l in lengths
+            end_idx = start + l - 1
+            end_idx > N && break  # Handle case when total points don't match (shouldn't happen with valid inputs)
+            bin = @view data[start:end_idx]
+            start = end_idx + 1
 
-        return xmean[1+rmhead : end-rmtail],
-               ymean[1+rmhead : end-rmtail],
-               xstd[1+rmhead : end-rmtail],
-               ystd[1+rmhead : end-rmtail]
+            xslice = bin.first
+            push!(xmean, mean(xslice))
+            push!(xstd, std(xslice))
+
+            yslice = bin.second
+            push!(ymean, mean(yslice))
+            push!(ystd, std(yslice))
+        end
     end
+
+    return xmean, ymean, xstd, ystd
 end
 
 """
