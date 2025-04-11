@@ -90,10 +90,10 @@ $_common_keyword_section
 $_common_keyword_head_tail
 """
 function distribution(x::Array, y::Array;
-                      section::Int64 = floor(Int64, length(x)^SectionIndex),
+                      section::Int64 = 10,
                       rmhead::Int64 = 0,
                       rmtail::Int64 = 0,
-                      uniform_interval::Bool = false,
+                      uniform_interval::Bool = true,
                       )
     # Check if section is valid
     section <= 0 && throw(ArgumentError("section must be a positive integer"))
