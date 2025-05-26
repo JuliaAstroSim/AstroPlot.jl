@@ -56,10 +56,10 @@ function density(r::Array, m::Array;
     column = div(length(r), section)
     d = reshape(data[1 : section * column], section, column)
     
-    rsmall = empty(r)
-    rmean = empty(r)
-    rlarge = empty(r)
-    rho = empty(m)
+    rsmall = Array{eltype(r),1}()
+    rmean = Array{eltype(r),1}()
+    rlarge = Array{eltype(r),1}()
+    rho = Array{eltype(m),1}()
 
     for col in 1:column
         push!(rsmall, d[1,col].first)
@@ -108,10 +108,10 @@ function distribution(x::Array, y::Array;
     sort!(data, by = x->x.first)
     # x_sorted =
 
-    xmean = empty(x)
-    xstd = empty(x)
-    ymean = empty(y)
-    ystd = empty(y)
+    xmean = Array{eltype(x),1}()
+    xstd = Array{eltype(x),1}()
+    ymean = Array{eltype(y),1}()
+    ystd = Array{eltype(y),1}()
 
     if uniform_interval
         # Uniform interval binning
