@@ -140,7 +140,7 @@ function plot_trajectory(folder::String, filenamebase::String, Counts::Array{Int
         pos[id] = Array{AbstractPoint,1}()
     end
 
-    progress = Progress(length(Counts), "Loading data: "; #=showspeed=true=#)
+    progress = Progress(length(Counts), desc = "Loading data: ")
     for i in Counts
         snapshot_index = Printf.format(Printf.Format(formatstring), i)
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
@@ -225,7 +225,7 @@ function plot_trajectory!(fig, ax, folder::String, filenamebase::String, Counts:
         pos[id] = Array{AbstractPoint,1}()
     end
 
-    progress = Progress(length(Counts), "Loading data: "; #=showspeed=true=#)
+    progress = Progress(length(Counts), desc = "Loading data: ")
     for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))

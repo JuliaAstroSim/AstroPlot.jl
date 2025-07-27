@@ -50,7 +50,7 @@
             xlims = (-0.06, +0.06), ylims = (-0.06, +0.06),
             times = collect(0.0:0.00005:0.005) * u"Gyr",
         )
-        plt = mosaicview(joinpath(foldertest, "mosaic/"), "pos_", collect(1:9:100), ".png"; fillvalue = 0.5, npad = 3, ncol = 4, rowmajor = true)
+        plt = mosaic(joinpath(foldertest, "mosaic/"), "pos_", collect(1:9:100), ".png"; fillvalue = 0.5, npad = 3, ncol = 4, rowmajor = true)
 
         png2video(joinpath(foldertest, "mosaic/"), "pos_", ".png", joinpath(foldertest, "TDE.mp4"))
 

@@ -22,6 +22,7 @@ using LoopVectorization
 using Distributed
 
 using ParallelOperations
+using AstroSimBase
 @reexport using PhysicalParticles
 @reexport using PhysicalTrees
 @reexport using PhysicalMeshes
@@ -101,7 +102,7 @@ export
 
     # video
     png2video,
-    mosaicview,
+    mosaic,
 
     jld2, gadget2, hdf5
 

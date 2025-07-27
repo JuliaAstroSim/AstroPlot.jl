@@ -266,7 +266,7 @@ function plot_radii(folder::String, filenamebase::String,
         L100 = Float64[],
     )
 
-    progress = Progress(length(Counts), "Loading data and precessing: "; #=showspeed=true=#)
+    progress = Progress(length(Counts); desc = "Loading data and precessing: ")
     for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
@@ -348,7 +348,7 @@ function plot_radii!(AxisScale, FigLagrange, AxisLagrange, folder::String, filen
         L100 = Float64[],
     )
 
-    progress = Progress(length(Counts), "Loading data and precessing: "; #=showspeed=true=#)
+    progress = Progress(length(Counts), desc = "Loading data and precessing: ")
     for i in eachindex(Counts)
         snapshot_index = Printf.format(Printf.Format(formatstring), Counts[i])
         filename = joinpath(folder, string(filenamebase, snapshot_index, suffix))
