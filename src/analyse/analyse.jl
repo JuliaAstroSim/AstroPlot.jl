@@ -94,6 +94,7 @@ function distribution(x::Array, y::Array;
                       rmhead::Int64 = 0,
                       rmtail::Int64 = 0,
                       uniform_interval::Bool = true,
+                      counts = false,
                       )
     # Check if section is valid
     section <= 0 && throw(ArgumentError("section must be a positive integer"))
@@ -112,6 +113,7 @@ function distribution(x::Array, y::Array;
     xstd = Array{eltype(x),1}()
     ymean = Array{eltype(y),1}()
     ystd = Array{eltype(y),1}()
+    bin_N = Array{Int, 1}()
 
     if uniform_interval
         # Uniform interval binning
@@ -142,6 +144,8 @@ function distribution(x::Array, y::Array;
                 push!(ymean, mean(yslice))
                 push!(ystd, std(yslice))
             end
+
+            push!(bin_N, length(bin))
         end
     else
         N >= section || throw(ArgumentError("Number of data points ($N) must be ≥ number of bins ($section)"))
@@ -166,10 +170,16 @@ function distribution(x::Array, y::Array;
             yslice = bin.second
             push!(ymean, mean(yslice))
             push!(ystd, std(yslice))
+
+            push!(bin_N, length(bin))
         end
     end
 
-    return xmean, ymean, xstd, ystd
+    if counts
+        return xmean, ymean, xstd, ystd, bin_N
+    else
+        return xmean, ymean, xstd, ystd
+    end
 end
 
 """
