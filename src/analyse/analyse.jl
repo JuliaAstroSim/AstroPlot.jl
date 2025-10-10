@@ -80,6 +80,12 @@ function density(r::Array, m::Array;
     return rmean, rho
 end
 
+struct DataWeighted
+    x
+    y
+    weight
+end
+
 """
 $(TYPEDSIGNATURES)
 Compute how quantity `y` is distributed along `x`. For example, rotation velocity along radius.
@@ -89,7 +95,7 @@ Return `Tuple(xmean, ymean, xstd, ystd)`, where `mean` is mean value, `std` mean
 $_common_keyword_section
 $_common_keyword_head_tail
 """
-function distribution(x::Array, y::Array;
+function distribution(x::Array, y::Array, weight=nothing;
                       section::Int64 = 10,
                       rmhead::Int64 = 0,
                       rmtail::Int64 = 0,
@@ -100,13 +106,19 @@ function distribution(x::Array, y::Array;
     section <= 0 && throw(ArgumentError("section must be a positive integer"))
     length(x) == length(y) || throw(DimensionMismatch("x and y must have the same length"))
 
-    data = StructArray(Pair.(x[1+rmhead:end-rmtail],y[1+rmhead:end-rmtail]))
+    if isnothing(weight)
+        weights = ones(size(x))
+    else
+        weights = weight
+    end
+
+    data = StructArray(DataWeighted.(x[1+rmhead:end-rmtail],y[1+rmhead:end-rmtail],weights[1+rmhead:end-rmtail]))
     N = length(data)
     if N == 0
         return Float64[], Float64[], Float64[], Float64[]
     end
     
-    sort!(data, by = x->x.first)
+    sort!(data, by = p->p.x)
     # x_sorted =
 
     xmean = Array{eltype(x),1}()
@@ -117,8 +129,8 @@ function distribution(x::Array, y::Array;
 
     if uniform_interval
         # Uniform interval binning
-        xmin = data.first[1]
-        xmax = data.first[end]
+        xmin = data.x[1]
+        xmax = data.x[end]
         dx = (xmax - xmin) / section
         bin_edges = xmin .+ (0:section) .* dx
         
@@ -126,7 +138,7 @@ function distribution(x::Array, y::Array;
         for i in 1:section
             # Set right edge: left-closed, right-open for all but last bin
             right_edge = i < section ? bin_edges[i+1] : Inf * x[end]
-            end_idx = searchsortedfirst(data.first, right_edge)
+            end_idx = searchsortedfirst(data.x, right_edge)
             bin = @view data[start:end_idx-1]
             start = end_idx
 
@@ -136,13 +148,14 @@ function distribution(x::Array, y::Array;
                 push!(ymean, NaN)
                 push!(ystd, NaN)
             else
-                xslice = bin.first
-                push!(xmean, mean(xslice))
-                push!(xstd, std(xslice))
+                xslice = identity.(collect(bin.x))
+                weight_slice = aweights(identity.(collect(bin.weight)))
+                push!(xmean, mean(xslice, weight_slice))
+                push!(xstd, std(xslice, weight_slice))
 
-                yslice = bin.second
-                push!(ymean, mean(yslice))
-                push!(ystd, std(yslice))
+                yslice = identity.(collect(bin.y))
+                push!(ymean, mean(yslice, weight_slice))
+                push!(ystd, std(yslice, weight_slice))
             end
 
             push!(bin_N, length(bin))
@@ -153,7 +166,7 @@ function distribution(x::Array, y::Array;
         bin_counts = div(N, section)
         remainder = N % section
         
-        # Calculate bin lengths (first 'remainder' bins have bin_counts+1 points)
+        # Calculate bin lengths (x 'remainder' bins have bin_counts+1 points)
         lengths = vcat(fill(bin_counts + 1, remainder), fill(bin_counts, section - remainder))
         
         start = 1
@@ -163,13 +176,14 @@ function distribution(x::Array, y::Array;
             bin = @view data[start:end_idx]
             start = end_idx + 1
 
-            xslice = bin.first
-            push!(xmean, mean(xslice))
-            push!(xstd, std(xslice))
+            xslice = identity.(collect(bin.x))
+            weight_slice = aweights(identity.(collect(bin.weight)))
+            push!(xmean, mean(xslice, weight_slice))
+            push!(xstd, std(xslice, weight_slice))
 
-            yslice = bin.second
-            push!(ymean, mean(yslice))
-            push!(ystd, std(yslice))
+            yslice = identity.(collect(bin.y))
+            push!(ymean, mean(yslice, weight_slice))
+            push!(ystd, std(yslice, weight_slice))
 
             push!(bin_N, length(bin))
         end

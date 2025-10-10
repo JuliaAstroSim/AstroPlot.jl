@@ -1,7 +1,7 @@
 name = "AstroPlot"
 uuid = "00b67d96-df8a-4e04-ab4d-0170e12eeaec"
-authors = ["islent <leoislent@gmail.com>"]
 version = "0.1.4"
+authors = ["islent <leoislent@gmail.com>"]
 
 [deps]
 AstroIO = "c85a633c-0c3f-44a2-bffe-7f9d0681b3e7"
@@ -26,6 +26,7 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
@@ -54,6 +55,7 @@ PrecompileTools = "1"
 ProgressMeter = "1"
 Reexport = "1"
 Statistics = "1"
+StatsBase = "0.34.6"
 StructArrays = "0.6, 0.7"
 UnicodePlots = "2, 3"
 Unitful = "1"

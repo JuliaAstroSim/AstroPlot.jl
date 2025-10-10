@@ -21,6 +21,8 @@ using StructArrays
 using LoopVectorization
 using Distributed
 
+using StatsBase
+
 using ParallelOperations
 using AstroSimBase
 @reexport using PhysicalParticles
