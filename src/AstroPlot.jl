@@ -49,7 +49,7 @@ export
     # Analyse
     rotvel,
     radialvel,
-    distribution, distribution_cov,
+    distribution, distribution_cov, distribution_skewness,
 
     rotationcurve,
     plot_rotationcurve, plot_rotationcurve!,
