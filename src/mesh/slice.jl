@@ -40,6 +40,9 @@ function unicode_slice(data::AbstractArray{T,3}, n::Int, units = nothing;
     end
 end
 
+# Forwarding method for PhysicalMeshes field types
+unicode_slice(f::ArrayScalarField, n::Int, units = nothing; kw...) = unicode_slice(f.data, n, units; kw...)
+
 """
 $(TYPEDSIGNATURES)
 Plot 2D slice of 3D data `symbol` in `m`.
