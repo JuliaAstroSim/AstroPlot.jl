@@ -10,3 +10,5 @@ test/*.mp4
 docs/build
 docs/Manifest.toml
 test/output/
+*.cov
+

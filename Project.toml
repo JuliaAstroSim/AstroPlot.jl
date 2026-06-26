@@ -1,6 +1,6 @@
 name = "AstroPlot"
 uuid = "00b67d96-df8a-4e04-ab4d-0170e12eeaec"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["islent <leoislent@gmail.com>"]
 
 [deps]
