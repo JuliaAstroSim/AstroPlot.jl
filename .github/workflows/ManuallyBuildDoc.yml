@@ -2,24 +2,38 @@ name: ManuallyBuildDoc
 
 on: [workflow_dispatch]
 
-# 64-bit Julia only
+# `julia-actions/julia-docdeploy@v1` invokes `julia docs/make.jl` itself, which
+# in turn calls both `makedocs` and `deploydocs`. With `GITHUB_TOKEN` available
+# (via the `contents: write` permission) Documenter.jl detects the GitHub
+# Actions environment and pushes the rendered docs to the `gh-pages` branch
+# using the auto-injected token — no `DOCUMENTER_KEY` SSH secret required.
+#
+# AstroPlot also installs GLMakie dependencies via apt since GLMakie needs
+# OpenGL system libraries at runtime.
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: julia-actions/setup-julia@latest
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
         with:
-          version: '1.11.6'
-      - run: sudo apt-get update && sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
-      - run: julia --project=docs -e '
-          using Pkg;
-          Pkg.add("Documenter");
-          Pkg.develop(PackageSpec(; path=pwd()));
-          Pkg.instantiate();'
-      - name: Build and deploy doc
-        env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Deploying to else where, so use SSH instead
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+          version: '1.12'
+      - name: Install GLMakie system dependencies
         run: >
-          DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' julia --project=docs --color=yes docs/make.jl
+          sudo apt-get update &&
+          sudo apt-get install -y
+          xorg-dev mesa-utils xvfb libgl1 freeglut3-dev
+          libxrandr-dev libxinerama-dev libxcursor-dev
+          libxi-dev libxext-dev
+      - name: Install dependencies and deploy documentation
+        uses: julia-actions/julia-docdeploy@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_VERSION: 0.27.25
+          # GLMakie needs a virtual display headless on CI runners
+          DISPLAY: ":0"
+        with:
+          prefix: xvfb-run -a -s "-screen 0 1024x768x24"
