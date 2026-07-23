@@ -8,6 +8,18 @@ function slice3d(a::AbstractArray{T,3}, d::Int, n::Int) where T
     end
 end
 
+# Unwrap PhysicalMeshes field wrappers to their underlying storage so
+# ``plot_slice!`` can dispatch on the real ``Array``/``StructArray``.
+_unwrap_for_plot(u::AbstractArray) = u
+_unwrap_for_plot(u::Union{Tuple, NamedTuple}) = u
+function _unwrap_for_plot(u)
+    if hasproperty(u, :data)
+        d = getproperty(u, :data)
+        return d isa AbstractArray ? d : u
+    end
+    return u
+end
+
 """
 $(TYPEDSIGNATURES)
 Plot 2D slice of a 3D array. Vector plot is not supported in unicode mode.
@@ -94,11 +106,15 @@ Plot 2D slice of 3D data.
 ## Keywords
 $_common_keyword_axis_label
 """
-function plot_slice!(f::Figure, ax::Makie.Axis, pos::AbstractArray{T,3}, data::AbstractArray{S,3}, n::Int, units = nothing;
+function plot_slice!(f::Figure, ax::Makie.Axis, pos::AbstractArray{T,3}, data, n::Int, units = nothing;
         xaxis = :x,
         yaxis = :y,
         kw...
-    ) where T where S
+    ) where T
+    # ``data`` may be a PhysicalMeshes ``ArrayScalarField`` (or similar
+    # wrapper). Extract the underlying storage so the ``Array`` /
+    # ``StructArray`` dispatch below sees the real data.
+    data = _unwrap_for_plot(data)
     xid = axisid(xaxis)
     yid = axisid(yaxis)
     d = 6 - xid - yid
